@@ -1,0 +1,1376 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<title>Düber Deliveries V1.10</title>
+<style>
+  :root {
+    /* Düber Palette: Midnight Black, Asphalt, Neon Green, Purple Kush, Amber Extract */
+    --bg-base: #060806;
+    --panel-bg: #0d120d;
+    --panel-border: #1a261a;
+    --silver-bright: #e2e8e2;
+    --silver-main: #9ca39c;
+    --silver-dim: #5c665c;
+    --silver-dark: #1f291f;
+    
+    --status-green: #22c55e;
+    --status-red: #ef4444;
+    --status-amber: #f59e0b;
+    --status-blue: #38bdf8;
+    --status-purple: #a855f7;
+    --status-exotic: #06b6d4;
+    
+    --t0-col: #5c665c; --t1-col: #22c55e; --t2-col: #38bdf8; --t3-col: #3b82f6; --t4-col: #a855f7; 
+    --t5-col: #d946ef; --t6-col: #f59e0b; --t7-col: #ea580c; --t8-col: #ef4444; --t9-col: #00ff66;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; -webkit-tap-highlight-color: transparent; }
+
+  html, body { width: 100%; height: 100%; background: var(--bg-base); color: var(--silver-bright); display: flex; flex-direction: column; overflow: hidden; }
+
+  body::before {
+    content: " "; display: block; position: fixed; top: 0; left: 0; bottom: 0; right: 0;
+    background: radial-gradient(circle at 50% 0%, rgba(34, 197, 94, 0.04) 0%, transparent 65%);
+    pointer-events: none; z-index: 1;
+  }
+
+  header { flex-shrink: 0; background: #000; border-bottom: 1px solid var(--status-green); padding: 6px 10px; display: flex; flex-direction: column; gap: 4px; z-index: 10; }
+  .header-top { display: flex; justify-content: space-between; align-items: center; }
+  .brand-title { font-size: 13px; font-weight: 900; letter-spacing: 1.5px; text-transform: uppercase; color: #fff; }
+  .brand-title span { color: var(--status-green); text-shadow: 0 0 5px rgba(34,197,94,0.5); }
+
+  .hud-stats { display: flex; gap: 4px; overflow-x: auto; white-space: nowrap; padding-bottom: 2px; }
+  .hud-stats::-webkit-scrollbar { display: none; }
+  .hud-pill { background: #000; border: 1px solid var(--panel-border); padding: 3px 6px; border-radius: 3px; font-size: 10px; font-family: monospace; font-weight: bold; }
+
+  nav { flex-shrink: 0; display: grid; grid-template-columns: repeat(4, 1fr); background: var(--panel-bg); border-bottom: 1px solid var(--panel-border); z-index: 9; }
+  .nav-btn { padding: 10px 4px; background: transparent; border: none; border-right: 1px solid var(--panel-border); border-bottom: 1px solid var(--panel-border); color: var(--silver-dim); font-size: 9px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px; cursor: pointer; transition: 0.15s; text-align: center; }
+  .nav-btn:nth-child(4n) { border-right: none; }
+  .nav-btn:nth-child(n+5) { border-bottom: none; }
+  .nav-btn.active { background: rgba(34, 197, 94, 0.08); color: var(--status-green); box-shadow: inset 0 -2px 0 var(--status-green); }
+
+  main { flex: 1; overflow-y: auto; padding: 10px; padding-bottom: 70px; z-index: 2; }
+  .view-tab { display: none; flex-direction: column; gap: 10px; }
+  .view-tab.active { display: flex; }
+
+  .panel { background: var(--panel-bg); border: 1px solid var(--panel-border); border-radius: 5px; padding: 10px; display: flex; flex-direction: column; gap: 8px; }
+  .panel-header { font-size: 11px; font-weight: 900; text-transform: uppercase; letter-spacing: 1px; color: #fff; padding-bottom: 6px; border-bottom: 1px solid var(--panel-border); display: flex; justify-content: space-between; align-items: center; }
+
+  .control-bar { display: flex; flex-wrap: wrap; gap: 6px; background: #000; padding: 6px 8px; border-radius: 4px; border: 1px solid var(--panel-border); align-items: center; }
+  .control-group { display: flex; gap: 4px; align-items: center; border-right: 1px solid var(--panel-border); padding-right: 6px; }
+  .control-group:last-child { border-right: none; padding-right: 0; }
+  .control-label { font-size: 8.5px; font-weight: bold; color: var(--silver-dim); text-transform: uppercase; letter-spacing: 0.5px; }
+
+  button.btn { background: #000; border: 1px solid var(--silver-dim); color: var(--silver-bright); padding: 5px 9px; font-size: 9px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px; border-radius: 3px; cursor: pointer; transition: 0.1s; }
+  button.btn:active { background: var(--silver-bright); color: #000; border-color: var(--silver-bright); }
+  button.btn:disabled { opacity: 0.35; cursor: not-allowed; border-color: var(--silver-dark); }
+  button.btn-green { background: #0d1a0d; border-color: var(--status-green); color: var(--status-green); }
+  button.btn-green:active { background: var(--status-green); color: #000; }
+  button.btn-danger { border-color: var(--status-red); color: var(--status-red); }
+  button.btn-danger:active { background: var(--status-red); color: #fff; }
+  button.btn-purple { border-color: var(--status-purple); color: var(--status-purple); }
+  button.btn-purple:active { background: var(--status-purple); color: #fff; }
+
+  .fleet-grid { display: grid; grid-template-columns: 1fr; gap: 8px; }
+  @media(min-width: 600px) { .fleet-grid { grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); } }
+
+  .strain-card { background: #000; border: 1px solid var(--panel-border); border-radius: 4px; padding: 10px; display: flex; flex-direction: column; gap: 6px; position: relative; }
+  .strain-card.in-flight { border-left: 3px solid var(--status-green); }
+  .strain-card.damaged { border-left: 3px solid var(--status-red); }
+  
+  .spec-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 4px; background: #030503; padding: 6px; border-radius: 3px; font-size: 9px; font-family: monospace; border: 1px solid var(--panel-border); }
+  .spec-grid span { color: var(--silver-dim); }
+
+  .badge { padding: 2px 4px; border-radius: 2px; font-size: 8px; font-weight: 900; font-family: monospace; background: #0d1a0d; color: var(--status-green); border: 1px solid var(--status-green); }
+  
+  .route-row { background: #000; border: 1px solid var(--panel-border); border-radius: 3px; padding: 8px 10px; display: flex; justify-content: space-between; align-items: center; font-size: 10px; }
+
+  .flight-bar-bg { width: 100%; height: 6px; background: #111; border: 1px solid #1a261a; border-radius: 2px; overflow: hidden; margin-top: 2px; }
+  .flight-bar-fill { height: 100%; background: var(--status-green); width: 0%; box-shadow: 0 0 6px var(--status-green);}
+
+  .auction-slot { background: #000; border: 1px solid var(--panel-border); padding: 10px; border-radius: 4px; display: flex; flex-direction: column; gap: 6px; }
+  .auction-timer-bg { width: 100%; height: 5px; background: #111; border: 1px solid var(--status-green); border-radius: 2px; overflow: hidden; }
+  .auction-timer-bar { height: 100%; background: var(--status-green); width: 100%; transition: width 0.1s linear;}
+  .auction-log { height: 44px; background: #030503; border: 1px solid var(--panel-border); padding: 4px; font-size: 8.5px; font-family: monospace; overflow: hidden; border-radius: 3px; color: var(--silver-main); }
+
+  .fraction-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 4px; }
+  .pack-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; }
+
+  select { background: #0a0f0a; color: #fff; border: 1px solid var(--silver-dark); padding: 5px; font-size: 10px; border-radius: 3px; outline: none; font-weight: bold; cursor: pointer; }
+  
+  .check-item { display: flex; justify-content: space-between; align-items: center; background: #000; padding: 8px 10px; border: 1px solid var(--panel-border); border-radius: 3px; font-size: 10px; }
+  .check-item.done { border-color: var(--status-green); background: rgba(34, 197, 94, 0.08); }
+
+  #toast-rack { position: fixed; bottom: 16px; left: 10px; right: 10px; display: flex; flex-direction: column; gap: 6px; z-index: 1000; pointer-events: none; }
+  .toast { background: #000; border: 1px solid var(--silver-dark); border-left: 3px solid var(--status-green); color: #fff; padding: 8px 12px; font-size: 11px; font-weight: bold; font-family: monospace; border-radius: 3px; box-shadow: 0 4px 15px rgba(0,0,0,0.9); animation: slideUp 0.2s, fadeOut 0.4s 2.6s forwards; pointer-events: auto;}
+  
+  @keyframes slideUp { from { transform: translateY(15px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+  @keyframes fadeOut { to { opacity: 0; transform: translateY(-5px); } }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-top">
+    <div class="brand-title">DÜBER DELIVERIES <span>// V1.10</span></div>
+    <div style="display:flex; gap:4px;">
+      <button class="btn" style="padding:3px 6px; font-size:8px;" onclick="saveGame()">SAVE</button>
+      <button class="btn" style="padding:3px 6px; font-size:8px;" onclick="loadGame()">LOAD</button>
+      <button class="btn btn-danger" style="padding:3px 6px; font-size:8px;" onclick="godMode()">KINGPIN</button>
+    </div>
+  </div>
+  <div style="display:flex; justify-content:space-between; align-items:center;">
+      <div class="hud-stats">
+        <div class="hud-pill">CASH: <span id="hud-funds" style="color:var(--status-green);">$0</span></div>
+        <div class="hud-pill">STASH: <span id="hud-fleet-count">0</span></div>
+        <div class="hud-pill">COURIERS: <span id="hud-pilot-count">0</span></div>
+        <div class="hud-pill">GAS: <span id="hud-fuel" style="color:var(--status-amber);">0</span></div>
+      </div>
+      <div class="control-bar" style="padding:2px 4px; margin-left:4px;">
+        <button class="btn btn-green active" id="buy-1" style="padding:2px 4px; font-size:8px;" onclick="setBuyMode(1)">1x</button>
+        <button class="btn" id="buy-0.25" style="padding:2px 4px; font-size:8px;" onclick="setBuyMode(0.25)">25%</button>
+        <button class="btn" id="buy-0.5" style="padding:2px 4px; font-size:8px;" onclick="setBuyMode(0.5)">50%</button>
+        <button class="btn" id="buy-1.0" style="padding:2px 4px; font-size:8px;" onclick="setBuyMode(1.0)">MAX</button>
+      </div>
+  </div>
+</header>
+
+<nav>
+  <button class="nav-btn active" onclick="setTab('market')">The Corner</button>
+  <button class="nav-btn" onclick="setTab('gacha')">Grow Ops</button>
+  <button class="nav-btn" onclick="setTab('fleet')">Inventory</button>
+  <button class="nav-btn" onclick="setTab('pilots')">Drivers</button>
+  <button class="nav-btn" onclick="setTab('routes')">Zones (400)</button>
+  <button class="nav-btn" onclick="setTab('auction')">Wholesale</button>
+  <button class="nav-btn" onclick="setTab('checklist')">Burner Phone</button>
+  <button class="nav-btn" onclick="setTab('upgrades')">Marketing</button>
+</nav>
+
+<main>
+
+  <!-- TAB 1: REVOLVING MARKET -->
+  <div id="tab-market" class="view-tab active">
+    <div class="panel">
+      <div class="panel-header">
+        <span>Street Corner Spot Market</span>
+        <span style="font-size:10px; color:var(--silver-dim);">RESTOCK: <span id="market-timer" style="font-size:12px; font-weight:bold; color:var(--status-green);">10.0</span>s</span>
+      </div>
+      <p style="font-size:10px; color:var(--silver-dim);">5 procedural strains drop every 10 seconds. Buy the dip, stash it, or flip it wholesale.</p>
+      <div id="market-grid" class="fleet-grid"></div>
+    </div>
+  </div>
+
+  <!-- TAB 2: GACHA (SEEDS & RESUMES) -->
+  <div id="tab-gacha" class="view-tab">
+    <div class="panel">
+      <div class="panel-header">Seed Bank (Grow Ops)</div>
+      <div style="display:flex; flex-direction:column; gap:6px;">
+        <div style="border:1px solid var(--panel-border); padding:8px; border-radius:3px;">
+          <div style="font-size:10px; font-weight:bold; margin-bottom:6px;">OUTDOOR MIDS [T1-T4] ($10K / Seed)</div>
+          <div class="pack-row">
+            <button class="btn" onclick="buySeeds(0, 1)">Plant 1x</button>
+            <button class="btn" onclick="buySeeds(0, 5)">Plant 5x</button>
+            <button class="btn btn-green" onclick="buySeeds(0, 10)">Plant 10x</button>
+          </div>
+        </div>
+        <div style="border:1px solid var(--panel-border); padding:8px; border-radius:3px;">
+          <div style="font-size:10px; color:var(--status-blue); font-weight:bold; margin-bottom:6px;">GREENHOUSE PREMIUM [T3-T6] ($100K / Seed)</div>
+          <div class="pack-row">
+            <button class="btn" style="border-color:var(--status-blue); color:var(--status-blue);" onclick="buySeeds(1, 1)">Plant 1x</button>
+            <button class="btn" style="border-color:var(--status-blue); color:var(--status-blue);" onclick="buySeeds(1, 5)">Plant 5x</button>
+            <button class="btn btn-green" onclick="buySeeds(1, 10)">Plant 10x</button>
+          </div>
+        </div>
+        <div style="border:1px solid var(--panel-border); padding:8px; border-radius:3px;">
+          <div style="font-size:10px; color:var(--status-purple); font-weight:bold; margin-bottom:6px;">INDOOR EXOTICS [T5-T8] ($1.0M / Seed)</div>
+          <div class="pack-row">
+            <button class="btn btn-purple" onclick="buySeeds(2, 1)">Plant 1x</button>
+            <button class="btn btn-purple" onclick="buySeeds(2, 5)">Plant 5x</button>
+            <button class="btn btn-green" onclick="buySeeds(2, 10)">Plant 10x</button>
+          </div>
+        </div>
+        <div style="border:1px solid var(--panel-border); padding:8px; border-radius:3px;">
+          <div style="font-size:10px; color:var(--status-amber); font-weight:bold; margin-bottom:6px;">CUP WINNERS &amp; DIAMONDS [T7-T10] ($5.0M / Seed)</div>
+          <div class="pack-row">
+            <button class="btn" style="border-color:var(--status-amber); color:var(--status-amber);" onclick="buySeeds(3, 1)">Plant 1x</button>
+            <button class="btn" style="border-color:var(--status-amber); color:var(--status-amber);" onclick="buySeeds(3, 5)">Plant 5x</button>
+            <button class="btn btn-green" onclick="buySeeds(3, 10)">Plant 10x</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <div class="panel-header">Courier Hiring Board</div>
+      <div style="display:flex; flex-direction:column; gap:6px;">
+        <div style="border:1px solid var(--panel-border); padding:8px; border-radius:3px;">
+          <div style="font-size:10px; font-weight:bold; margin-bottom:6px;">BICYCLE BOYS [T1-T4] ($5K / Hire)</div>
+          <div class="pack-row">
+            <button class="btn" onclick="buyResumes(0, 1)">Hire 1x</button>
+            <button class="btn" onclick="buyResumes(0, 5)">Hire 5x</button>
+            <button class="btn btn-green" onclick="buyResumes(0, 10)">Hire 10x</button>
+          </div>
+        </div>
+        <div style="border:1px solid var(--panel-border); padding:8px; border-radius:3px;">
+          <div style="font-size:10px; color:var(--status-blue); font-weight:bold; margin-bottom:6px;">LOCAL HUSTLERS [T3-T6] ($50K / Hire)</div>
+          <div class="pack-row">
+            <button class="btn" style="border-color:var(--status-blue); color:var(--status-blue);" onclick="buyResumes(1, 1)">Hire 1x</button>
+            <button class="btn" style="border-color:var(--status-blue); color:var(--status-blue);" onclick="buyResumes(1, 5)">Hire 5x</button>
+            <button class="btn btn-green" onclick="buyResumes(1, 10)">Hire 10x</button>
+          </div>
+        </div>
+        <div style="border:1px solid var(--panel-border); padding:8px; border-radius:3px;">
+          <div style="font-size:10px; color:var(--status-purple); font-weight:bold; margin-bottom:6px;">TRAP STARS [T5-T8] ($250K / Hire)</div>
+          <div class="pack-row">
+            <button class="btn btn-purple" onclick="buyResumes(2, 1)">Hire 1x</button>
+            <button class="btn btn-purple" onclick="buyResumes(2, 5)">Hire 5x</button>
+            <button class="btn btn-green" onclick="buyResumes(2, 10)">Hire 10x</button>
+          </div>
+        </div>
+        <div style="border:1px solid var(--panel-border); padding:8px; border-radius:3px;">
+          <div style="font-size:10px; color:var(--status-amber); font-weight:bold; margin-bottom:6px;">CARTEL PLUGS [T7-T10] ($1.0M / Hire)</div>
+          <div class="pack-row">
+            <button class="btn" style="border-color:var(--status-amber); color:var(--status-amber);" onclick="buyResumes(3, 1)">Hire 1x</button>
+            <button class="btn" style="border-color:var(--status-amber); color:var(--status-amber);" onclick="buyResumes(3, 5)">Hire 5x</button>
+            <button class="btn btn-green" onclick="buyResumes(3, 10)">Hire 10x</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <div class="panel-header">
+        <span>Gas Station (Fuel)</span>
+        <span style="font-size:11px; font-weight:bold; color:var(--status-amber);">$<span id="fuel-price">2.80</span> / GAL</span>
+      </div>
+      <div class="fraction-row">
+        <button class="btn" onclick="buyFuelFixed(50000)">50K Gal</button>
+        <button class="btn" onclick="buyFuelFixed(250000)">250K Gal</button>
+        <button class="btn" onclick="buyFuelFixed(1000000)">1M Gal</button>
+        <button class="btn btn-green" onclick="buyFuelFixed('MAX')">Max Fill</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB 3: FLEET OPS (STASH) -->
+  <div id="tab-fleet" class="view-tab">
+    <div class="panel">
+      <div class="panel-header">
+        <span>Stash Inventory</span>
+        <div style="display:flex; gap:4px;">
+          <button class="btn btn-green" onclick="autoAssignPilots()">Auto-Crew</button>
+          <button class="btn btn-green" onclick="autoAssignRoutes()">Auto-Route</button>
+          <button class="btn btn-green" onclick="dispatchAll()">Deliver</button>
+          <button class="btn" onclick="maintainAll()">Cure All</button>
+        </div>
+      </div>
+      
+      <div class="control-bar">
+        <div class="control-group">
+          <span class="control-label">Sort:</span>
+          <button class="btn" style="padding:4px 6px; font-size:8px;" onclick="sortHangar('val')">VAL</button>
+          <button class="btn" style="padding:4px 6px; font-size:8px;" onclick="sortHangar('tier')">TIER</button>
+          <button class="btn" style="padding:4px 6px; font-size:8px;" onclick="sortHangar('range')">DIST</button>
+        </div>
+        <div class="control-group">
+          <span class="control-label">Type:</span>
+          <select id="fleet-role-filter" onchange="filterHangarRole(this.value)" style="padding:3px; font-size:9px; width:auto;">
+            <option value="ALL">All Strains</option>
+            <option value="INDICA">Indica</option>
+            <option value="SATIVA">Sativa</option>
+            <option value="HYBRID">Hybrid</option>
+            <option value="EDIBLE">Edible</option>
+            <option value="EXTRACT">Extract</option>
+            <option value="EXOTIC">Exotic</option>
+          </select>
+        </div>
+        <div class="control-group">
+          <span class="control-label">Tier:</span>
+          <select id="fleet-tier-filter" onchange="filterHangarTier(this.value)" style="padding:3px; font-size:9px; width:auto;">
+            <option value="ALL">All Tiers</option>
+            <option value="0">T1</option><option value="1">T2</option><option value="2">T3</option><option value="3">T4</option><option value="4">T5</option>
+            <option value="5">T6</option><option value="6">T7</option><option value="7">T8</option><option value="8">T9</option><option value="9">T10</option>
+          </select>
+        </div>
+        <button class="btn btn-green" style="padding:4px 6px; font-size:8px;" onclick="importStrain()">Import Base36</button>
+      </div>
+
+      <div class="fraction-row">
+        <button class="btn btn-danger" onclick="quickSellStrains(0)">Smoke T1</button>
+        <button class="btn btn-danger" onclick="quickSellStrains(1)">Smoke T2&lt;</button>
+        <button class="btn btn-danger" onclick="quickSellStrains(2)">Smoke T3&lt;</button>
+        <button class="btn btn-danger" onclick="quickSellStrains(3)">Smoke T4&lt;</button>
+      </div>
+
+      <div id="fleet-list" class="fleet-grid"></div>
+    </div>
+  </div>
+
+  <!-- TAB 4: PILOTS (COURIERS) -->
+  <div id="tab-pilots" class="view-tab">
+    <div class="panel">
+      <div class="panel-header"><span>Courier Roster</span></div>
+      
+      <div class="control-bar">
+        <div class="control-group">
+          <span class="control-label">Sort:</span>
+          <button class="btn" style="padding:4px 6px; font-size:8px;" onclick="sortPilots('val')">VAL</button>
+          <button class="btn" style="padding:4px 6px; font-size:8px;" onclick="sortPilots('tier')">TIER</button>
+        </div>
+        <div class="control-group">
+          <span class="control-label">Tier:</span>
+          <select id="pilot-tier-filter" onchange="filterPilotTier(this.value)" style="padding:3px; font-size:9px; width:auto;">
+            <option value="ALL">All Tiers</option>
+            <option value="0">T1</option><option value="1">T2</option><option value="2">T3</option><option value="3">T4</option><option value="4">T5</option>
+            <option value="5">T6</option><option value="6">T7</option><option value="7">T8</option><option value="8">T9</option><option value="9">T10</option>
+          </select>
+        </div>
+        <button class="btn btn-green" style="padding:4px 6px; font-size:8px;" onclick="importCourier()">Import Base36</button>
+      </div>
+
+      <div class="fraction-row">
+        <button class="btn btn-danger" onclick="quickSellPilots(0)">Fire T1</button>
+        <button class="btn btn-danger" onclick="quickSellPilots(1)">Fire T2&lt;</button>
+        <button class="btn btn-danger" onclick="quickSellPilots(2)">Fire T3&lt;</button>
+        <button class="btn btn-danger" onclick="quickSellPilots(3)">Fire T4&lt;</button>
+      </div>
+
+      <div id="pilots-grid" class="fleet-grid"></div>
+    </div>
+  </div>
+
+  <!-- TAB 5: ROUTES (ZONES) -->
+  <div id="tab-routes" class="view-tab">
+    <div class="panel">
+      <div class="panel-header">
+        <span>Delivery Zones (400 Routes)</span>
+        <select id="route-cat-filter" onchange="filterRouteCategory(this.value)" style="padding:3px; font-size:9px; width:auto;">
+          <option value="ALL">All Demand</option>
+          <option value="INDICA">Indica Demand</option>
+          <option value="SATIVA">Sativa Demand</option>
+          <option value="HYBRID">Hybrid Demand</option>
+          <option value="EDIBLE">Edible Demand</option>
+          <option value="EXTRACT">Extract Demand</option>
+          <option value="EXOTIC">Exotic Demand</option>
+        </select>
+      </div>
+      <div id="routes-list" style="display:flex; flex-direction:column; gap:6px;"></div>
+    </div>
+  </div>
+
+  <!-- TAB 6: AUCTIONS (WHOLESALE BLOCK) -->
+  <div id="tab-auction" class="view-tab">
+    <div class="panel">
+      <div class="panel-header"><span>Wholesale Trap Block</span><span style="color:var(--status-amber);"><span id="auction-count">0</span>/10 LANES</span></div>
+      <p style="font-size:10px; color:var(--silver-dim);">Bids start at 90% base value. Sniping in the last 1s resets clock to 3s. 2x-20x price spikes active.</p>
+      
+      <div style="display:flex; gap:6px;">
+        <button class="btn btn-green" style="flex:1; padding:8px;" onclick="fillAuctions('planes')">Auto-Fill 10 Cheapest Strains</button>
+        <button class="btn btn-green" style="flex:1; padding:8px;" onclick="fillAuctions('pilots')">Auto-Fill 10 Cheapest Drivers</button>
+      </div>
+
+      <div id="auction-idle" style="text-align:center; padding:16px; color:var(--silver-dim); font-size:11px;">Lanes empty. Use Auto-Fill or click Wholesale on any individual asset.</div>
+      <div id="auction-board" class="fleet-grid"></div>
+    </div>
+  </div>
+
+  <!-- TAB 7: CHECKLIST & MISSIONS -->
+  <div id="tab-checklist" class="view-tab">
+    <div class="panel">
+      <div class="panel-header">Operations Automations</div>
+      <div style="display:flex; flex-direction:column; gap:6px;">
+        <div class="check-item">
+          <div><strong>Endless Hustle:</strong> Automatically re-dispatches deliveries on their assigned route after return.</div>
+          <button id="chk-autoloop" class="btn" onclick="toggleAutoLoop()">ENABLE</button>
+        </div>
+        <div class="check-item">
+          <div><strong>Automated Re-Curing:</strong> Automatically restores freshness if it falls below 45%.</div>
+          <button id="chk-automro" class="btn" onclick="toggleAutoMRO()">ENABLE</button>
+        </div>
+        <div class="check-item">
+          <div><strong>Automated Gas Runs:</strong> Buys 100K Gal when reserves fall below 50K.</div>
+          <button id="chk-autorefuel" class="btn" onclick="toggleAutoRefuel()">ENABLE</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <div class="panel-header">
+        <span>Burner Phone (VIP Requests)</span>
+        <button class="btn btn-green" style="padding:2px 6px; font-size:8px;" onclick="refreshSideMissions()">Ignore Texts</button>
+      </div>
+      <p style="font-size:10px; color:var(--silver-dim); margin-bottom:4px;">Send specific product to exact zones to earn massive cash and free mystery seeds.</p>
+      <div id="side-missions-list" style="display:flex; flex-direction:column; gap:6px;"></div>
+    </div>
+
+    <div class="panel">
+      <div class="panel-header">Kingpin Milestones</div>
+      <div id="milestone-list" style="display:flex; flex-direction:column; gap:6px;"></div>
+    </div>
+  </div>
+
+  <!-- TAB 8: UPGRADES -->
+  <div id="tab-upgrades" class="view-tab">
+    <div class="panel">
+      <div class="panel-header">Empire Architecture</div>
+      <div style="border:1px solid var(--panel-border); padding:8px; border-radius:3px; background:#000;">
+        <div style="display:flex; justify-content:space-between; margin-bottom:4px; font-size:11px;">
+          <span style="font-weight:bold; color:var(--status-green);">Street Marketing</span>
+          <span style="color:var(--silver-dim);">Lvl <span id="upg-mkt-lvl">0</span> (+<span id="upg-mkt-pct">0</span>%)</span>
+        </div>
+        <div style="font-size:9.5px; color:var(--silver-dim); margin-bottom:6px;">Permanently boosts base delivery yields by +5% per level.</div>
+        <button class="btn btn-green" style="width:100%;" onclick="buyUpgrade('mkt')">Invest ($<span id="upg-mkt-cost">100000</span>)</button>
+      </div>
+      <div style="border:1px solid var(--panel-border); padding:8px; border-radius:3px; background:#000;">
+        <div style="display:flex; justify-content:space-between; margin-bottom:4px; font-size:11px;">
+          <span style="color:var(--status-blue); font-weight:bold;">Hybrid Engine Fleets</span>
+          <span style="color:var(--silver-dim);">Lvl <span id="upg-eng-lvl">0</span> (-<span id="upg-eng-pct">0</span>%)</span>
+        </div>
+        <div style="font-size:9.5px; color:var(--silver-dim); margin-bottom:6px;">Permanently reduces fleet-wide gas consumption by 2% per level (Max 70%).</div>
+        <button class="btn" style="border-color:var(--status-blue); color:var(--status-blue); width:100%;" onclick="buyUpgrade('eng')">Invest ($<span id="upg-eng-cost">150000</span>)</button>
+      </div>
+    </div>
+  </div>
+</main>
+
+<div id="toast-rack"></div>
+
+<script>
+  /* ================= 9,600 WEED COMBINATIONS ================= */
+  const WEED_PREFIXES = ["Frosty","Sticky","Purple","Sour","Sweet","Loud","Dank","Gas","Haze","Kush"];
+  const WEED_GROWERS = ["Cali","Dam","Local","Hydro","Sun-Grown","Boutique","Cartel","Medicinal"];
+  const WEED_STRAINS = ["Widow","Diesel","Gelato","Runtz","OG","Dream","Express","Cake","Punch","Cookies","Skunk","Glue","Sherbet","Zkittlez","Haze","Kush","Wreck","Mac","Mints","Breath"];
+  const WEED_ROLES = ["INDICA", "SATIVA", "HYBRID", "EDIBLE", "EXTRACT", "EXOTIC"];
+
+  const P_FIRST = ["John","Jane","James","Sarah","Michael","Elena","David","Maria","Robert","Anna","William","Emma","Richard","Olivia","Thomas","Sophia","Charles","Isabella","Daniel","Mia"];
+  const P_LAST = ["Smith","Johnson","Williams","Brown","Jones","Garcia","Miller","Davis","Rodriguez","Martinez","Hernandez","Lopez","Gonzalez","Wilson","Anderson","Thomas","Taylor","Moore","Jackson","Martin"];
+  const P_CALL = ["'Smokey'","'Speedy'","'Ghost'","'Plug'","'Runner'","'Ace'","'Slick'","'Rider'"];
+  const B_TYPES = ["TIPS","SPEED","MPG","CARE"]; // TIPS=Yield, SPEED=Time, MPG=Fuel, CARE=Safety/Freshness
+
+  const TIERS = [
+    { tier: 1, name: "Tier I: Schwag", color: "var(--t0-col)", baseVal: 50000 },
+    { tier: 2, name: "Tier II: Mids", color: "var(--t1-col)", baseVal: 150000 },
+    { tier: 3, name: "Tier III: Beasters", color: "var(--t2-col)", baseVal: 500000 },
+    { tier: 4, name: "Tier IV: Premium", color: "var(--t3-col)", baseVal: 1500000 },
+    { tier: 5, name: "Tier V: Top Shelf", color: "var(--t4-col)", baseVal: 5000000 },
+    { tier: 6, name: "Tier VI: Private Reserve", color: "var(--t5-col)", baseVal: 15000000 },
+    { tier: 7, name: "Tier VII: Designer", color: "var(--t6-col)", baseVal: 40000000 },
+    { tier: 8, name: "Tier VIII: Exotic", color: "var(--t7-col)", baseVal: 100000000 },
+    { tier: 9, name: "Tier IX: Cup Winner", color: "var(--t8-col)", baseVal: 250000000 },
+    { tier: 10, name: "Tier X: Diamond", color: "var(--t9-col)", baseVal: 500000000 }
+  ];
+
+  const ZONE_CAT = {
+    INDICA: ["Suburbs","Quiet Neighborhood","Late Night Lounge","Retirement Comm.","Chill Spot","Basement Party","Movie Theater","Hotel Room","Campground","Cabin"],
+    SATIVA: ["Downtown","Financial Dist.","Tech Campus","Art Studio","Morning Cafe","Hiking Trail","Gym Lot","Festival Grounds","Beach Boardwalk","Skatepark"],
+    HYBRID: ["Midtown","College Campus","Bar District","Arcade","Rooftop Party","House Show","Block Party","Bowling Alley","Record Store","Food Truck Park"],
+    EDIBLE: ["Airport Drop","Bus Station","Yoga Studio","Vegan Cafe","Boutique Shop","Spa & Resort","Culinary School","Luxury Condo","Mansion Row","Country Club"],
+    EXTRACT: ["Warehouse Dist.","Industrial Park","Underground Club","Trap House","Trap Studio","Mechanic Shop","Rave Cave","Night Market","Back Alley","Loading Dock"],
+    EXOTIC: ["VIP Lounge","Penthouse Suite","Yacht Marina","Hollywood Hills","Private Island","Exclusive Club","High Roller Suite","Red Carpet","Mansions","Estate"]
+  };
+
+  const MILESTONES = [
+    { id: "m1", title: "First Delivery", desc: "Send a courier on an active route.", reward: 250000, req: s => s.fleet.some(p => p.status === 'IN_FLIGHT' || p.expRev > 0) },
+    { id: "m2", title: "Trap House", desc: "Hold 5 or more strains in your stash.", reward: 1000000, req: s => s.fleet.length >= 5 },
+    { id: "m3", title: "Delivery Fleet", desc: "Hire 5 or more couriers.", reward: 750000, req: s => s.pilots.length >= 5 },
+    { id: "m4", title: "Cross-State Run", desc: "Unlock a zone > 3,000 Miles.", reward: 2000000, req: s => s.routes.some(r => r.unlocked && r.dist >= 3000) },
+    { id: "m5", title: "The Baker", desc: "Harvest an Edible class product.", reward: 3000000, req: s => s.fleet.some(p => p.role === 'EDIBLE') },
+    { id: "m6", title: "Top Shelf", desc: "Acquire a Tier V or higher strain.", reward: 8000000, req: s => s.fleet.some(p => p.tierIndex >= 4) },
+    { id: "m7", title: "Star Driver", desc: "Hire a Tier V or higher courier.", reward: 4000000, req: s => s.pilots.some(p => p.tierIndex >= 4) },
+    { id: "m8", title: "Gas Guzzler", desc: "Accumulate over 500,000 Gal of Gas in reserve.", reward: 2500000, req: s => s.fuelReserve >= 500000 },
+    { id: "m9", title: "Kingpin Status", desc: "Amass over $100,000,000.", reward: 20000000, req: s => s.funds >= 100000000 },
+    { id: "m10", title: "Distribution Center", desc: "Expand stash to 10 active strains.", reward: 5000000, req: s => s.fleet.length >= 10 },
+    { id: "m11", title: "Wholesale Plug", desc: "Sell an asset on the wholesale block.", reward: 1500000, req: s => s.statAuctionsSold > 0 },
+    { id: "m12", title: "Personal Use", desc: "Smoke (dispose) any strain.", reward: 1000000, req: s => s.statPlanesScrapped > 0 },
+    { id: "m13", title: "Smuggler's Run", desc: "Unlock a zone > 6,500 Miles.", reward: 6000000, req: s => s.routes.some(r => r.unlocked && r.dist >= 6500) },
+    { id: "m14", title: "Cartel Ties", desc: "Employ 3 or more Tier VII+ Plugs.", reward: 15000000, req: s => s.pilots.filter(p => p.tierIndex >= 6).length >= 3 },
+    { id: "m15", title: "Diamond Hands", desc: "Acquire a Tier X Diamond strain.", reward: 50000000, req: s => s.fleet.some(p => p.tierIndex === 9) }
+  ];
+
+  const $ = id => document.getElementById(id);
+
+  /* ================= STATE ================= */
+  let State = {
+    funds: 50000000, 
+    fuelReserve: 250000,
+    fuelSpotPrice: 2.85,
+    buyMode: 1, 
+    sortHangarMode: 'val',
+    filterHangarRole: 'ALL',
+    filterHangarTier: 'ALL',
+    sortPilotsMode: 'val',
+    filterPilotTier: 'ALL',
+    filterRouteCat: 'ALL',
+    fleet: [], pilots: [], routes: [], auctions: [], marketCars: [],
+    marketTimer: 10.0,
+    upgrades: { mkt: 0, eng: 0 },
+    automation: { autoDispatch: false, autoMRO: false, autoRefuel: false },
+    claimedMilestones: [],
+    sideMissions: [],
+    statAuctionsSold: 0,
+    statPlanesScrapped: 0
+  };
+  let globalInterval = null;
+
+  /* ================= UTILITY & BASE36 ================= */
+  function fmt(n) {
+    if (n >= 1e12) return (n / 1e12).toFixed(2) + "T";
+    if (n >= 1e9) return (n / 1e9).toFixed(2) + "B";
+    if (n >= 1e6) return (n / 1e6).toFixed(2) + "M";
+    if (n >= 1e3) return (n / 1e3).toFixed(1) + "K";
+    return Math.floor(n).toLocaleString();
+  }
+  function toast(msg) {
+    const r = $('toast-rack'); const e = document.createElement('div');
+    e.className = 'toast'; e.innerHTML = msg; r.appendChild(e);
+    setTimeout(() => e.remove(), 2800);
+  }
+  function updateHUD() {
+    if($('hud-funds')) $('hud-funds').innerText = `$${fmt(State.funds)}`;
+    if($('hud-fleet-count')) $('hud-fleet-count').innerText = State.fleet.length;
+    if($('hud-pilot-count')) $('hud-pilot-count').innerText = State.pilots.length;
+    if($('hud-fuel')) $('hud-fuel').innerText = fmt(State.fuelReserve);
+  }
+  function godMode() {
+    State.funds += 2000000000; State.fuelReserve += 10000000;
+    State.fleet.forEach(p => p.condition = 100);
+    toast("KINGPIN: +$2B Cash, +10M Gal Gas, Freshness Restored.");
+    updateHUD(); renderFleet();
+  }
+  function saveGame() { localStorage.setItem('duberV1_10', JSON.stringify(State)); toast("Progress Saved."); }
+  function loadGame() {
+    let s = localStorage.getItem('duberV1_10');
+    if (s) {
+      State = JSON.parse(s);
+      if(!State.routes || State.routes.length < 400) State.routes = generateRoutes();
+      if(!State.sideMissions || State.sideMissions.length === 0) generateSideMissions();
+      State.fleet.forEach(p => { p.status = 'READY'; p.flightEnd = 0; p.flightStart = 0; });
+      updateHUD(); updateAutomationUI(); setTab('market');
+      toast("Progress Restored.");
+    } else {
+      toast("No saved records found.");
+    }
+  }
+  function setBuyMode(val) {
+      State.buyMode = val;
+      ['buy-1','buy-0.25','buy-0.5','buy-0.75','buy-1.0'].forEach(id => { if($(id)) $(id).classList.remove('active'); });
+      let sel = val===1?'buy-1':val===0.25?'buy-0.25':val===0.5?'buy-0.5':val===0.75?'buy-0.75':'buy-1.0';
+      if($(sel)) $(sel).classList.add('active');
+  }
+
+  /* BASE36 FOR COURIERS */
+  function exportCourier(uid) {
+    let p = State.pilots.find(x => x.uid===uid); if(!p) return;
+    let codeInt = p.fIdx * 160 + p.lIdx * 8 + p.cIdx;
+    prompt("Copy Courier Base36 Code:", "CR-" + codeInt.toString(36).toUpperCase());
+  }
+  function importCourier() {
+    let str = prompt("Enter Courier Base36 Code (CR-XXX):"); if(!str) return;
+    str = str.replace('CR-', '').trim();
+    let codeInt = parseInt(str, 36); if(isNaN(codeInt) || codeInt < 0) { toast("Invalid code."); return; }
+    let cIdx = codeInt % 8; codeInt = Math.floor(codeInt / 8);
+    let lIdx = codeInt % 20; codeInt = Math.floor(codeInt / 20);
+    let fIdx = codeInt % 20;
+    let tIdx = Math.floor(Math.random() * 10);
+    let bIdx = Math.floor(Math.random() * 4);
+    State.pilots.push(hireCourier(fIdx, lIdx, cIdx, tIdx, bIdx)); 
+    updateHUD(); renderPilots(); toast("Courier hired via Trade Code!");
+  }
+
+  /* BASE36 FOR STRAINS */
+  function exportStrain(uid) {
+    let p = State.fleet.find(x => x.uid===uid); if(!p) return;
+    let codeInt = p.pIdx * 960 + p.bIdx * 120 + p.mIdx * 6 + p.rIdx;
+    prompt("Copy Strain Base36 Code:", "DD-" + codeInt.toString(36).toUpperCase());
+  }
+  function importStrain() {
+    let str = prompt("Enter Strain Base36 Code (DD-XXX):"); if(!str) return;
+    str = str.replace('DD-', '').trim();
+    let codeInt = parseInt(str, 36); if(isNaN(codeInt) || codeInt < 0) { toast("Invalid code."); return; }
+    let rIdx = codeInt % 6; codeInt = Math.floor(codeInt / 6);
+    let mIdx = codeInt % 20; codeInt = Math.floor(codeInt / 20);
+    let bIdx = codeInt % 8; codeInt = Math.floor(codeInt / 8);
+    let pIdx = codeInt % 10;
+    let tIdx = Math.floor(Math.random() * 10);
+    
+    let tD = TIERS[tIdx];
+    let val = Math.floor(tD.baseVal * 1.0); 
+    let cost = Math.max(50000, Math.floor(val * 0.8)); 
+    let cap = Math.floor(50 + (tIdx * 45));
+    let rnge = Math.floor(1000 + (tIdx * 900));
+    let burn = Math.floor(200 + (tIdx * 150));
+
+    let importedPlane = {
+      uid: 'S' + Math.floor(100+Math.random()*899) + 'DD',
+      pIdx, bIdx, mIdx, rIdx, tierIndex: tIdx,
+      name: `${WEED_PREFIXES[pIdx]} ${WEED_GROWERS[bIdx]} ${WEED_STRAINS[mIdx]}`,
+      role: WEED_ROLES[rIdx % WEED_ROLES.length], tierName: tD.name, tierColor: tD.color,
+      value: val, cost: cost, capacity: cap, range: rnge, fuelBurn: burn,
+      condition: 100, status: 'READY', assignedRoute: null, assignedPilot: null
+    };
+    
+    State.fleet.push(importedPlane);
+    updateHUD(); renderFleet(); toast("Strain harvested via Trade Code!");
+  }
+
+  /* ================= PROCEDURAL GENERATORS (400 Routes) ================= */
+  function generateRoutes() {
+    let rts = [];
+    let roles = WEED_ROLES;
+    let used = new Set();
+    let idCounter = 0;
+
+    roles.forEach(role => {
+      let pool = ZONE_CAT[role] || ZONE_CAT["INDICA"];
+      let count = role === "INDICA" || role === "SATIVA" ? 80 : 60; // 400 total
+      for(let i=0; i<count; i++) {
+        let a1, a2, pair;
+        let attempts = 0;
+        do {
+          a1 = pool[Math.floor(Math.random() * pool.length)];
+          a2 = pool[Math.floor(Math.random() * pool.length)];
+          pair = `${a1}-${a2}-${role}`;
+          attempts++;
+        } while((a1 === a2 || used.has(pair)) && attempts < 50);
+        
+        used.add(pair);
+        let dist = role === 'EXOTIC' ? Math.floor(1200 + Math.random() * 7500) : Math.floor(350 + Math.random() * 8500);
+        let tier = dist > 6500 ? "Cross-Country" : dist > 4000 ? "Interstate" : dist > 1500 ? "Regional" : "Local";
+        let cost = Math.ceil((100000 + (Math.pow(dist, 1.38) * 32)) / 10000) * 10000;
+        
+        rts.push({
+          id: "rt_" + (idCounter++),
+          name: `${a1} ↔ ${a2}`,
+          role: role,
+          dist: dist,
+          cost: cost,
+          unlocked: idCounter === 1,
+          minTier: tier
+        });
+      }
+    });
+
+    rts.sort((a,b) => a.dist - b.dist);
+    rts[0].unlocked = true;
+    return rts;
+  }
+
+  function harvestStrain(tIdx) {
+    let pIdx = Math.floor(Math.random() * WEED_PREFIXES.length);
+    let bIdx = Math.floor(Math.random() * WEED_GROWERS.length);
+    let mIdx = Math.floor(Math.random() * WEED_STRAINS.length);
+    let rIdx = Math.floor(Math.random() * WEED_ROLES.length);
+    let tD = TIERS[tIdx];
+
+    let fluct = 1.0 + (Math.random() * 0.4 - 0.2); 
+    let val = Math.floor(tD.baseVal * fluct);
+    let cost = Math.max(50000, Math.floor(val * 0.8)); 
+
+    let cap = Math.floor(50 + (tIdx * 45) * fluct); // LBS
+    let rnge = Math.floor(1000 + (tIdx * 900) * fluct); // DIST in MILES
+    let burn = Math.floor(200 + (tIdx * 150)); // GAS BURN
+
+    return {
+      uid: 'S' + Math.floor(100+Math.random()*899) + 'DD',
+      pIdx, bIdx, mIdx, rIdx, tierIndex: tIdx,
+      name: `${WEED_PREFIXES[pIdx]} ${WEED_GROWERS[bIdx]} ${WEED_STRAINS[mIdx]}`,
+      role: WEED_ROLES[rIdx], tierName: tD.name, tierColor: tD.color,
+      value: val, cost: cost, capacity: cap, range: rnge, fuelBurn: burn,
+      condition: 100, status: 'READY', assignedRoute: null, assignedPilot: null
+    };
+  }
+
+  function hireCourier(fIdx, lIdx, cIdx, tIdx, bIdx) {
+    let rawPow = [6,25,100,300,1000,2500,6000,15000,35000,66666][tIdx];
+    let val = TIERS[tIdx].baseVal / 10; 
+    return {
+      uid: Date.now()+Math.random().toString(36).substring(2,8), fIdx, lIdx, cIdx, tIdx, bIdx,
+      name: `${P_FIRST[fIdx]} ${P_CALL[cIdx]} ${P_LAST[lIdx]}`,
+      tierIndex: tIdx, tierName: TIERS[tIdx].name, tierColor: TIERS[tIdx].color,
+      bType: B_TYPES[bIdx], bonus: rawPow, value: Math.floor(val),
+      locked: false, assignedTo: null
+    };
+  }
+
+  /* ================= MARKETS & GACHA ================= */
+  function refreshMarket() {
+    State.marketCars = [];
+    for(let i=0; i<5; i++) {
+      let r = Math.random()*100; let tI = r>99.9?9 : r>99?8 : r>95?7 : r>85?6 : r>70?5 : r>50?4 : r>30?3 : r>15?2 : r>5?1 : 0;
+      State.marketCars.push(harvestStrain(tI));
+    }
+    renderMarket();
+  }
+
+  function renderMarket() {
+    const grid = $('market-grid'); if(!grid) return; grid.innerHTML = '';
+    State.marketCars.forEach((c, idx) => {
+      let rCol = c.role === 'INDICA' ? '#a855f7' : c.role === 'SATIVA' ? '#f59e0b' : c.role === 'HYBRID' ? '#22c55e' : c.role === 'EDIBLE' ? '#ec4899' : c.role === 'EXTRACT' ? '#fbbf24' : '#06b6d4';
+      const e = document.createElement('div'); e.className = 'strain-card'; e.style.borderColor = c.tierColor;
+      e.innerHTML = `
+        <div style="display:flex; justify-content:space-between; align-items:center;">
+          <span style="color:${c.tierColor}; font-weight:bold; font-size:10px;">[${c.tierName}]</span>
+          <span class="badge" style="color:${rCol}; border-color:${rCol};">${c.role}</span>
+        </div>
+        <div style="font-size:13px; font-weight:900; color:#fff;">${c.name}</div>
+        <div class="spec-grid">
+          <div><span>WGHT:</span> ${c.capacity} LBS</div>
+          <div><span>DIST:</span> ${c.range.toLocaleString()} MILES</div>
+          <div><span>GAS:</span> ${c.fuelBurn} gal/hr</div>
+          <div><span>VAL:</span> $${fmt(c.value)}</div>
+        </div>
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-top:4px;">
+          <div>
+            <div style="font-size:9px; color:var(--silver-dim);">Est Val: $${fmt(c.value)}</div>
+            <div style="font-size:12px; color:var(--status-green); font-weight:bold; font-family:monospace;">Price: $${fmt(c.cost)}</div>
+          </div>
+          <button class="btn btn-green" onclick="buyMarketStrain(${idx})">BUY</button>
+        </div>
+      `;
+      grid.appendChild(e);
+    });
+  }
+
+  function buyMarketStrain(idx) {
+    let c = State.marketCars[idx]; if(!c) return;
+    if(State.funds < c.cost) { toast("Insufficient cash."); return; }
+    State.funds -= c.cost; State.fleet.push(c); State.marketCars.splice(idx, 1);
+    toast(`Stashed: ${c.name}`); updateHUD(); renderMarket();
+  }
+
+  function buySeeds(bIdx, count) {
+    let costs = [10000, 100000, 1000000, 5000000];
+    let c = State.buyMode === 1 ? count : Math.max(1, Math.floor(Math.floor(State.funds/costs[bIdx]) * State.buyMode));
+    let cost = costs[bIdx] * c;
+    if(State.funds < cost) { toast("Insufficient cash."); return; }
+    State.funds -= cost;
+    let tArr = bIdx===0?[0,1,2,3]:bIdx===1?[2,3,4,5]:bIdx===2?[4,5,6,7]:[6,7,8,9];
+    for(let i=0; i<c; i++) {
+      let r = Math.random()*100; let tI = r>95?tArr[3]:r>80?tArr[2]:r>50?tArr[1]:tArr[0];
+      State.fleet.push(harvestStrain(tI));
+    }
+    updateHUD(); toast(`Harvested ${c}x Strains.`);
+  }
+
+  function buyResumes(bIdx, count) {
+    let costs = [5000, 50000, 250000, 1000000];
+    let c = State.buyMode === 1 ? count : Math.max(1, Math.floor(Math.floor(State.funds/costs[bIdx]) * State.buyMode));
+    let cost = costs[bIdx] * c;
+    if(State.funds < cost) { toast("Insufficient cash."); return; }
+    State.funds -= cost;
+    let tArr = bIdx===0?[0,1,2,3]:bIdx===1?[2,3,4,5]:bIdx===2?[4,5,6,7]:[6,7,8,9];
+    for(let i=0; i<c; i++) {
+      let r = Math.random()*100; let tI = r>95?tArr[3]:r>80?tArr[2]:r>50?tArr[1]:tArr[0];
+      State.pilots.push(hireCourier(Math.floor(Math.random()*20), Math.floor(Math.random()*20), Math.floor(Math.random()*8), tI, Math.floor(Math.random()*4)));
+    }
+    updateHUD(); toast(`Hired ${c}x Couriers.`);
+  }
+
+  function buyFuelFixed(amount) {
+    let unit = State.fuelSpotPrice;
+    let gal = amount === 'MAX' ? Math.floor(State.funds / unit) : amount;
+    if(gal <= 0) { toast("Insufficient cash."); return; }
+    let cost = gal * unit;
+    if(State.funds < cost) { toast("Insufficient cash."); return; }
+    State.funds -= cost; State.fuelReserve += gal;
+    toast(`Bought ${fmt(gal)} Gal Gas.`); updateHUD();
+  }
+
+  /* ================= FLEET OPS ================= */
+  function sortHangar(mode) { State.sortHangarMode = mode; renderFleet(); }
+  function filterHangarRole(val) { State.filterHangarRole = val; renderFleet(); }
+  function filterHangarTier(val) { State.filterHangarTier = val; renderFleet(); }
+  
+  function assignRoute(pUid, rId) { const p = State.fleet.find(x=>x.uid===pUid); if(p) p.assignedRoute = rId; }
+  function assignPilot(pUid, piUid) {
+    const p = State.fleet.find(x=>x.uid===pUid); if(!p) return;
+    if(p.assignedPilot) { let o = State.pilots.find(x=>x.uid===p.assignedPilot); if(o) o.assignedTo = null; }
+    if(piUid==="") p.assignedPilot = null; 
+    else { p.assignedPilot=piUid; let n=State.pilots.find(x=>x.uid===piUid); if(n) n.assignedTo=pUid; }
+    renderFleet();
+  }
+
+  function autoAssignPilots() {
+    let uncrewed = State.fleet.filter(p => !p.assignedPilot && p.status === 'READY');
+    let freePilots = State.pilots.filter(p => !p.assignedTo && !p.locked).sort((a,b) => b.bonus - a.bonus);
+    if(uncrewed.length === 0 || freePilots.length === 0) {
+      toast("No strains or available couriers."); return;
+    }
+    let paired = 0;
+    uncrewed.forEach(p => {
+      if(freePilots.length > 0) {
+        let pilot = freePilots.shift();
+        p.assignedPilot = pilot.uid;
+        pilot.assignedTo = p.uid;
+        paired++;
+      }
+    });
+    toast(`Assigned couriers to ${paired} deliveries.`); renderFleet(); renderPilots();
+  }
+
+  function autoAssignRoutes() {
+    let unrouted = State.fleet.filter(p => !p.assignedRoute && p.status === 'READY');
+    let uRts = State.routes.filter(r => r.unlocked);
+    if(unrouted.length === 0 || uRts.length === 0) {
+      toast("No idle strains or unlocked zones."); return;
+    }
+    let routedCnt = 0;
+    unrouted.forEach(p => {
+      let valid = uRts.filter(r => (r.role === p.role || r.role === 'INDICA') && r.dist <= p.range);
+      if(valid.length > 0) {
+        valid.sort((a,b) => b.dist - a.dist);
+        p.assignedRoute = valid[0].id;
+        routedCnt++;
+      }
+    });
+    toast(`Auto-Routed ${routedCnt} deliveries to furthest zones.`);
+    renderFleet();
+  }
+
+  function renderFleet() {
+    const list = $('fleet-list'); if(!list) return; list.innerHTML = '';
+    
+    let filtered = [...State.fleet];
+    if(State.filterHangarRole !== 'ALL') filtered = filtered.filter(p => p.role === State.filterHangarRole);
+    if(State.filterHangarTier !== 'ALL') filtered = filtered.filter(p => p.tierIndex === parseInt(State.filterHangarTier));
+    
+    if(filtered.length===0) { list.innerHTML=`<div style="text-align:center; padding:20px; color:var(--silver-dim); font-size:11px;">No strains match current filters.</div>`; return; }
+
+    if(State.sortHangarMode==='val') filtered.sort((a,b)=>b.value-a.value);
+    if(State.sortHangarMode==='tier') filtered.sort((a,b)=>b.tierIndex-a.tierIndex);
+    if(State.sortHangarMode==='range') filtered.sort((a,b)=>b.range-a.range);
+
+    const uRts = State.routes.filter(r => r.unlocked);
+    
+    // CACHE DROPDOWNS
+    let routeOptionsCache = {};
+    WEED_ROLES.forEach(role => {
+        let opts = `<option value="">-- Assign Zone (${role}) --</option>`;
+        uRts.filter(r => r.role === role || r.role === 'INDICA').forEach(r => {
+            let yieldM = 1.0 + (State.upgrades.mkt*0.05);
+            let baseYield = r.dist * 165 * yieldM;
+            let fuelD = 1.0; 
+            let baseFuelCost = ((r.dist * 0.22) * (1 - Math.min(0.7, State.upgrades.eng*0.02)) / fuelD) * State.fuelSpotPrice;
+            let net = baseYield - baseFuelCost;
+            opts += `<option value="${r.id}">${r.name} [${r.role}] (${r.dist} MI) | ~$${fmt(net)} Net</option>`;
+        });
+        routeOptionsCache[role] = opts;
+    });
+
+    let pilotOpts = `<option value="">-- Assign Courier --</option>`;
+    State.pilots.forEach(pl => { 
+        if(!pl.assignedTo) pilotOpts += `<option value="${pl.uid}">${pl.name} [${pl.bType}: +${fmt(pl.bonus)}%]</option>`; 
+    });
+
+    filtered.forEach(p => {
+      let rCol = p.role === 'INDICA' ? '#a855f7' : p.role === 'SATIVA' ? '#f59e0b' : p.role === 'HYBRID' ? '#22c55e' : p.role === 'EDIBLE' ? '#ec4899' : p.role === 'EXTRACT' ? '#fbbf24' : '#06b6d4';
+      const c = document.createElement('div'); c.className = `strain-card ${p.status==='IN_FLIGHT'?'in-flight':p.condition<50?'damaged':''}`; c.style.borderColor = p.tierColor;
+      
+      let pOpts = routeOptionsCache[p.role];
+      if(p.assignedRoute) pOpts = pOpts.replace(`value="${p.assignedRoute}"`, `value="${p.assignedRoute}" selected`);
+      let rtSel = `<select ${p.status==='IN_FLIGHT'?'disabled':''} onchange="assignRoute('${p.uid}', this.value)">${pOpts}</select>`;
+
+      let pPilotOpts = pilotOpts;
+      if(p.assignedPilot) {
+          let pl = State.pilots.find(x=>x.uid === p.assignedPilot);
+          if(pl) pPilotOpts += `<option value="${pl.uid}" selected>${pl.name} [${pl.bType}: +${fmt(pl.bonus)}%]</option>`;
+      }
+      let piSel = `<select ${p.status==='IN_FLIGHT'?'disabled':''} onchange="assignPilot('${p.uid}', this.value)">${pPilotOpts}</select>`;
+
+      c.innerHTML = `
+        <div style="display:flex; justify-content:space-between; align-items:center;">
+          <div>
+            <span style="color:${p.tierColor}; font-weight:bold; font-size:10px;">[${p.tierName}]</span>
+            <span style="font-size:12px; font-weight:900; color:#fff; margin-left:3px;">${p.name}</span>
+            <span style="font-size:9px; color:var(--silver-dim); font-family:monospace;">[${p.uid}]</span>
+          </div>
+          <span class="badge" style="color:${rCol}; border-color:${rCol};">${p.role}</span>
+        </div>
+        
+        <div class="spec-grid">
+          <div><span>WGHT:</span> ${p.capacity} LBS</div>
+          <div><span>DIST:</span> ${p.range.toLocaleString()} MILES</div>
+          <div><span>GAS:</span> ${p.fuelBurn} gal/hr</div>
+          <div><span>VAL:</span> $${fmt(p.value)}</div>
+        </div>
+
+        <div style="display:flex; justify-content:space-between; font-size:8.5px; font-family:monospace; color:var(--silver-dim);">
+          <span>FRESHNESS: ${p.condition.toFixed(0)}%</span>
+          <span id="st-${p.uid}">STATUS: <strong style="color:#fff;">${p.status}</strong></span>
+        </div>
+        
+        <div style="display:flex; flex-direction:column; gap:3px;">${rtSel}${piSel}</div>
+        
+        ${p.status==='IN_FLIGHT'?`<div class="flight-bar-bg"><div id="bar-${p.uid}" class="flight-bar-fill"></div></div>`:''}
+        
+        <div style="display:flex; justify-content:space-between; margin-top:3px;">
+          <div style="display:flex; gap:3px;">
+            <button class="btn" style="padding:3px 5px; font-size:8px;" onclick="exportStrain('${p.uid}')">Trade</button>
+            <button class="btn btn-purple" style="padding:3px 5px; font-size:8px;" ${p.status==='IN_FLIGHT'?'disabled':''} onclick="initAuction('${p.uid}', 'plane')">Wholesale</button>
+            <button class="btn btn-danger" style="padding:3px 5px; font-size:8px;" ${p.status==='IN_FLIGHT'?'disabled':''} onclick="consumeStrain('${p.uid}')">Smoke</button>
+          </div>
+          <div style="display:flex; gap:3px;">
+            <button class="btn" style="padding:3px 6px; font-size:8px;" ${p.status==='IN_FLIGHT'?'disabled':''} onclick="maintainAirframe('${p.uid}')">Re-Cure</button>
+            <button class="btn btn-green" style="padding:4px 8px; font-size:8.5px;" ${p.status==='IN_FLIGHT'||!p.assignedRoute||!p.assignedPilot?'disabled':''} onclick="dispatchFlight('${p.uid}')">Deliver</button>
+          </div>
+        </div>
+      `;
+      list.appendChild(c);
+    });
+  }
+
+  function consumeStrain(uid) {
+    let i = State.fleet.findIndex(x=>x.uid===uid); if(i===-1) return;
+    let val = Math.floor(State.fleet[i].value * 0.5); State.funds+=val;
+    if(State.fleet[i].assignedPilot) { let p=State.pilots.find(x=>x.uid===State.fleet[i].assignedPilot); if(p) p.assignedTo=null; }
+    State.fleet.splice(i,1); State.statPlanesScrapped++;
+    toast(`Smoked. Yielded $${fmt(val)}.`); updateHUD(); renderFleet();
+  }
+
+  function quickSellStrains(maxT) {
+    let t = State.fleet.filter(s=>s.tierIndex<=maxT && s.status==='READY');
+    if(t.length===0){toast("No eligible strains in tier bracket.");return;}
+    let tot=0; t.forEach(s=>{
+      tot+=Math.floor(s.value*0.5);
+      if(s.assignedPilot) { let p=State.pilots.find(x=>x.uid===s.assignedPilot); if(p) p.assignedTo=null; }
+      State.statPlanesScrapped++;
+    });
+    State.fleet = State.fleet.filter(s=>s.tierIndex>maxT || s.status!=='READY');
+    State.funds+=tot; toast(`Smoked ${t.length} strains for $${fmt(tot)}.`); updateHUD(); renderFleet(); renderPilots();
+  }
+
+  /* ================= PILOT ROSTER ================= */
+  function sortPilots(mode) { State.sortPilotsMode = mode; renderPilots(); }
+  function filterPilotTier(val) { State.filterPilotTier = val; renderPilots(); }
+
+  function renderPilots() {
+    const grid = $('pilots-grid'); if(!grid) return; grid.innerHTML = '';
+    
+    let filtered = [...State.pilots];
+    if(State.filterPilotTier !== 'ALL') filtered = filtered.filter(p => p.tierIndex === parseInt(State.filterPilotTier));
+
+    if(filtered.length===0) { grid.innerHTML = `<div style="text-align:center; padding: 20px; color: var(--silver-dim); font-size:11px;">No couriers match filter criteria.</div>`; return; }
+
+    if(State.sortPilotsMode==='val') filtered.sort((a,b)=>b.value-a.value);
+    if(State.sortPilotsMode==='tier') filtered.sort((a,b)=>b.tierIndex-a.tierIndex);
+    
+    filtered.forEach(p => {
+      const c = document.createElement('div'); c.className = 'strain-card'; c.style.borderColor = p.tierColor;
+      c.innerHTML = `
+        <div class="stat-block" style="display:flex; justify-content:space-between;">
+          <span style="color:${p.tierColor}; font-weight:bold; font-size:9.5px;">${p.tierName}</span>
+          <span style="color:var(--status-green); font-size:9.5px;">[${p.bType}] +${fmt(p.bonus)}%</span>
+        </div>
+        <div style="font-size:12px; font-weight:900; color:#fff;">${p.name} ${p.locked?'[🔒]':''}</div>
+        <div style="font-size:9px; color:var(--silver-dim);">${p.assignedTo ? `Assigned to: ${p.assignedTo}` : 'Standby / Unassigned'}</div>
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-top:4px;">
+          <span class="stat-block" style="font-size:10px; color:var(--silver-bright); font-weight:bold;">VAL: $${fmt(p.value)}</span>
+          <div style="display:flex; flex-wrap:wrap; gap:3px; justify-content:flex-end;">
+            <button class="btn" style="padding:3px 5px; font-size:8px;" onclick="exportCourier('${p.uid}')">Trade</button>
+            <button class="btn" style="padding:3px 5px; font-size:8px;" onclick="togglePilotLock('${p.uid}')">${p.locked?'Unlock':'Lock'}</button>
+            ${!p.assignedTo&&!p.locked?`<button class="btn btn-purple" style="padding:3px 5px; font-size:8px;" onclick="initAuction('${p.uid}', 'pilot')">Wholesale</button><button class="btn btn-danger" style="padding:3px 5px; font-size:8px;" onclick="sellPilot('${p.uid}')">Fire</button>`:''}
+          </div>
+        </div>
+      `;
+      grid.appendChild(c);
+    });
+  }
+  function togglePilotLock(uid) { let p=State.pilots.find(x=>x.uid===uid); if(p){p.locked=!p.locked; renderPilots();} }
+  function sellPilot(uid) {
+    let idx = State.pilots.findIndex(s=>s.uid===uid);
+    if(idx>-1) { let v=Math.floor(State.pilots[idx].value*0.5); State.funds+=v; State.pilots.splice(idx,1); toast(`Fired. Severance recovered $${fmt(v)}.`); updateHUD(); renderPilots(); renderFleet(); }
+  }
+  function quickSellPilots(maxT) {
+    let ts = State.pilots.filter(s=>s.tierIndex<=maxT && !s.assignedTo && !s.locked);
+    if(ts.length===0){toast("No eligible couriers.");return;}
+    let tot=0; ts.forEach(s=>tot+=Math.floor(s.value*0.5));
+    State.pilots = State.pilots.filter(s=>s.tierIndex>maxT || s.assignedTo || s.locked);
+    State.funds+=tot; toast(`Fired ${ts.length} couriers. Recovered $${fmt(tot)}.`); updateHUD(); renderPilots();
+  }
+
+  /* ================= ROUTES ================= */
+  function filterRouteCategory(val) { State.filterRouteCat = val; renderRoutes(); }
+
+  function renderRoutes() {
+    const list = $('routes-list'); if(!list) return; list.innerHTML = '';
+    let filtered = State.filterRouteCat === 'ALL' ? State.routes : State.routes.filter(r => r.role === State.filterRouteCat);
+
+    filtered.forEach(r => {
+      let rCol = r.role === 'INDICA' ? '#a855f7' : r.role === 'SATIVA' ? '#f59e0b' : r.role === 'HYBRID' ? '#22c55e' : r.role === 'EDIBLE' ? '#ec4899' : r.role === 'EXTRACT' ? '#fbbf24' : '#06b6d4';
+      let yieldM = 1.0 + (State.upgrades.mkt*0.05);
+      let baseYield = r.dist * 165 * yieldM;
+      let fuelCost = ((r.dist * 0.22) * (1 - Math.min(0.7, State.upgrades.eng*0.02))) * State.fuelSpotPrice;
+      let netProfit = baseYield - fuelCost;
+
+      const row = document.createElement('div'); row.className = 'route-row';
+      row.innerHTML = `
+        <div style="flex:1;">
+          <div style="font-weight:900; color:#fff;">${r.name} <span class="badge" style="margin-left:4px; color:${rCol}; border-color:${rCol};">${r.role}</span></div>
+          <div style="font-size:9px; color:var(--silver-dim); font-family:monospace; margin-top:2px;">
+            ${r.dist.toLocaleString()} MILES // Area: ${r.minTier}
+          </div>
+          <div style="font-size:9px; color:var(--silver-dim); font-family:monospace; margin-top:2px;">
+            Revenue: $${fmt(baseYield)} | Gas: -$${fmt(fuelCost)}
+          </div>
+          <div style="font-size:10px; color:var(--status-green); font-weight:bold; font-family:monospace; margin-top:2px;">
+            Est. Net Profit: ~$${fmt(netProfit)}
+          </div>
+        </div>
+        <div>
+          ${r.unlocked?`<span style="color:var(--status-green); font-weight:bold; font-family:monospace;">ZONED ✓</span>`:`<button class="btn btn-green" onclick="unlockRoute('${r.id}')">Expand ($${fmt(r.cost)})</button>`}
+        </div>
+      `;
+      list.appendChild(row);
+    });
+  }
+  function unlockRoute(rId) { const r=State.routes.find(x=>x.id===rId); if(!r)return; if(State.funds<r.cost){toast("Insufficient Cash.");return;} State.funds-=r.cost; r.unlocked=true; updateHUD(); renderRoutes(); renderFleet(); }
+
+  /* ================= CHECKLIST, SIDE MISSIONS & AUTOMATION ================= */
+  function toggleAutoLoop() {
+    State.automation.autoDispatch = !State.automation.autoDispatch;
+    toast(`Endless Hustle: ${State.automation.autoDispatch ? 'ON' : 'OFF'}`);
+    updateAutomationUI();
+  }
+  function toggleAutoMRO() {
+    State.automation.autoMRO = !State.automation.autoMRO;
+    toast(`Auto Re-Cure: ${State.automation.autoMRO ? 'ON' : 'OFF'}`);
+    updateAutomationUI();
+  }
+  function toggleAutoRefuel() {
+    State.automation.autoRefuel = !State.automation.autoRefuel;
+    toast(`Auto Gas Runs: ${State.automation.autoRefuel ? 'ON' : 'OFF'}`);
+    updateAutomationUI();
+  }
+  function updateAutomationUI() {
+    if($('chk-autoloop'))$('chk-autoloop').innerText = State.automation.autoDispatch ? 'ACTIVE' : 'ENABLE';
+    if($('chk-automro'))$('chk-automro').innerText = State.automation.autoMRO ? 'ACTIVE' : 'ENABLE';
+    if($('chk-autorefuel'))$('chk-autorefuel').innerText = State.automation.autoRefuel ? 'ACTIVE' : 'ENABLE';
+    renderMilestones();
+    renderSideMissions();
+  }
+
+  function generateSideMissions() {
+    let unlocked = State.routes.filter(r => r.unlocked);
+    if(unlocked.length === 0) unlocked = State.routes; 
+    
+    State.sideMissions = [];
+    for(let i=0; i<3; i++) {
+        let rt = unlocked[Math.floor(Math.random() * unlocked.length)];
+        State.sideMissions.push({
+            id: "sm_" + Date.now() + i,
+            title: `Burner Text: ${rt.name}`,
+            desc: `Yo, need some ${rt.role} sent to ${rt.name} ASAP.`,
+            reqRoute: rt.id,
+            reqRole: rt.role,
+            readyToClaim: false,
+            rewardCash: Math.floor(rt.dist * 500) + 1000000,
+            rewardTier: Math.min(9, Math.floor(rt.dist / 1000))
+        });
+    }
+  }
+
+  function refreshSideMissions() {
+    generateSideMissions();
+    renderSideMissions();
+    toast("Burner Phone refreshed.");
+  }
+
+  function renderSideMissions() {
+    const list = $('side-missions-list'); if(!list) return; list.innerHTML = '';
+    State.sideMissions.forEach((m, idx) => {
+      let isReady = m.readyToClaim;
+      let rText = `+$${fmt(m.rewardCash)} & Free T${m.rewardTier+1} Seeds`;
+      let div = document.createElement('div');
+      div.className = `check-item ${isReady ? 'done' : ''}`;
+      div.innerHTML = `
+        <div>
+          <div style="font-weight:bold; color:#fff;">${m.title}</div>
+          <div style="font-size:9.5px; color:var(--silver-dim);">${m.desc}</div>
+          <div style="font-size:9.5px; color:var(--status-green); font-weight:bold; margin-top:2px;">Payout: ${rText}</div>
+        </div>
+        <div>
+          <button class="btn btn-green" ${isReady ? '' : 'disabled'} onclick="claimSideMission(${idx})">COLLECT</button>
+        </div>
+      `;
+      list.appendChild(div);
+    });
+  }
+
+  function claimSideMission(idx) {
+    let m = State.sideMissions[idx];
+    if(!m || !m.readyToClaim) return;
+    
+    State.funds += m.rewardCash;
+    let bonusPlane = harvestStrain(m.rewardTier); 
+    State.fleet.push(bonusPlane);
+    toast(`VIP Paid! +$${fmt(m.rewardCash)} & ${bonusPlane.name} grown!`);
+
+    State.sideMissions.splice(idx, 1);
+    
+    let unlocked = State.routes.filter(r => r.unlocked);
+    if(unlocked.length === 0) unlocked = State.routes;
+    let rt = unlocked[Math.floor(Math.random() * unlocked.length)];
+    State.sideMissions.push({
+        id: "sm_" + Date.now(),
+        title: `Burner Text: ${rt.name}`,
+        desc: `Yo, need some ${rt.role} sent to ${rt.name} ASAP.`,
+        reqRoute: rt.id,
+        reqRole: rt.role,
+        readyToClaim: false,
+        rewardCash: Math.floor(rt.dist * 500) + 1000000,
+        rewardTier: Math.min(9, Math.floor(rt.dist / 1000))
+    });
+
+    updateHUD(); renderSideMissions();
+  }
+
+  function renderMilestones() {
+    const list = $('milestone-list'); if(!list) return; list.innerHTML = '';
+    MILESTONES.forEach(m => {
+      let isClaimed = State.claimedMilestones.includes(m.id);
+      let canClaim = !isClaimed && m.req(State);
+      let div = document.createElement('div');
+      div.className = `check-item ${isClaimed ? 'done' : ''}`;
+      div.innerHTML = `
+        <div>
+          <div style="font-weight:bold; color:${isClaimed ? 'var(--status-green)' : '#fff'};">${isClaimed ? '✓ ' : ''}${m.title}</div>
+          <div style="font-size:9.5px; color:var(--silver-dim);">${m.desc}</div>
+          <div style="font-size:9.5px; color:var(--status-amber); font-weight:bold; margin-top:1px;">Reward: +$${fmt(m.reward)}</div>
+        </div>
+        <div>
+          ${isClaimed 
+            ? `<span style="color:var(--status-green); font-weight:bold; font-size:9px;">CLAIMED</span>` 
+            : `<button class="btn btn-green" ${canClaim ? '' : 'disabled'} onclick="claimMilestone('${m.id}')">CLAIM</button>`
+          }
+        </div>
+      `;
+      list.appendChild(div);
+    });
+  }
+
+  function claimMilestone(mId) {
+    let m = MILESTONES.find(x => x.id === mId);
+    if(!m || State.claimedMilestones.includes(mId) || !m.req(State)) return;
+    State.claimedMilestones.push(mId);
+    State.funds += m.reward;
+    toast(`Milestone Achieved: +$${fmt(m.reward)}`);
+    updateHUD(); renderMilestones();
+  }
+
+  /* ================= UPGRADES ================= */
+  function getUpgCost(type, lvl) { return type==='mkt' ? Math.floor(100000*Math.pow(1.5,lvl)) : Math.floor(150000*Math.pow(1.6,lvl)); }
+  function renderUpgrades() {
+    let mC = getUpgCost('mkt', State.upgrades.mkt); let eC = getUpgCost('eng', State.upgrades.eng);
+    if($('upg-mkt-lvl'))$('upg-mkt-lvl').innerText=State.upgrades.mkt; 
+    if($('upg-mkt-pct'))$('upg-mkt-pct').innerText=State.upgrades.mkt*5; 
+    if($('upg-mkt-cost'))$('upg-mkt-cost').innerText=fmt(mC);
+    
+    if($('upg-eng-lvl'))$('upg-eng-lvl').innerText=State.upgrades.eng; 
+    if($('upg-eng-pct'))$('upg-eng-pct').innerText=Math.min(70, State.upgrades.eng*2); 
+    if($('upg-eng-cost'))$('upg-eng-cost').innerText=fmt(eC);
+  }
+  function buyUpgrade(type) {
+    let cost = getUpgCost(type, State.upgrades[type]);
+    if(State.funds < cost) { toast("Insufficient Cash."); return; }
+    State.funds -= cost; State.upgrades[type]++;
+    updateHUD(); renderUpgrades(); toast("Operation expanded.");
+  }
+
+  /* ================= FLIGHT LOGIC ================= */
+  function dispatchFlight(pUid) {
+    const p = State.fleet.find(x=>x.uid===pUid); if(!p||p.status==='IN_FLIGHT'||!p.assignedRoute||!p.assignedPilot)return;
+    const r = State.routes.find(x=>x.id===p.assignedRoute); const pl = State.pilots.find(x=>x.uid===p.assignedPilot); if(!r||!pl)return;
+    
+    // Auto-MRO pre-check
+    if(p.condition < 45) {
+      if(State.automation.autoMRO && State.funds >= Math.floor((100-p.condition)*2500)) {
+        maintainAirframe(p.uid);
+      } else {
+        toast("[STALE] Freshness critical. Must Re-Cure."); return;
+      }
+    }
+
+    let yieldM = 1.0 + (State.upgrades.mkt*0.05); let speedD = 1.0; let fuelD = 1.0; let safeD = 1.0;
+    if(pl.bType==='TIPS') yieldM *= (1 + pl.bonus/100);
+    if(pl.bType==='SPEED') speedD = 1 + pl.bonus/100; 
+    if(pl.bType==='MPG') fuelD = 1 + pl.bonus/100;
+    if(pl.bType==='CARE') safeD = 1 + pl.bonus/100;
+
+    let baseMs = Math.max(5000, Math.min(90000, (r.dist/8000)*90000));
+    let msTime = Math.max(1000, baseMs / speedD); 
+
+    let fBurn = Math.floor((r.dist * 0.22) * (1 - Math.min(0.7, State.upgrades.eng*0.02)) / fuelD);
+    
+    // Auto-Refuel check
+    if(State.fuelReserve < fBurn) {
+      if(State.automation.autoRefuel && State.funds >= 100000 * State.fuelSpotPrice) {
+        State.funds -= 100000 * State.fuelSpotPrice;
+        State.fuelReserve += 100000;
+      } else {
+        toast("Insufficient Gas."); return;
+      }
+    }
+    State.fuelReserve -= fBurn;
+
+    let bRev = r.dist * 165 * yieldM;
+    
+    p.status='IN_FLIGHT'; p.flightStart=Date.now(); p.flightDuration=msTime; p.flightEnd=p.flightStart+msTime; p.expRev=bRev; p.wear=10/safeD;
+    
+    State.sideMissions.forEach(m => {
+        if(!m.readyToClaim && p.assignedRoute === m.reqRoute && p.role === m.reqRole) {
+            m.readyToClaim = true;
+            toast(`Client Text: ${m.title}`);
+            if($('tab-checklist').classList.contains('active')) renderSideMissions();
+        }
+    });
+
+    renderFleet(); updateHUD();
+  }
+  function dispatchAll() { State.fleet.filter(p=>p.status==='READY'&&p.assignedRoute&&p.assignedPilot).forEach(p=>dispatchFlight(p.uid)); }
+  function maintainAirframe(pUid) { const p=State.fleet.find(x=>x.uid===pUid); if(!p||p.status==='IN_FLIGHT')return; let c=Math.floor((100-p.condition)*2500); if(State.funds<c)return; State.funds-=c; p.condition=100; updateHUD(); renderFleet(); }
+  function maintainAll() { let c=0; State.fleet.filter(p=>p.condition<90&&p.status!=='IN_FLIGHT').forEach(p=>c+=Math.floor((100-p.condition)*2500)); if(c===0||State.funds<c)return; State.funds-=c; State.fleet.forEach(p=>p.condition=100); updateHUD(); renderFleet(); }
+
+  /* ================= UNIVERSAL AUCTIONS (10 LANES) ================= */
+  function initAuction(uid, type) {
+    if(State.auctions.length>=10){toast("Lanes full.");return;}
+    let item;
+    if(type==='plane') { let i=State.fleet.findIndex(x=>x.uid===uid); if(i===-1)return; item=State.fleet[i]; if(item.assignedPilot){ let px=State.pilots.find(x=>x.uid===item.assignedPilot); if(px)px.assignedTo=null; } State.fleet.splice(i,1); }
+    if(type==='pilot') { let i=State.pilots.findIndex(x=>x.uid===uid); if(i===-1)return; item=State.pilots[i]; State.pilots.splice(i,1); }
+    
+    State.auctions.push({ item:item, type:type, baseVal:item.value, timer:20.0, currentBid:Math.floor(item.value*0.9), log:[] });
+    updateHUD(); renderAuctions(); renderFleet(); renderPilots(); toast("Product moved to Wholesale.");
+  }
+  
+  function fillAuctions(type) {
+    let a=10-State.auctions.length; if(a<=0) { toast("Lanes full."); return; }
+    
+    let c = type==='planes' 
+      ? State.fleet.filter(p=>p.status==='READY'&&!p.assignedPilot).sort((x,y)=>x.value-y.value) 
+      : State.pilots.filter(p=>!p.assignedTo&&!p.locked).sort((x,y)=>x.value-y.value);
+        
+    if(c.length===0){toast("No eligible product available.");return;}
+    
+    let loaded = 0;
+    c.slice(0,a).forEach(item=>{ 
+      if(type==='planes'){ let i=State.fleet.findIndex(x=>x.uid===item.uid); State.fleet.splice(i,1); }
+      if(type==='pilots'){ let i=State.pilots.findIndex(x=>x.uid===item.uid); State.pilots.splice(i,1); }
+      State.auctions.push({item:item, type:type, baseVal:item.value, timer:20.0, currentBid:Math.floor(item.value*0.9), log:[]}); 
+      loaded++;
+    });
+    
+    updateHUD(); renderPilots(); renderFleet(); renderAuctions(); 
+    toast(`Loaded ${loaded} lots to Wholesale.`);
+  }
+
+  function renderAuctions() {
+    const b=$('auction-board'); if(!b)return; $('auction-count').innerText=State.auctions.length; b.innerHTML='';$('auction-idle').style.display = State.auctions.length===0 ? 'block' : 'none';
+    State.auctions.forEach((a) => {
+      let hLog = a.log.map(l=>`<div>${l}</div>`).join('');
+      let col = a.item.tierColor || '#fff';
+      b.innerHTML+=`
+        <div class="auction-slot">
+          <div style="display:flex;justify-content:space-between;align-items:flex-end;">
+            <div>
+              <div style="font-size:12px;font-weight:bold;color:${col};">${a.item.name}</div>
+              <div class="stat-block" style="font-size:9px;">VAL: $${fmt(a.baseVal)}</div>
+            </div>
+            <div style="text-align:right;">
+              <div id="auc-timer-${a.item.uid}" style="font-size:8.5px;color:var(--silver-dim);font-weight:bold;">TIME [${a.timer.toFixed(1)}s]</div>
+              <div id="auc-bid-${a.item.uid}" style="font-size:14px;font-weight:bold;color:var(--status-green);font-family:monospace;">$${fmt(a.currentBid)}</div>
+            </div>
+          </div>
+          <div class="auction-timer-bg"><div id="auc-bar-${a.item.uid}" class="auction-timer-bar" style="width:${(a.timer/20)*100}%;"></div></div>
+          <div class="auction-log">${hLog}</div>
+        </div>
+      `;
+    });
+  }
+
+  /* ================= GAME LOOP ================= */
+  const FACTIONS = ["Dispensary Chain","Rival Cartel","Local Trap Star","College Frat"];
+  function gameTick() {
+    let n = Date.now();
+    
+    // Market Timer
+    State.marketTimer -= 0.1;
+    let mT = $('market-timer'); if(mT) mT.innerText = Math.max(0, State.marketTimer).toFixed(1);
+    if(State.marketTimer <= 0) { State.marketTimer = 10.0; refreshMarket(); }
+
+    // Flights
+    State.fleet.forEach(p => {
+      if(p.status==='IN_FLIGHT') {
+        let pct = ((n-p.flightStart)/p.flightDuration)*100;
+        if(pct>=100) { 
+          p.status='READY'; State.funds+=p.expRev; p.condition=Math.max(10, p.condition-p.wear); updateHUD(); 
+          let st=$(`st-${p.uid}`); if(st) st.innerHTML=`STATUS: <strong style="color:#fff;">READY</strong>`; 
+          let b=$(`bar-${p.uid}`); if(b){b.style.width='0%'; b.parentElement.style.display='none';} 
+          
+          if(State.automation.autoDispatch && p.assignedRoute && p.assignedPilot) {
+            setTimeout(() => dispatchFlight(p.uid), 200);
+          } else {
+            renderFleet(); 
+          }
+        } 
+        else { let b=$(`bar-${p.uid}`); if(b) b.style.width=pct+'%'; }
+      }
+    });
+
+    // Auctions
+    if(State.auctions.length>0) {
+      for(let i=State.auctions.length-1; i>=0; i--) {
+        let a=State.auctions[i]; a.timer-=0.1; 
+        
+        let uiT = $(`auc-timer-${a.item.uid}`);
+        let uiB = $(`auc-bar-${a.item.uid}`);
+        let uiBid = $(`auc-bid-${a.item.uid}`);
+
+        if(a.timer>0 && Math.random()<0.10) {
+          let f=FACTIONS[Math.floor(Math.random()*FACTIONS.length)]; let m=1.05+(Math.random()*0.10);
+          if(Math.random()<0.015) { m=2.0+(Math.random()*18.0); a.log.push(`<span style="color:var(--status-amber);">[BID WAR] Spike!</span>`); }
+          let nB=Math.floor(a.currentBid*m); if(nB<=a.currentBid) nB=a.currentBid+1; a.currentBid=nB;
+          a.log.push(`<span style="color:var(--silver-bright);">[${f}] bids $${fmt(a.currentBid)}</span>`);
+          if(a.log.length>3) a.log.shift();
+          if(a.timer<=1.0){ a.timer=3.0; a.log.push(`<span style="color:var(--status-red);">[OVERTIME] Reset to 3s!</span>`); }
+          if(uiBid) uiBid.innerText = "$" + fmt(a.currentBid);
+          if($('tab-auction').classList.contains('active')) renderAuctions();
+        } else {
+          if(uiT) uiT.innerText = `TIME [${Math.max(0, a.timer).toFixed(1)}s]`;
+          if(uiB) { uiB.style.width = ((a.timer/20)*100) + '%'; uiB.style.background = a.timer <= 3 ? 'var(--status-red)' : 'var(--status-green)'; }
+        }
+
+        if(a.timer<=0){ 
+          State.funds+=a.currentBid; State.statAuctionsSold++;
+          toast(`SOLD for $${fmt(a.currentBid)}!`); 
+          State.auctions.splice(i,1); updateHUD(); 
+          if($('tab-auction').classList.contains('active')) renderAuctions();
+        }
+      }
+    }
+  }
+
+  /* ================= INIT & NAVIGATION ================= */
+  function setTab(tabId) {
+    document.querySelectorAll('.nav-btn').forEach(b => { b.classList.remove('active'); if(b.getAttribute('onclick').includes(tabId)) b.classList.add('active'); });
+    document.querySelectorAll('.view-tab').forEach(t => t.classList.remove('active'));
+    const target = $('tab-'+tabId); if(target) target.classList.add('active');
+
+    if(tabId==='fleet') renderFleet();
+    if(tabId==='pilots') renderPilots();
+    if(tabId==='routes') renderRoutes();
+    if(tabId==='auction') renderAuctions();
+    if(tabId==='checklist') { renderMilestones(); renderSideMissions(); }
+    if(tabId==='upgrades') renderUpgrades();
+  }
+
+  function initUI() {
+    if(!State.routes || State.routes.length < 400) State.routes = generateRoutes();
+    if(!State.sideMissions || State.sideMissions.length === 0) generateSideMissions();
+    updateHUD(); refreshMarket(); updateAutomationUI(); renderUpgrades();
+    if(globalInterval) clearInterval(globalInterval); globalInterval = setInterval(gameTick, 100);
+  }
+  initUI();
+</script>
+</body>
+</html>
