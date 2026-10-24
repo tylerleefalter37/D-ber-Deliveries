@@ -55,19 +55,19 @@
   .hud-stats::-webkit-scrollbar { display: none; }
   .hud-pill { background: #010401; border: 1px solid var(--panel-border); padding: 4px 8px; border-radius: 4px; font-size: 10px; font-family: monospace; font-weight: bold; }
 
-  /* DOCKED BOTTOM THUMB NAVIGATION */
+  /* DOCKED BOTTOM THUMB NAVIGATION (8 TABS INCL SKILLS) */
   nav.bottom-nav {
-    flex-shrink: 0; display: grid; grid-template-columns: repeat(7, 1fr);
+    flex-shrink: 0; display: grid; grid-template-columns: repeat(8, 1fr);
     background: rgba(0,0,0,0.97); backdrop-filter: blur(14px); border-top: 1px solid var(--panel-border);
     padding-bottom: var(--safe-bottom); z-index: 30;
   }
   .nav-btn {
-    padding: 8px 2px; background: transparent; border: none; border-right: 1px solid #101a10;
-    color: var(--silver-dim); font-size: 8px; font-weight: 800; text-transform: uppercase;
-    letter-spacing: 0.3px; cursor: pointer; transition: 0.15s; text-align: center; display: flex; flex-direction: column; align-items: center; gap: 3px;
+    padding: 7px 1px; background: transparent; border: none; border-right: 1px solid #101a10;
+    color: var(--silver-dim); font-size: 7.5px; font-weight: 800; text-transform: uppercase;
+    letter-spacing: 0.2px; cursor: pointer; transition: 0.15s; text-align: center; display: flex; flex-direction: column; align-items: center; gap: 2px;
   }
   .nav-btn:last-child { border-right: none; }
-  .nav-btn .icon { font-size: 15px; }
+  .nav-btn .icon { font-size: 14px; }
   .nav-btn.active { background: rgba(186, 12, 47, 0.14); color: var(--c-green); box-shadow: inset 0 2px 0 var(--c-scarlet); }
 
   main { flex: 1; overflow-y: auto; padding: 10px; padding-bottom: 40px; z-index: 2; -webkit-overflow-scrolling: touch; }
@@ -104,23 +104,7 @@
   button.btn-cyan:active { background: var(--c-cyan); color: #000; }
   button.btn-danger { border-color: var(--c-scarlet); color: var(--c-scarlet); }
 
-  /* DOSSIER RESPONSIVE CARD */
-  .strain-card-full {
-    width: 100%; background: #010401; border: 1px solid var(--panel-border); border-radius: 8px;
-    padding: 12px; display: flex; flex-direction: column; gap: 8px; position: relative; box-shadow: 0 4px 15px rgba(0,0,0,0.6);
-  }
-  .strain-card-full.cup-winner { border-color: var(--c-gold) !important; box-shadow: inset 0 0 16px rgba(251, 191, 36, 0.15); }
-
-  .bud-showcase-box {
-    display: flex; gap: 12px; align-items: center; background: #000; border: 1px solid var(--panel-border); padding: 8px; border-radius: 6px;
-  }
-  .bud-pixel-canvas-lg {
-    width: 124px; height: 124px; image-rendering: pixelated; border-radius: 6px; background: #000; flex-shrink: 0; border: 1px solid #162416; box-shadow: 0 0 16px rgba(0,0,0,0.9);
-  }
-
-  .spec-grid-full { display: grid; grid-template-columns: repeat(2, 1fr); gap: 5px; background: #020502; padding: 8px; border-radius: 4px; font-size: 9px; font-family: monospace; border: 1px solid var(--panel-border); }
-  .spec-grid-full span { color: var(--silver-dim); }
-
+  /* DOSSIER CARD */
   .badge { padding: 3px 6px; border-radius: 3px; font-size: 8.5px; font-weight: 900; font-family: monospace; background: #0c180c; color: var(--c-green); border: 1px solid var(--c-green); }
   .badge-ohio { padding: 3px 6px; border-radius: 3px; font-size: 8px; font-weight: 900; font-family: monospace; background: #1a0408; color: #ff6b81; border: 1px solid var(--c-scarlet); }
   .score-pill { font-size: 9px; font-weight: 900; padding: 2px 6px; border-radius: 3px; background: #101c10; border: 1px solid var(--c-lime); color: var(--c-lime); font-family: monospace; }
@@ -129,6 +113,7 @@
   .grow-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 8px; margin-top: 4px; }
   .grow-pot { background: #010401; border: 1px dashed var(--panel-border); border-radius: 6px; padding: 8px; display: flex; flex-direction: column; gap: 5px; align-items: center; text-align: center; }
   .grow-pot.occupied { border-style: solid; border-color: var(--c-green); background: #060e06; }
+  .grow-pot.ready { border-color: var(--c-gold); box-shadow: 0 0 10px rgba(251, 191, 36, 0.25); }
   
   .progress-bg { width: 100%; height: 6px; background: #111; border-radius: 3px; overflow: hidden; margin-top: 2px; }
   .progress-fill { height: 100%; background: var(--c-green); width: 0%; transition: width 0.15s ease-out; }
@@ -141,6 +126,14 @@
   /* EQUIPMENT TILES */
   .equip-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 8px; }
   .equip-card { background: #010301; border: 1px solid var(--panel-border); border-radius: 6px; padding: 10px; display: flex; flex-direction: column; gap: 5px; }
+
+  /* SKILL TREE STYLES */
+  .skills-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 10px; }
+  .skill-branch { background: #020602; border: 1px solid var(--panel-border); border-radius: 6px; padding: 10px; display: flex; flex-direction: column; gap: 8px; }
+  .skill-branch-title { font-size: 11px; font-weight: 900; letter-spacing: 0.5px; text-transform: uppercase; display: flex; justify-content: space-between; align-items: center; }
+  .skill-node { background: #000; border: 1px solid var(--panel-border); border-radius: 5px; padding: 8px; display: flex; justify-content: space-between; align-items: center; gap: 8px; }
+  .skill-node.unlocked { border-color: var(--c-green); background: #051205; }
+  .skill-node.maxed { border-color: var(--c-gold); background: #121004; }
 
   select, input[type="text"], input[type="number"] { background: #020502; color: #fff; border: 1px solid var(--silver-dark); padding: 6px; font-size: 9.5px; border-radius: 4px; outline: none; font-weight: bold; width: 100%; }
   
@@ -214,7 +207,8 @@
   <div style="display:flex; justify-content:space-between; align-items:center;">
     <div class="hud-stats">
       <div class="hud-pill">BANK: <span id="hud-funds" style="color:var(--c-green);">$1,450</span></div>
-      <div class="hud-pill">FLOWER: <span id="hud-raw-g" style="color:var(--c-lime);">0g</span></div>
+      <div class="hud-pill">LEVEL: <span id="hud-level" style="color:var(--c-gold);">1</span> (<span id="hud-sp" style="color:var(--c-cyan);">2 SP</span>)</div>
+      <div class="hud-pill">BULK: <span id="hud-raw-g" style="color:var(--c-lime);">0g</span></div>
       <div class="hud-pill">SEEDS: <span id="hud-seeds-count" style="color:var(--c-blue);">3</span></div>
       <div class="hud-pill">PACKS: <span id="hud-stash-count">0</span></div>
       <div class="hud-pill">FACILITY: <span id="hud-fac-name" style="color:var(--c-amber);">Closet</span></div>
@@ -227,7 +221,6 @@
 
   <!-- TAB 1: GROW OPS / CULTIVATION -->
   <div id="tab-grow" class="view-tab active">
-    <!-- FACILITY CONTROLLER & ACTIVE ROOM STATS -->
     <div class="panel">
       <div class="panel-header">
         <span>Active Canopy: <strong id="grow-fac-title" style="color:var(--c-green);">2-Plant Closet</strong></span>
@@ -257,8 +250,8 @@
       <div style="display:flex; justify-content:space-between; align-items:center; font-size:9.5px; color:var(--silver-dim); margin-top:2px;">
         <span>Pots Occupied: <b id="pots-count-txt" style="color:#fff;">0/2</b></span>
         <div style="display:flex; gap:4px;">
-          <button class="btn btn-green" onclick="harvestAllPlants()">Harvest Canopy</button>
-          <button class="btn" onclick="quickPlantBestSeed()">Auto-Plant Top Seed</button>
+          <button class="btn btn-green" onclick="harvestAllPlants()">Chop All Ready</button>
+          <button class="btn" onclick="quickPlantBestSeed()">Auto-Plant Top Cut</button>
         </div>
       </div>
       <div id="grow-pots-grid" class="grow-grid"></div>
@@ -300,7 +293,7 @@
     </div>
   </div>
 
-  <!-- TAB 2: GROW EQUIPMENT, LIGHTS, WATER, NUTRIENTS & HVAC -->
+  <!-- TAB 2: GROW EQUIPMENT -->
   <div id="tab-equip" class="view-tab">
     <div class="panel">
       <div class="panel-header">
@@ -309,13 +302,11 @@
       </div>
       <p style="font-size:9.5px; color:var(--silver-dim);">Upgrading lights, nutrients, irrigation, and climate gear boosts canopy growth rates, terpene production, and THC ceilings.</p>
 
-      <div class="equip-grid" id="equip-container">
-        <!-- RENDERED DYNAMICALLY -->
-      </div>
+      <div class="equip-grid" id="equip-container"></div>
     </div>
   </div>
 
-  <!-- TAB 3: SEED VAULT & EXPANDED OHIO GENETICS -->
+  <!-- TAB 3: SEED VAULT & CATALOG -->
   <div id="tab-seeds" class="view-tab">
     <div class="panel">
       <div class="panel-header">
@@ -327,11 +318,11 @@
       </div>
     </div>
 
-    <!-- GLOBAL SEED BANK (OHIO LEGENDS + NATIONAL ELITE) -->
+    <!-- GLOBAL SEED BANK -->
     <div class="panel">
       <div class="panel-header">
         <span>Ohio Certified Seed Bank &amp; Breeder Stock</span>
-        <span style="font-size:9px; color:var(--c-blue);">$30 - $180 / PACK</span>
+        <span style="font-size:9px; color:var(--c-blue);">$35 - $160 / 3-PACK</span>
       </div>
       <div class="control-bar">
         <div class="control-group">
@@ -367,7 +358,7 @@
         <span>Packaging Station: Multi-Weight Ohio Formats</span>
         <span style="font-size:9px; color:var(--c-green);">BULK CURED BATCHES</span>
       </div>
-      <p style="font-size:9.5px; color:var(--silver-dim);">Break your bulk harvests down into official packaging units to sell in the dispensary storefront.</p>
+      <p style="font-size:9.5px; color:var(--silver-dim);">Break your high-yielding bulk harvests down into official packaging units to stock in your dispensary storefront.</p>
       
       <div id="packaging-bulk-list" style="display:flex; flex-direction:column; gap:8px;"></div>
     </div>
@@ -387,7 +378,7 @@
     <div class="panel">
       <div class="panel-header">
         <span>Buckeye Buds Dispensary Menu</span>
-        <span style="font-size:9.5px; color:var(--c-gold);">PATRONS: <b id="store-visits">142</b>/hr</span>
+        <span style="font-size:9.5px; color:var(--c-gold);">PATRONS: <b id="store-visits">165</b>/hr</span>
       </div>
       <div style="display:flex; justify-content:space-between; align-items:center; font-size:9.5px; color:var(--silver-dim);">
         <span>Stock Tenths (2.83g), Fifths (5.66g), Halves (14.15g), Zips (28.3g), or Pre-Rolls. Price flexibly!</span>
@@ -435,7 +426,7 @@
     </div>
   </div>
 
-  <!-- TAB 7: CANNABIS CUPS & EXTRACT LAB -->
+  <!-- TAB 7: CANNABIS CUPS & LAB -->
   <div id="tab-cups" class="view-tab">
     <div class="panel">
       <div class="panel-header">Midwest &amp; Ohio Cannabis Competitions</div>
@@ -479,6 +470,22 @@
     </div>
   </div>
 
+  <!-- TAB 8: MASTER CULTIVATOR SKILL TREE -->
+  <div id="tab-skills" class="view-tab">
+    <div class="panel">
+      <div class="panel-header">
+        <span>Master Cultivator Skill Tree</span>
+        <div style="display:flex; gap:6px; align-items:center;">
+          <span style="font-size:9.5px; color:var(--c-gold); font-weight:bold;">AVAILABLE SP: <b id="skills-sp-count" style="color:var(--c-cyan);">2</b></span>
+          <button class="btn btn-danger" style="padding:2px 6px; font-size:7.5px;" onclick="respecSkills()">Reset Skills</button>
+        </div>
+      </div>
+      <p style="font-size:9px; color:var(--silver-dim);">Gain XP by harvesting, packaging, selling in the dispensary, and winning Ohio Cups. Invest Skill Points to permanently boost yield, accelerate vegetative cycles, enhance THC and terps, and supercharge breeding.</p>
+
+      <div class="skills-grid" id="skills-container"></div>
+    </div>
+  </div>
+
 </main>
 
 <!-- SEED GERMINATE MODAL -->
@@ -507,7 +514,7 @@
   </div>
 </div>
 
-<!-- ERGONOMIC 7-TAB BOTTOM THUMB NAVIGATION -->
+<!-- 8-TAB BOTTOM THUMB NAVIGATION -->
 <nav class="bottom-nav">
   <button class="nav-btn active" onclick="setTab('grow')"><span class="icon">🌱</span><span>Grow</span></button>
   <button class="nav-btn" onclick="setTab('equip')"><span class="icon">💡</span><span>Gear</span></button>
@@ -516,6 +523,7 @@
   <button class="nav-btn" onclick="setTab('store')"><span class="icon">🏪</span><span>Store</span></button>
   <button class="nav-btn" onclick="setTab('breeding')"><span class="icon">🔬</span><span>Breed</span></button>
   <button class="nav-btn" onclick="setTab('cups')"><span class="icon">🏆</span><span>Cups</span></button>
+  <button class="nav-btn" onclick="setTab('skills')"><span class="icon">⭐</span><span>Skills</span></button>
 </nav>
 
 <div id="toast-rack"></div>
@@ -795,28 +803,28 @@
   /* GROW ROOM EQUIPMENT DEFINITIONS */
   const EQUIPMENT_DATABASE = {
     lights: [
-      { id: "L_CFL", name: "Shop Fluorescent 150W", cost: 0, ppfd: 320, thcBonus: 0, speedBonus: 1.0, desc: "Basic cold tubes from the local hardware store." },
-      { id: "L_HPS", name: "Eye Hortilux 1000W HPS", cost: 650, ppfd: 750, thcBonus: 2, speedBonus: 1.25, desc: "Intense orange sodium spectrum. Heavy heat, massive fat sticky colas." },
-      { id: "L_LED", name: "Commercial SpiderBar 720W LED", cost: 1800, ppfd: 1150, thcBonus: 4, speedBonus: 1.5, desc: "Samsung LM301H full-spectrum diodes. Ultra dense trichome carpets." },
-      { id: "L_PRO", name: "Ag-Tech UV/Far-Red Supplemental Array", cost: 4500, ppfd: 1600, thcBonus: 6, speedBonus: 1.8, desc: "Industrial high-PPFD photons with targeted UV stress for maximum cannabinoid output." }
+      { id: "L_CFL", name: "Shop Fluorescent 150W", cost: 0, ppfd: 320, thcBonus: 0, yieldBonus: 1.0, speedBonus: 1.0, desc: "Basic cold tubes from the local hardware store." },
+      { id: "L_HPS", name: "Eye Hortilux 1000W HPS", cost: 650, ppfd: 750, thcBonus: 2, yieldBonus: 1.25, speedBonus: 1.25, desc: "Intense orange sodium spectrum. Heavy heat, massive fat sticky colas." },
+      { id: "L_LED", name: "Commercial SpiderBar 720W LED", cost: 1800, ppfd: 1150, thcBonus: 4, yieldBonus: 1.50, speedBonus: 1.5, desc: "Samsung LM301H full-spectrum diodes. Ultra dense trichome carpets." },
+      { id: "L_PRO", name: "Ag-Tech UV/Far-Red Supplemental Array", cost: 4500, ppfd: 1600, thcBonus: 6, yieldBonus: 1.85, speedBonus: 1.8, desc: "Industrial high-PPFD photons with targeted UV stress for maximum cannabinoid output." }
     ],
     water: [
-      { id: "W_HAND", name: "Plastic Watering Pitcher", cost: 0, ec: 1.2, speedBonus: 1.0, desc: "Tap water from the sink. Requires manual watering attention." },
-      { id: "W_BLUMAT", name: "Gravity Blumat Ceramic Drippers", cost: 350, ec: 1.6, speedBonus: 1.2, desc: "Automatic tension-sensing moisture stakes keep roots perfectly moist." },
-      { id: "W_RDWC", name: "Recirculating Deep Water Culture (RDWC)", cost: 1500, ec: 2.1, speedBonus: 1.45, desc: "Highly oxygenated nutrient whirlpool for explosive root system expansion." },
-      { id: "W_RO_AUTO", name: "Medical RO Filtration & Peristaltic Doser", cost: 3800, ec: 2.6, speedBonus: 1.7, desc: "0-PPM pure osmosis water with 24/7 computer controlled pH and nutrient dosing." }
+      { id: "W_HAND", name: "Plastic Watering Pitcher", cost: 0, ec: 1.2, speedBonus: 1.0, yieldBonus: 1.0, desc: "Tap water from the sink. Requires manual watering attention." },
+      { id: "W_BLUMAT", name: "Gravity Blumat Ceramic Drippers", cost: 350, ec: 1.6, speedBonus: 1.2, yieldBonus: 1.15, desc: "Automatic tension-sensing moisture stakes keep roots perfectly moist." },
+      { id: "W_RDWC", name: "Recirculating Deep Water Culture (RDWC)", cost: 1500, ec: 2.1, speedBonus: 1.45, yieldBonus: 1.35, desc: "Highly oxygenated nutrient whirlpool for explosive root system expansion." },
+      { id: "W_RO_AUTO", name: "Medical RO Filtration & Peristaltic Doser", cost: 3800, ec: 2.6, speedBonus: 1.7, yieldBonus: 1.60, desc: "0-PPM pure osmosis water with 24/7 computer controlled pH and nutrient dosing." }
     ],
     nutrients: [
-      { id: "N_GENERIC", name: "Hardware Store Soluble Fertilizer", cost: 0, terpBonus: 0, appealBonus: 0, desc: "Basic blue plant food. Gets the job done, but mutes terps." },
-      { id: "N_FOXFARM", name: "FoxFarm Mineral Salt Trio", cost: 250, terpBonus: 0.6, appealBonus: 4, desc: "Classic American craft liquid formulas for heavy flowering vigor." },
-      { id: "N_ORGANIC", name: "No-Till Super Soil & Compost Teas", cost: 1200, terpBonus: 1.4, appealBonus: 8, desc: "Living mycorrhizae, kelp, and guano brews that explode terpene flavor profiles." },
-      { id: "N_ATHENA", name: "Athena Pro Cleanroom Line + Silicate", cost: 3200, terpBonus: 2.2, appealBonus: 12, desc: "Tournament-grade clean formulation. Crystal-clear vascular transport." }
+      { id: "N_GENERIC", name: "Hardware Store Soluble Fertilizer", cost: 0, terpBonus: 0, appealBonus: 0, yieldBonus: 1.0, desc: "Basic blue plant food. Gets the job done, but mutes terps." },
+      { id: "N_FOXFARM", name: "FoxFarm Mineral Salt Trio", cost: 250, terpBonus: 0.6, appealBonus: 4, yieldBonus: 1.15, desc: "Classic American craft liquid formulas for heavy flowering vigor." },
+      { id: "N_ORGANIC", name: "No-Till Super Soil & Compost Teas", cost: 1200, terpBonus: 1.4, appealBonus: 8, yieldBonus: 1.30, desc: "Living mycorrhizae, kelp, and guano brews that explode terpene flavor profiles." },
+      { id: "N_ATHENA", name: "Athena Pro Cleanroom Line + Silicate", cost: 3200, terpBonus: 2.2, appealBonus: 12, yieldBonus: 1.55, desc: "Tournament-grade clean formulation. Crystal-clear vascular transport." }
     ],
     climate: [
-      { id: "C_FAN", name: "Oscillating Clip-On Fan", cost: 0, vpd: 1.6, co2: 420, rotRisk: 0.15, desc: "Moves stale air around the tent. Little heat or humidity control." },
-      { id: "C_INLINE", name: "VIVOSUN 6\" Inline Carbon Extraction", cost: 400, vpd: 1.3, co2: 500, rotRisk: 0.05, desc: "Exhausts intense heat and eliminates terpene odors from neighborhood." },
-      { id: "C_SPLIT", name: "Mini-Split Inverter AC + Quest Dehum", cost: 2400, vpd: 1.1, co2: 650, rotRisk: 0.0, desc: "Locks VPD in tight sweetspot. Completely immunizes canopy to mold." },
-      { id: "C_SEALED", name: "Sealed Co2 Burner/Tank System (1500 PPM)", cost: 5500, vpd: 0.95, co2: 1500, rotRisk: 0.0, desc: "Enriches sealed canopy in 1500 PPM carbon dioxide. 35% faster vegetative/bloom push." }
+      { id: "C_FAN", name: "Oscillating Clip-On Fan", cost: 0, vpd: 1.6, co2: 420, speedBonus: 1.0, desc: "Moves stale air around the tent. Little heat or humidity control." },
+      { id: "C_INLINE", name: "VIVOSUN 6\" Inline Carbon Extraction", cost: 400, vpd: 1.3, co2: 500, speedBonus: 1.15, desc: "Exhausts intense heat and eliminates terpene odors from neighborhood." },
+      { id: "C_SPLIT", name: "Mini-Split Inverter AC + Quest Dehum", cost: 2400, vpd: 1.1, co2: 650, speedBonus: 1.35, desc: "Locks VPD in tight sweetspot. Completely immunizes canopy to mold." },
+      { id: "C_SEALED", name: "Sealed Co2 Burner/Tank System (1500 PPM)", cost: 5500, vpd: 0.95, co2: 1500, speedBonus: 1.70, desc: "Enriches sealed canopy in 1500 PPM carbon dioxide. 35% faster vegetative/bloom push." }
     ]
   };
 
@@ -850,9 +858,57 @@
     { id: "cup4", name: "Great Lakes Invitational", minTier: 7, fee: 5000, prize: 50000, minScore: 94 }
   ];
 
+  /* MASTER SKILL TREE CONFIGURATION */
+  const SKILL_TREE = [
+    {
+      id: "branch_yield",
+      title: "🌾 Agronomist (Biomass & Yield)",
+      color: "var(--c-green)",
+      skills: [
+        { id: "yield_1", name: "Colossal Colas", maxRank: 3, costPerRank: 1, desc: "+15% bulk flower harvest yield per rank.", effectDesc: "+15%/rank Yield" },
+        { id: "yield_2", name: "Bumper Harvest Floor", maxRank: 2, costPerRank: 2, desc: "Raises guaranteed minimum dry harvest by +25g per plant.", effectDesc: "+25g Min Weight" },
+        { id: "yield_3", name: "Jackpot Pheno Hunter", maxRank: 1, costPerRank: 3, desc: "Unlocks 25% chance of rolling a Monster Cola (+50% bonus yield) on chop.", effectDesc: "Monster Jackpot Chop" }
+      ]
+    },
+    {
+      id: "branch_potency",
+      title: "⚗️ Alchemy (THC & Terpenes)",
+      color: "var(--c-gold)",
+      skills: [
+        { id: "pot_1", name: "Trichome Density", maxRank: 3, costPerRank: 1, desc: "+2% baseline THC concentration to all harvested canopies.", effectDesc: "+2%/rank THC" },
+        { id: "pot_2", name: "Terpene Radiance", maxRank: 3, costPerRank: 1, desc: "+0.8% total monoterpenes and +5 Cure rating.", effectDesc: "+0.8%/rank Terps" },
+        { id: "pot_3", name: "Ohio Gas Phenotype", maxRank: 1, costPerRank: 3, desc: "Allows elite crops to roll 35% - 38% THC championship ceilings.", effectDesc: "Diamond THC Ceilings" }
+      ]
+    },
+    {
+      id: "branch_speed",
+      title: "⚡ Chrono-Vigor (Rapid Cycles)",
+      color: "var(--c-cyan)",
+      skills: [
+        { id: "speed_1", name: "Rapid Photosynthesis", maxRank: 3, costPerRank: 1, desc: "+25% canopy vegetative and flowering growth speed.", effectDesc: "+25%/rank Speed" },
+        { id: "speed_2", name: "Instant Taproots", maxRank: 2, costPerRank: 2, desc: "Seeds instantly start germinated at 15% progress.", effectDesc: "+15% Germination Boost" },
+        { id: "speed_3", name: "Turbo Curing Room", maxRank: 1, costPerRank: 2, desc: "Auto-dry shucking and packaging speeds doubled.", effectDesc: "2x Automation Speed" }
+      ]
+    },
+    {
+      id: "branch_genetics",
+      title: "🧬 Genetics & Breeding Matrix",
+      color: "var(--c-purple)",
+      skills: [
+        { id: "gen_1", name: "Mendelian Precision", maxRank: 3, costPerRank: 1, desc: "+4 overall score guarantee on all cross-pollinated F1 crosses.", effectDesc: "+4/rank Est Score" },
+        { id: "gen_2", name: "Tier Leap Mutation", maxRank: 2, costPerRank: 2, desc: "Increases chance for crossbred seeds to jump 2 whole Tiers.", effectDesc: "+30%/rank Tier Leap" },
+        { id: "gen_3", name: "Prolific Pollinator", maxRank: 1, costPerRank: 3, desc: "Breeding generates 5 seeds instead of 3, and seed orders receive +1 bonus seed.", effectDesc: "+2 Seeds / Breeding" }
+      ]
+    }
+  ];
+
   /* ================= GAME STATE ================= */
   let State = {
     funds: 1450,
+    xp: 0,
+    level: 1,
+    skillPoints: 2,
+    skills: {}, // { skill_id: rank }
     facIdx: 0,
     equip: {
       lightIdx: 0,
@@ -862,8 +918,8 @@
     },
     growPots: [],
     seedInventory: [],
-    bulkHarvests: [],    // Unpackaged raw cured flower (grams)
-    packagedVault: [],   // Packaged units ready for retail/trade
+    bulkHarvests: [],    // Raw cured bulk flower
+    packagedVault: [],   // Packaged retail jars/pouches
     storeShelves: [],
     trophies: [],
     godMode: false,
@@ -885,9 +941,14 @@
   }
 
   function toast(msg) {
-    const r = $('toast-rack'); const e = document.createElement('div');
+    const r = $('toast-rack'); if (!r) return;
+    const e = document.createElement('div');
     e.className = 'toast'; e.innerHTML = msg; r.appendChild(e);
     setTimeout(() => e.remove(), 2800);
+  }
+
+  function getSkillRank(id) {
+    return State.skills[id] || 0;
   }
 
   function getActiveEquip() {
@@ -899,8 +960,25 @@
     };
   }
 
+  function addXP(amount) {
+    State.xp += amount;
+    let nextThreshold = State.level * 250;
+    while (State.xp >= nextThreshold) {
+      State.xp -= nextThreshold;
+      State.level++;
+      State.skillPoints += 1;
+      toast(`⭐ LEVEL UP! You reached Cultivator Level ${State.level}! (+1 Skill Point)`);
+      nextThreshold = State.level * 250;
+    }
+    updateHUD();
+    renderSkills();
+  }
+
   function updateHUD() {
     if ($('hud-funds')) $('hud-funds').innerText = `$${fmt(State.funds)}`;
+    if ($('hud-level')) $('hud-level').innerText = State.level;
+    if ($('hud-sp')) $('hud-sp').innerText = `${State.skillPoints} SP`;
+    if ($('skills-sp-count')) $('skills-sp-count').innerText = `${State.skillPoints} SP`;
     if ($('hud-seeds-count')) $('hud-seeds-count').innerText = State.seedInventory.length;
     let totalBulkG = State.bulkHarvests.reduce((a, b) => a + b.weightG, 0);
     if ($('hud-raw-g')) $('hud-raw-g').innerText = `${totalBulkG.toFixed(1)}g`;
@@ -913,7 +991,6 @@
     let rank = count >= 8 ? "OHIO CUP LEGEND" : count >= 4 ? "MASTER BREEDER" : count >= 1 ? "AWARD WINNER" : "OHIO HOMEGROWER";
     if ($('hud-rank')) $('hud-rank').innerText = rank;
 
-    // Environmental stats
     const eq = getActiveEquip();
     if ($('env-ppfd')) $('env-ppfd').innerText = `${eq.light.ppfd} µmol`;
     if ($('env-co2')) $('env-co2').innerText = `${eq.climate.co2} PPM`;
@@ -925,16 +1002,17 @@
     State.godMode = !State.godMode;
     if (State.godMode) {
       State.funds += 50000;
+      State.skillPoints += 25;
       State.bulkHarvests.forEach(s => { s.score = Math.max(95, s.score); });
       $('btn-god').innerText = "GOD ON";
       $('btn-god').style.borderColor = "var(--c-green)";
-      toast("GOD MODE ACTIVATED: +$50,000 & Rapid Bloom!");
+      toast("GOD MODE ACTIVATED: +$50,000, +25 SP & Rapid Bloom!");
     } else {
       $('btn-god').innerText = "GOD MODE";
       $('btn-god').style.borderColor = "var(--c-scarlet)";
       toast("God Mode disabled.");
     }
-    updateHUD(); renderGrowUI(); renderBulkHarvests();
+    updateHUD(); renderGrowUI(); renderBulkHarvests(); renderSkills();
   }
 
   function toggleAuto(key) {
@@ -950,16 +1028,60 @@
     if ($('chk-autorestock')) $('chk-autorestock').innerText = State.auto.autoRestock ? 'ACTIVE' : 'ENABLE';
   }
 
-  function saveGame() { localStorage.setItem('buckeyeBudsExtremeV2', JSON.stringify(State)); toast("Operations & Setup Saved."); }
+  function saveGame() {
+    localStorage.setItem('buckeyeBudsExtremeV2', JSON.stringify(State));
+    toast("Canopy, Skills & Operations Saved.");
+  }
+
   function loadGame() {
     let s = localStorage.getItem('buckeyeBudsExtremeV2');
     if (s) {
       State = JSON.parse(s);
-      updateHUD(); renderGrowUI(); renderEquip(); renderStore(); renderBulkHarvests(); renderPackagedVault(); renderOwnedSeeds(); renderSeedCatalog(); renderCups(); renderTrophies(); updateAutoUI();
+      if (!State.skills) State.skills = {};
+      if (State.skillPoints === undefined) State.skillPoints = 2;
+      if (State.level === undefined) State.level = 1;
+      if (State.xp === undefined) State.xp = 0;
+      updateHUD(); renderGrowUI(); renderEquip(); renderStore(); renderBulkHarvests(); renderPackagedVault(); renderOwnedSeeds(); renderSeedCatalog(); renderCups(); renderTrophies(); renderSkills(); updateAutoUI();
       toast("Saved Operations Restored.");
     } else {
       toast("No save found.");
     }
+  }
+
+  /* ================= REALISTIC YIELD CALCULATOR ================= */
+  function calculateHarvestYield(plant) {
+    const eq = getActiveEquip();
+    // Realistic base craft indoor yields: 50g to 85g per plant base
+    let baseMin = 50 + (plant.tierIdx * 3);
+    let baseMax = 85 + (plant.tierIdx * 6);
+
+    // Skill 1: Bumper Harvest Floor
+    let floorBonus = getSkillRank('yield_2') * 25;
+    baseMin += floorBonus;
+    baseMax += floorBonus;
+
+    // Fluctuating roll
+    let roll = baseMin + (Math.random() * (baseMax - baseMin));
+
+    // Equipment Multipliers
+    let equipMult = eq.light.yieldBonus * eq.water.yieldBonus * eq.nutrients.yieldBonus;
+    roll = roll * equipMult;
+
+    // Skill 2: Colossal Colas (+15% per rank)
+    let skillYieldMult = 1.0 + (getSkillRank('yield_1') * 0.15);
+    roll = roll * skillYieldMult;
+
+    // Skill 3: Monster Jackpot Pheno (25% chance of +50% weight)
+    let isJackpot = false;
+    if (getSkillRank('yield_3') > 0 && Math.random() < 0.25) {
+      roll *= 1.50;
+      isJackpot = true;
+    }
+
+    return {
+      dryGrams: Number(roll.toFixed(1)),
+      isJackpot: isJackpot
+    };
   }
 
   /* ================= PROCEDURAL CULTIVAR GENERATOR ================= */
@@ -971,17 +1093,21 @@
     let tD = TIERS[tierIdx] || TIERS[0];
     const eq = getActiveEquip();
 
-    let actualThc = (thc || (tD.baseTHC + Math.floor(Math.random() * 4))) + eq.light.thcBonus;
-    let actualTerps = Number(((terps || Number((2.0 + (tierIdx * 0.5) + Math.random() * 1.5).toFixed(1))) + eq.nutrients.terpBonus).toFixed(1));
+    // Base Cannabinoids + Equipment + Skill Trees
+    let thcSkillBoost = getSkillRank('pot_1') * 2;
+    let actualThc = (thc || (tD.baseTHC + Math.floor(Math.random() * 4))) + eq.light.thcBonus + thcSkillBoost;
+    if (getSkillRank('pot_3') > 0 && Math.random() < 0.30) {
+      actualThc = Math.min(38, actualThc + 3); // Gas pheno mutation
+    }
+
+    let terpSkillBoost = Number((getSkillRank('pot_2') * 0.8).toFixed(1));
+    let actualTerps = Number(((terps || Number((2.0 + (tierIdx * 0.5) + Math.random() * 1.5).toFixed(1))) + eq.nutrients.terpBonus + terpSkillBoost).toFixed(1));
     let actualAppeal = Math.min(99, (appeal || Math.floor(75 + (tierIdx * 2.5) + Math.random() * 5)) + eq.nutrients.appealBonus);
     let seed = seedInt !== null ? seedInt : Math.floor(Math.random() * 9999999);
     let palKeys = Object.keys(BOTANICAL_PALETTES);
     let actualPal = palette || palKeys[Math.floor(Math.random() * palKeys.length)];
     let actualMorph = morph || MORPHOLOGIES[Math.floor(Math.random() * MORPHOLOGIES.length)];
     let score = calculateScore(actualThc, actualAppeal, actualTerps, 100);
-    
-    // Average yield per plant: 28g to 45g raw craft buds
-    let yieldG = Number((28 + (tierIdx * 2) + (Math.random() * 14)).toFixed(1));
 
     return {
       uid: 'BB-' + Math.random().toString(36).substring(2, 7).toUpperCase(),
@@ -999,7 +1125,6 @@
       bagAppeal: actualAppeal,
       cure: 100,
       score: score,
-      yieldG: yieldG,
       trophiesWon: 0
     };
   }
@@ -1028,24 +1153,63 @@
       btnUpg.style.display = 'none';
     }
 
-    const grid = $('grow-pots-grid'); if (!grid) return; grid.innerHTML = '';
+    const grid = $('grow-pots-grid'); if (!grid) return;
+    grid.innerHTML = '';
+
     State.growPots.slice(0, 36).forEach(pot => {
       let div = document.createElement('div');
-      div.className = `grow-pot ${pot.occupied ? 'occupied' : ''}`;
+      div.id = `pot-card-${pot.id}`;
+      div.className = `grow-pot ${pot.occupied ? 'occupied' : ''} ${pot.progress >= 100 ? 'ready' : ''}`;
+      
       if (pot.occupied) {
         div.innerHTML = `
-          <div style="font-size:9.5px; font-weight:bold; color:#fff;">${pot.plant.name}</div>
-          <div style="font-size:8px; color:var(--c-green);">${pot.progress >= 100 ? 'HARVEST READY' : pot.phase}</div>
-          <div class="progress-bg"><div class="progress-fill" style="width:${pot.progress}%;"></div></div>
-          <button class="btn btn-green" style="padding:3px 5px; font-size:7.5px; width:100%; margin-top:2px;" ${pot.progress >= 100 ? '' : 'disabled'} onclick="harvestPot(${pot.id})">Chop (~${pot.plant.yieldG}g)</button>
+          <div style="font-size:9.5px; font-weight:bold; color:#fff;" id="pot-title-${pot.id}">${pot.plant.name}</div>
+          <div style="font-size:8px; color:${pot.progress >= 100 ? 'var(--c-gold)' : 'var(--c-green)'}; font-weight:bold;" id="pot-phase-${pot.id}">
+            ${pot.progress >= 100 ? '⭐ READY TO HARVEST' : pot.phase}
+          </div>
+          <div class="progress-bg"><div class="progress-fill" id="pot-bar-${pot.id}" style="width:${pot.progress}%;"></div></div>
+          <button class="btn btn-green" id="pot-chop-btn-${pot.id}" style="padding:4px 6px; font-size:8px; width:100%; margin-top:3px;" ${pot.progress >= 100 ? '' : 'disabled'} onclick="harvestPot(${pot.id})">
+            ${pot.progress >= 100 ? '✂️ Chop Cola' : 'Flowering...'}
+          </button>
         `;
       } else {
         div.innerHTML = `
           <div style="font-size:8.5px; color:var(--silver-dim);">Pot #${pot.id + 1} [Empty]</div>
-          <button class="btn btn-green" style="padding:3px 5px; font-size:7.5px; margin-top:4px;" onclick="openSeedPickerModal(${pot.id})">Plant Cut</button>
+          <button class="btn btn-green" style="padding:4px 6px; font-size:7.5px; margin-top:4px;" onclick="openSeedPickerModal(${pot.id})">Plant Cut</button>
         `;
       }
       grid.appendChild(div);
+    });
+  }
+
+  /* LIGHTWEIGHT LIVE TICK UPDATE TO PREVENT SWALLOWING CLICKS */
+  function updateGrowPotsInPlace() {
+    State.growPots.slice(0, 36).forEach(pot => {
+      let card = document.getElementById(`pot-card-${pot.id}`);
+      if (!card) return;
+
+      if (pot.occupied) {
+        let bar = document.getElementById(`pot-bar-${pot.id}`);
+        let phase = document.getElementById(`pot-phase-${pot.id}`);
+        let chopBtn = document.getElementById(`pot-chop-btn-${pot.id}`);
+
+        if (bar) bar.style.width = `${pot.progress}%`;
+        if (phase) {
+          phase.innerText = pot.progress >= 100 ? '⭐ READY TO HARVEST' : pot.phase;
+          phase.style.color = pot.progress >= 100 ? 'var(--c-gold)' : 'var(--c-green)';
+        }
+        if (chopBtn) {
+          if (pot.progress >= 100) {
+            chopBtn.removeAttribute('disabled');
+            chopBtn.innerText = '✂️ Chop Cola';
+            card.classList.add('ready');
+          } else {
+            chopBtn.setAttribute('disabled', 'true');
+            chopBtn.innerText = 'Flowering...';
+            card.classList.remove('ready');
+          }
+        }
+      }
     });
   }
 
@@ -1082,9 +1246,12 @@
     let pot = State.growPots.find(p => p.id === State.targetPotForSeed);
     if (!pot) return;
 
+    // Instant Rooting Skill
+    let startProgress = getSkillRank('speed_2') * 15;
+
     pot.occupied = true;
     pot.plant = createCultivar(seed.name, seed.role, seed.tierIdx, seed.seedInt, seed.thc, seed.terps, seed.bagAppeal, seed.palette, seed.morphology, seed.lineage);
-    pot.progress = 0;
+    pot.progress = startProgress;
     pot.phase = 'VEGETATIVE';
 
     closeSeedModal();
@@ -1099,13 +1266,14 @@
 
     State.seedInventory.sort((a,b) => b.thc - a.thc);
 
+    let startProgress = getSkillRank('speed_2') * 15;
     let planted = 0;
     empty.forEach(pot => {
       if (State.seedInventory.length > 0) {
         let seed = State.seedInventory.shift();
         pot.occupied = true;
         pot.plant = createCultivar(seed.name, seed.role, seed.tierIdx, seed.seedInt, seed.thc, seed.terps, seed.bagAppeal, seed.palette, seed.morphology, seed.lineage);
-        pot.progress = 0;
+        pot.progress = startProgress;
         pot.phase = 'VEGETATIVE';
         planted++;
       }
@@ -1119,10 +1287,20 @@
     let pot = State.growPots.find(p => p.id === potId);
     if (!pot || !pot.occupied || pot.progress < 100) return;
     
-    // Add to bulk harvested batch
-    let batch = { ...pot.plant, weightG: pot.plant.yieldG };
+    // Calculate full fluctuating harvest weight
+    let yieldResult = calculateHarvestYield(pot.plant);
+    let batch = { ...pot.plant, weightG: yieldResult.dryGrams };
     State.bulkHarvests.push(batch);
-    toast(`Chopped ${batch.name} (${batch.weightG}g raw craft flower)!`);
+
+    // XP calculation
+    addXP(Math.floor(25 + batch.weightG * 0.4));
+
+    if (yieldResult.isJackpot) {
+      toast(`🔥 JACKPOT MONSTER COLA! Chopped ${batch.name}: <b style="color:var(--c-gold);">${batch.weightG}g</b> cured craft flower!`);
+    } else {
+      toast(`✂️ Chopped ${batch.name}: <b>${batch.weightG}g</b> bulk cured craft flower!`);
+    }
+
     pot.occupied = false; pot.plant = null; pot.progress = 0; pot.phase = 'EMPTY';
     updateHUD(); renderGrowUI(); renderBulkHarvests();
   }
@@ -1130,12 +1308,18 @@
   function harvestAllPlants() {
     let ready = State.growPots.filter(p => p.occupied && p.progress >= 100);
     if (ready.length === 0) { toast("No plants fully flowered yet."); return; }
+    
+    let totalHarvestG = 0;
     ready.forEach(pot => {
-      let batch = { ...pot.plant, weightG: pot.plant.yieldG };
+      let yieldResult = calculateHarvestYield(pot.plant);
+      let batch = { ...pot.plant, weightG: yieldResult.dryGrams };
+      totalHarvestG += yieldResult.dryGrams;
       State.bulkHarvests.push(batch);
       pot.occupied = false; pot.plant = null; pot.progress = 0; pot.phase = 'EMPTY';
     });
-    toast(`Harvested ${ready.length} plants into Bulk Curing Vault!`);
+
+    addXP(Math.floor(ready.length * 30 + totalHarvestG * 0.25));
+    toast(`✂️ Canopy Chopped! Harvested <b>${totalHarvestG.toFixed(1)}g</b> across ${ready.length} plants into Bulk Vault!`);
     updateHUD(); renderGrowUI(); renderBulkHarvests();
   }
 
@@ -1154,7 +1338,7 @@
 
     const categories = [
       { key: 'lights', title: '☀️ Grow Lighting Systems', curr: State.equip.lightIdx, list: EQUIPMENT_DATABASE.lights },
-      { key: 'water', title: '💧 Irrigation & RO Water', curr: State.equip.waterIdx, list: EQUIPMENT_DATABASE.water },
+      { key: 'water', title: '💧 Irrigation & Hydroponics', curr: State.equip.waterIdx, list: EQUIPMENT_DATABASE.water },
       { key: 'nutrients', title: '🧪 Nutrients & Soil Regimens', curr: State.equip.nutrientsIdx, list: EQUIPMENT_DATABASE.nutrients },
       { key: 'climate', title: '🌬️ HVAC, VPD & CO₂ Enrichment', curr: State.equip.climateIdx, list: EQUIPMENT_DATABASE.climate }
     ];
@@ -1199,6 +1383,7 @@
 
     State.funds -= nextItem.cost;
     State.equip[currIdxKey]++;
+    addXP(100);
     toast(`Installed ${nextItem.name}! Canopy upgraded.`);
     updateHUD();
     renderEquip();
@@ -1209,7 +1394,7 @@
     const list = $('packaging-bulk-list'); if (!list) return; list.innerHTML = '';
 
     if (State.bulkHarvests.length === 0) {
-      list.innerHTML = `<div style="text-align:center; padding:15px; color:var(--silver-dim); font-size:9.5px;">No raw bulk flower in bins. Chop flowered crops in Grow Room!</div>`;
+      list.innerHTML = `<div style="text-align:center; padding:15px; color:var(--silver-dim); font-size:9.5px;">No raw bulk flower in bins. Chop mature crops in Grow Room!</div>`;
       return;
     }
 
@@ -1225,17 +1410,17 @@
             <span style="color:${b.tierColor}; font-size:8.5px; font-weight:bold;">${b.tierName}</span>
           </div>
           <div style="font-size:9px; color:var(--c-lime); font-weight:bold; margin-top:2px;">
-            Bulk Weight: ${b.weightG.toFixed(1)}g | THC: ${b.thc}% | Terps: ${b.terpenes}%
+            Available Bulk: <b style="color:#fff; font-size:11px;">${b.weightG.toFixed(1)}g</b> | THC: ${b.thc}% | Terps: ${b.terpenes}%
           </div>
           <div style="display:flex; flex-wrap:wrap; gap:4px; margin-top:6px;">
-            <button class="btn btn-green" onclick="packageBatch(${idx}, 'PREROLL')">1g Joint</button>
+            <button class="btn btn-green" onclick="packageBatch(${idx}, 'PREROLL')">1.0g Joint</button>
             <button class="btn btn-scarlet" onclick="packageBatch(${idx}, 'TENTH')">2.83g Tenth</button>
             <button class="btn btn-gold" onclick="packageBatch(${idx}, 'FIFTH')">5.66g Fifth</button>
             <button class="btn btn-blue" onclick="packageBatch(${idx}, 'HALF')">14.15g Half</button>
-            <button class="btn btn-cyan" onclick="packageBatch(${idx}, 'OUNCE')">28.3g Ounce</button>
+            <button class="btn btn-cyan" onclick="packageBatch(${idx}, 'OUNCE')">28.3g Zip</button>
           </div>
         </div>
-        <button class="btn btn-danger" style="padding:6px; font-size:8px;" onclick="dumpBulkWholesale(${idx})">Bulk Wholesale</button>
+        <button class="btn btn-danger" style="padding:6px; font-size:8px;" onclick="dumpBulkWholesale(${idx})">Wholesale Remainder</button>
       `;
       list.appendChild(card);
     });
@@ -1247,7 +1432,7 @@
     if (!bulk || !fmtObj) return;
 
     if (bulk.weightG < fmtObj.grams) {
-      toast(`Need at least ${fmtObj.grams}g of ${bulk.name} to package a ${fmtObj.name}!`);
+      toast(`Need at least ${fmtObj.grams}g of ${bulk.name} to package a ${fmtObj.name}! Available: ${bulk.weightG.toFixed(1)}g`);
       return;
     }
 
@@ -1255,7 +1440,6 @@
     let usedWeight = Number((units * fmtObj.grams).toFixed(2));
     bulk.weightG = Number((bulk.weightG - usedWeight).toFixed(2));
 
-    // Fair retail base price calculation
     let unitPrice = Math.floor(fmtObj.grams * fmtObj.basePricePerGram * (bulk.score / 70));
 
     State.packagedVault.push({
@@ -1280,11 +1464,12 @@
       trophiesWon: bulk.trophiesWon || 0
     });
 
-    if (bulk.weightG < 0.8) {
+    if (bulk.weightG < 0.5) {
       State.bulkHarvests.splice(bulkIdx, 1);
     }
 
-    toast(`Packaged ${units}x ${fmtObj.name} of ${bulk.name}! Ready for retail.`);
+    addXP(units * 4);
+    toast(`Packaged ${units}x ${fmtObj.name} of ${bulk.name}! Ready for dispensary shelves.`);
     updateHUD();
     renderBulkHarvests();
     renderPackagedVault();
@@ -1292,10 +1477,11 @@
 
   function dumpBulkWholesale(idx) {
     let bulk = State.bulkHarvests[idx];
-    let payout = Math.floor(bulk.weightG * 4.5);
+    let payout = Math.floor(bulk.weightG * 5.0);
     State.funds += payout;
+    addXP(15);
     State.bulkHarvests.splice(idx, 1);
-    toast(`Wholesaled ${bulk.weightG}g raw trim/flower to processor for $${payout}!`);
+    toast(`Wholesaled ${bulk.weightG}g raw trim/flower to licensed processor for $${payout}!`);
     updateHUD(); renderBulkHarvests();
   }
 
@@ -1394,7 +1580,9 @@
     if (State.funds < cut.cost) { toast("Insufficient bank balance."); return; }
 
     State.funds -= cut.cost;
-    for (let i = 0; i < 3; i++) {
+    let seedCount = 3 + (getSkillRank('gen_3') > 0 ? 1 : 0);
+
+    for (let i = 0; i < seedCount; i++) {
       State.seedInventory.push({
         name: cut.name,
         role: cut.role,
@@ -1409,7 +1597,8 @@
       });
     }
 
-    toast(`Purchased 3-pack of ${cut.name} seeds for $${cut.cost}!`);
+    addXP(30);
+    toast(`Purchased ${seedCount}-pack of ${cut.name} certified seeds!`);
     updateHUD(); renderOwnedSeeds();
   }
 
@@ -1457,13 +1646,13 @@
     let pack = State.packagedVault.splice(packIdx, 1)[0];
     emptyShelf.item = pack;
     emptyShelf.remainingUnits = pack.unitsRemaining;
-    emptyShelf.pricePerUnit = Math.floor(pack.pricePerUnit * 1.15); // Ohio fair retail markup
-    toast(`Stocked ${pack.unitsRemaining}x ${pack.formatName} of ${pack.name} on dispensary shelf!`);
+    emptyShelf.pricePerUnit = Math.floor(pack.pricePerUnit * 1.15);
+    toast(`Stocked ${pack.unitsRemaining}x ${pack.formatName} of ${pack.name} on storefront shelf!`);
     updateHUD(); renderStore(); renderPackagedVault();
   }
 
   function stockShelfFromPackagedVault(shelfId) {
-    if (State.packagedVault.length === 0) { toast("No packaged inventory in vault! Package your flower first."); return; }
+    if (State.packagedVault.length === 0) { toast("No packaged inventory in vault! Package your bulk flower first."); return; }
     let item = State.packagedVault.shift();
     let shelf = State.storeShelves.find(s => s.id === shelfId);
     shelf.item = item;
@@ -1525,6 +1714,8 @@
       State.funds += saleTotal;
       shelf.remainingUnits -= unitsBought;
 
+      addXP(unitsBought * 5);
+
       let log = document.createElement('div');
       log.style.color = "var(--c-green)";
       log.innerText = `✓ Patient bought ${unitsBought}x ${shelf.item.formatName} (${shelf.item.name}) for $${saleTotal}!`;
@@ -1544,17 +1735,85 @@
     }
   }
 
+  /* ================= MASTER SKILL TREE SYSTEM ================= */
+  function renderSkills() {
+    const container = $('skills-container'); if (!container) return; container.innerHTML = '';
+    $('skills-sp-count').innerText = `${State.skillPoints} SP`;
+
+    SKILL_TREE.forEach(branch => {
+      let branchCard = document.createElement('div');
+      branchCard.className = 'skill-branch';
+      branchCard.innerHTML = `
+        <div class="skill-branch-title" style="color:${branch.color};">
+          <span>${branch.title}</span>
+        </div>
+      `;
+
+      branch.skills.forEach(skill => {
+        let currentRank = getSkillRank(skill.id);
+        let isMax = currentRank >= skill.maxRank;
+        let canAfford = State.skillPoints >= skill.costPerRank;
+
+        let node = document.createElement('div');
+        node.className = `skill-node ${currentRank > 0 ? (isMax ? 'maxed' : 'unlocked') : ''}`;
+        node.innerHTML = `
+          <div style="flex:1;">
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+              <span style="font-weight:900; color:#fff; font-size:10px;">${skill.name}</span>
+              <span class="badge" style="font-size:7.5px;">Rank ${currentRank}/${skill.maxRank}</span>
+            </div>
+            <div style="font-size:8px; color:var(--silver-dim); margin-top:2px;">${skill.desc}</div>
+            <div style="font-size:8px; color:var(--c-green); font-weight:bold; margin-top:2px;">Active: ${skill.effectDesc}</div>
+          </div>
+          <div>
+            ${isMax ? `
+              <button class="btn btn-gold" style="font-size:7.5px; padding:4px 6px;" disabled>MASTERED</button>
+            ` : `
+              <button class="btn btn-green" style="font-size:7.5px; padding:4px 6px;" ${canAfford ? '' : 'disabled'} onclick="upgradeSkill('${skill.id}', ${skill.costPerRank})">
+                +1 (${skill.costPerRank} SP)
+              </button>
+            `}
+          </div>
+        `;
+        branchCard.appendChild(node);
+      });
+
+      container.appendChild(branchCard);
+    });
+  }
+
+  function upgradeSkill(skillId, cost) {
+    if (State.skillPoints < cost) { toast("Not enough Skill Points."); return; }
+    State.skillPoints -= cost;
+    State.skills[skillId] = (State.skills[skillId] || 0) + 1;
+    toast(`⭐ Skill Unlocked! (${State.skills[skillId]} Rank)`);
+    updateHUD();
+    renderSkills();
+  }
+
+  function respecSkills() {
+    let refund = 0;
+    SKILL_TREE.forEach(branch => {
+      branch.skills.forEach(skill => {
+        let rank = getSkillRank(skill.id);
+        refund += (rank * skill.costPerRank);
+      });
+    });
+
+    State.skills = {};
+    State.skillPoints += refund;
+    toast(`Skills Reset! Refunded ${refund} Skill Points.`);
+    updateHUD();
+    renderSkills();
+  }
+
   /* ================= BREEDING LAB ================= */
   function updateBreedingSelects() {
     const s1 = $('breed-mother'); const s2 = $('breed-father');
     if (!s1 || !s2) return;
     let opts = `<option value="">-- Choose Cultivar --</option>`;
     
-    // Allow breeding from bulk or packaged
-    let combined = [];
-    State.bulkHarvests.forEach(b => combined.push(b));
-    State.packagedVault.forEach(p => combined.push(p));
-
+    let combined = [...State.bulkHarvests, ...State.packagedVault];
     combined.forEach(st => {
       opts += `<option value="${st.uid || st.cultivarUid}">${st.name} [Score: ${st.score} | THC: ${st.thc}%]</option>`;
     });
@@ -1574,7 +1833,7 @@
     if (p1 && p2 && u1 !== u2) {
       rBox.style.display = 'block';
       let hybridName = `${p1.name.split(' ')[0]} × ${p2.name.split(' ').slice(-1)[0]}`;
-      let estScore = Math.floor((p1.score + p2.score) / 2) + 3;
+      let estScore = Math.floor((p1.score + p2.score) / 2) + 3 + (getSkillRank('gen_1') * 4);
       $('breed-cross-name').innerText = hybridName;
       $('breed-est-score').innerText = `EST SCORE: ${estScore}`;
       $('breed-desc-txt').innerText = `Ohio hybrid vigor verified. Inheriting ${p1.palette} coloration and combined terpene profile.`;
@@ -1594,7 +1853,11 @@
     if (!p1 || !p2) return;
 
     State.funds -= 150;
-    let nTier = Math.min(9, Math.max(p1.tierIdx, p2.tierIdx) + (Math.random() < 0.4 ? 1 : 0));
+
+    // Skill 2: Tier Leap
+    let leapChance = 0.40 + (getSkillRank('gen_2') * 0.30);
+    let nTier = Math.min(9, Math.max(p1.tierIdx, p2.tierIdx) + (Math.random() < leapChance ? 1 : 0));
+
     let nThc = Math.min(38, Math.floor((p1.thc + p2.thc) / 2 + (Math.random() * 3 + 1)));
     let nTerps = Number((((p1.terpenes + p2.terpenes) / 2) + (Math.random() * 0.8)).toFixed(1));
     let nAppeal = Math.min(99, Math.floor((p1.bagAppeal + p2.bagAppeal) / 2 + (Math.random() * 4)));
@@ -1605,7 +1868,10 @@
     let hybridMorph = Math.random() < 0.5 ? p1.morphology : p2.morphology;
     let lineageDesc = `${p1.name} × ${p2.name}`;
 
-    for (let i = 0; i < 3; i++) {
+    // Skill 3: Prolific Pollinator (5 seeds instead of 3)
+    let seedCount = 3 + (getSkillRank('gen_3') > 0 ? 2 : 0);
+
+    for (let i = 0; i < seedCount; i++) {
       State.seedInventory.push({
         name: crossName,
         role: hybridRole,
@@ -1620,7 +1886,8 @@
       });
     }
 
-    toast(`GENETICS STABILIZED: Generated 3x ${crossName} Seeds! Stored in Seed Vault.`);
+    addXP(120);
+    toast(`GENETICS STABILIZED: Generated ${seedCount}x ${crossName} Seeds! Stored in Seed Vault.`);
     updateHUD(); renderOwnedSeeds(); updateBreedingSelects();
   }
 
@@ -1662,18 +1929,21 @@
       batch.weightG -= 10;
       if (batch.weightG <= 0.5) State.bulkHarvests.shift();
       State.funds += 70;
+      addXP(40);
       toast(`Washed & pressed 1g Cold Cure Live Hash Rosin! Sold for $70.`);
     } else if (type === 'CART') {
       if (batch.weightG < 6) { toast("Requires at least 6g of cured buds for a 0.84g Luster Pod!"); return; }
       batch.weightG -= 6;
       if (batch.weightG <= 0.5) State.bulkHarvests.shift();
       State.funds += 50;
+      addXP(30);
       toast(`Extracted 0.84g Ohio Luster Pod! Sold for $50.`);
     } else if (type === 'EDIBLE') {
       if (batch.weightG < 4) { toast("Requires at least 4g flower to infuse gummy batch!"); return; }
       batch.weightG -= 4;
       if (batch.weightG <= 0.5) State.bulkHarvests.shift();
       State.funds += 44;
+      addXP(25);
       toast(`Infused 2x 110mg Solventless Gummy Tins! Sold for $44.`);
     }
     updateHUD(); renderBulkHarvests();
@@ -1714,8 +1984,10 @@
       State.funds += cup.prize;
       champ.trophiesWon = (champ.trophiesWon || 0) + 1;
       State.trophies.push({ cup: cup.name, strain: champ.name });
-      toast(`CHAMPION! ${champ.name} took 1st Place! +$${fmt(cup.prize)}`);
+      addXP(250);
+      toast(`🏆 1ST PLACE CHAMPION! ${champ.name} won ${cup.name}! +$${fmt(cup.prize)}`);
     } else {
+      addXP(30);
       toast(`Judges awarded 4th place to ${champ.name}. Just missed the podium.`);
     }
 
@@ -1745,7 +2017,10 @@
   function gameTick() {
     tickCounter++;
     const eq = getActiveEquip();
-    let speedMult = eq.light.speedBonus * eq.water.speedBonus;
+    
+    // Growth Speed bonuses: Equipment + Skill 1
+    let speedSkillMult = 1.0 + (getSkillRank('speed_1') * 0.25);
+    let speedMult = eq.light.speedBonus * eq.water.speedBonus * eq.climate.speedBonus * speedSkillMult;
 
     State.growPots.forEach(pot => {
       if (pot.occupied && pot.progress < 100) {
@@ -1760,20 +2035,25 @@
       }
     });
 
+    // Auto-Harvest
     if (State.auto.autoHarvest) {
       let ready = State.growPots.filter(p => p.occupied && p.progress >= 100);
       if (ready.length > 0) harvestAllPlants();
     }
 
+    // Auto-Water / Auto-Seed
     if (State.auto.autoWater) {
       let empty = State.growPots.filter(p => !p.occupied);
       if (empty.length > 0 && State.seedInventory.length > 0) quickPlantBestSeed();
     }
 
-    if (State.auto.autoPack && State.bulkHarvests.length > 0 && tickCounter % 30 === 0) {
+    // Auto-Pack (doubled speed if turbo curing unlocked)
+    let packInterval = getSkillRank('speed_3') > 0 ? 15 : 30;
+    if (State.auto.autoPack && State.bulkHarvests.length > 0 && tickCounter % packInterval === 0) {
       packageBatch(0, 'TENTH');
     }
 
+    // Auto-Restock
     if (State.auto.autoRestock && tickCounter % 20 === 0) {
       let emptyShelves = State.storeShelves.filter(s => !s.item);
       if (emptyShelves.length > 0 && State.packagedVault.length > 0) autoStockAllShelves();
@@ -1781,7 +2061,10 @@
 
     if (tickCounter % 15 === 0) customerTick();
 
-    if ($('tab-grow').classList.contains('active')) renderGrowUI();
+    // UPDATE GROW UI IN PLACE TO PREVENT DESTROYING CLICK LISTENERS
+    if ($('tab-grow').classList.contains('active')) {
+      updateGrowPotsInPlace();
+    }
   }
 
   /* ================= NAVIGATION & INITIALIZATION ================= */
@@ -1800,6 +2083,7 @@
     if (tabId === 'store') renderStore();
     if (tabId === 'breeding') { updateBreedingSelects(); previewBreeding(); }
     if (tabId === 'cups') { renderCups(); renderTrophies(); }
+    if (tabId === 'skills') renderSkills();
   }
 
   function initStarterPack() {
@@ -1821,6 +2105,7 @@
     renderSeedCatalog();
     renderStore();
     renderCups();
+    renderSkills();
     updateAutoUI();
     setInterval(gameTick, 100);
   }
