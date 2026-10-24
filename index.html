@@ -10,12 +10,10 @@
     --panel-bg: rgba(10, 16, 10, 0.94);
     --panel-border: #182818;
     --panel-border-glow: #243d24;
-    
     --silver-bright: #edf4ed;
     --silver-main: #9cb19c;
     --silver-dim: #5a6e5a;
     --silver-dark: #121c12;
-    
     --c-green: #22c55e;
     --c-lime: #84cc16;
     --c-amber: #f59e0b;
@@ -25,37 +23,27 @@
     --c-cyan: #06b6d4;
     --c-scarlet: #ba0c2f;
     --c-gray: #868f98;
-
     --t0-col: #64748b; --t1-col: #22c55e; --t2-col: #38bdf8; --t3-col: #3b82f6; --t4-col: #a855f7; 
     --t5-col: #d946ef; --t6-col: #f59e0b; --t7-col: #ea580c; --t8-col: #ef4444; --t9-col: #00ff88;
     --safe-bottom: env(safe-area-inset-bottom, 16px);
   }
-
   * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; -webkit-tap-highlight-color: transparent; }
-
   html, body { width: 100%; height: 100%; background: var(--bg-base); color: var(--silver-bright); display: flex; flex-direction: column; overflow: hidden; }
-
   body::before {
     content: " "; display: block; position: fixed; top: 0; left: 0; bottom: 0; right: 0;
-    background: radial-gradient(circle at 50% 0%, rgba(186, 12, 47, 0.1) 0%, rgba(34, 197, 94, 0.07) 45%, transparent 80%);
+    background: radial-gradient(circle at 50% 0%, rgba(186, 12, 47, 0.12) 0%, rgba(34, 197, 94, 0.08) 45%, transparent 80%);
     pointer-events: none; z-index: 1;
   }
-
-  /* TOP HUD */
   header { flex-shrink: 0; background: rgba(0,0,0,0.96); backdrop-filter: blur(12px); border-bottom: 1px solid var(--panel-border); padding: 6px 12px; display: flex; flex-direction: column; gap: 5px; z-index: 20; }
   .header-top { display: flex; justify-content: space-between; align-items: center; }
-  
   .brand-container { display: flex; align-items: center; gap: 8px; }
   .logo-svg { width: 44px; height: 38px; flex-shrink: 0; }
   .brand-title { font-size: 13px; font-weight: 900; letter-spacing: 1.2px; text-transform: uppercase; color: #fff; line-height: 1.1; }
   .brand-title span { color: var(--c-scarlet); text-shadow: 0 0 8px rgba(186, 12, 47, 0.6); }
   .brand-sub { font-size: 8px; color: var(--c-gray); letter-spacing: 0.8px; font-family: monospace; }
-
   .hud-stats { display: flex; gap: 6px; overflow-x: auto; white-space: nowrap; padding-bottom: 2px; }
   .hud-stats::-webkit-scrollbar { display: none; }
   .hud-pill { background: #010401; border: 1px solid var(--panel-border); padding: 4px 8px; border-radius: 4px; font-size: 10px; font-family: monospace; font-weight: bold; }
-
-  /* DOCKED BOTTOM THUMB NAVIGATION (8 TABS INCL SKILLS) */
   nav.bottom-nav {
     flex-shrink: 0; display: grid; grid-template-columns: repeat(8, 1fr);
     background: rgba(0,0,0,0.97); backdrop-filter: blur(14px); border-top: 1px solid var(--panel-border);
@@ -69,26 +57,18 @@
   .nav-btn:last-child { border-right: none; }
   .nav-btn .icon { font-size: 14px; }
   .nav-btn.active { background: rgba(186, 12, 47, 0.14); color: var(--c-green); box-shadow: inset 0 2px 0 var(--c-scarlet); }
-
   main { flex: 1; overflow-y: auto; padding: 10px; padding-bottom: 40px; z-index: 2; -webkit-overflow-scrolling: touch; }
   .view-tab { display: none; flex-direction: column; gap: 10px; }
   .view-tab.active { display: flex; }
-
   .panel { background: var(--panel-bg); backdrop-filter: blur(10px); border: 1px solid var(--panel-border); border-radius: 8px; padding: 12px; display: flex; flex-direction: column; gap: 8px; }
   .panel-header { font-size: 11px; font-weight: 900; text-transform: uppercase; letter-spacing: 1px; color: #fff; padding-bottom: 6px; border-bottom: 1px solid var(--panel-border); display: flex; justify-content: space-between; align-items: center; }
-
-  /* ENVIRONMENT METRICS STRIP */
-  .env-strip {
-    display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; background: #000; border: 1px solid var(--panel-border); border-radius: 6px; padding: 6px;
-  }
+  .env-strip { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; background: #000; border: 1px solid var(--panel-border); border-radius: 6px; padding: 6px; }
   .env-node { display: flex; flex-direction: column; align-items: center; text-align: center; }
   .env-val { font-size: 11px; font-family: monospace; font-weight: 900; }
   .env-lbl { font-size: 7.5px; color: var(--silver-dim); letter-spacing: 0.5px; }
-
   .control-bar { display: flex; flex-wrap: wrap; gap: 6px; background: #000; padding: 6px 8px; border-radius: 5px; border: 1px solid var(--panel-border); align-items: center; }
   .control-group { display: flex; gap: 4px; align-items: center; border-right: 1px solid var(--panel-border); padding-right: 6px; }
   .control-group:last-child { border-right: none; padding-right: 0; }
-
   button.btn { background: #020502; border: 1px solid var(--silver-dim); color: var(--silver-bright); padding: 6px 10px; font-size: 8.5px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.4px; border-radius: 4px; cursor: pointer; transition: 0.1s; }
   button.btn:active { background: var(--silver-bright); color: #000; }
   button.btn:disabled { opacity: 0.35; cursor: not-allowed; border-color: var(--silver-dark); }
@@ -100,62 +80,52 @@
   button.btn-gold:active { background: var(--c-gold); color: #000; }
   button.btn-blue { background: #071720; border-color: var(--c-blue); color: var(--c-blue); }
   button.btn-blue:active { background: var(--c-blue); color: #000; }
-  button.btn-cyan { background: #04181a; border-color: var(--c-cyan); color: var(--c-cyan); }
-  button.btn-cyan:active { background: var(--c-cyan); color: #000; }
   button.btn-danger { border-color: var(--c-scarlet); color: var(--c-scarlet); }
-
-  /* DOSSIER CARD */
+  
+  /* LARGE DOSSIERS */
+  .large-dossier-card {
+    background: #010401; border: 1px solid var(--panel-border); border-radius: 8px;
+    padding: 12px; display: flex; flex-direction: column; gap: 8px; position: relative;
+    box-shadow: 0 4px 18px rgba(0,0,0,0.7);
+  }
+  .large-dossier-card.winner { border-color: var(--c-gold); box-shadow: inset 0 0 16px rgba(251, 191, 36, 0.15); }
+  .dossier-body { display: flex; gap: 12px; align-items: flex-start; }
+  .dossier-canvas-wrap {
+    width: 128px; height: 128px; flex-shrink: 0; background: #000; border: 1px solid #1a2a1a;
+    border-radius: 6px; overflow: hidden; display: flex; align-items: center; justify-content: center;
+  }
+  .dossier-canvas-wrap canvas { width: 128px; height: 128px; image-rendering: pixelated; }
+  .dossier-info { flex: 1; display: flex; flex-direction: column; gap: 4px; font-size: 9.5px; }
+  .dossier-meta-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 4px; background: #000; padding: 6px; border-radius: 4px; border: 1px solid var(--panel-border); font-family: monospace; font-size: 9px; margin-top: 3px; }
+  
   .badge { padding: 3px 6px; border-radius: 3px; font-size: 8.5px; font-weight: 900; font-family: monospace; background: #0c180c; color: var(--c-green); border: 1px solid var(--c-green); }
   .badge-ohio { padding: 3px 6px; border-radius: 3px; font-size: 8px; font-weight: 900; font-family: monospace; background: #1a0408; color: #ff6b81; border: 1px solid var(--c-scarlet); }
   .score-pill { font-size: 9px; font-weight: 900; padding: 2px 6px; border-radius: 3px; background: #101c10; border: 1px solid var(--c-lime); color: var(--c-lime); font-family: monospace; }
-  
-  /* GROW ROOM POTS */
-  .grow-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 8px; margin-top: 4px; }
+  .grow-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 8px; margin-top: 4px; }
   .grow-pot { background: #010401; border: 1px dashed var(--panel-border); border-radius: 6px; padding: 8px; display: flex; flex-direction: column; gap: 5px; align-items: center; text-align: center; }
   .grow-pot.occupied { border-style: solid; border-color: var(--c-green); background: #060e06; }
-  .grow-pot.ready { border-color: var(--c-gold); box-shadow: 0 0 10px rgba(251, 191, 36, 0.25); }
-  
+  .grow-pot.ready { border-color: var(--c-gold); box-shadow: 0 0 10px rgba(251, 191, 36, 0.35); }
   .progress-bg { width: 100%; height: 6px; background: #111; border-radius: 3px; overflow: hidden; margin-top: 2px; }
   .progress-fill { height: 100%; background: var(--c-green); width: 0%; transition: width 0.15s ease-out; }
-
-  /* STORE SHELVES */
-  .store-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 8px; }
-  .store-shelf { background: #010401; border: 1px solid var(--panel-border); border-radius: 6px; padding: 8px; display: flex; flex-direction: column; gap: 5px; position: relative; }
-  .store-shelf.stocked { border-color: var(--c-gold); background: #080c08; }
-
-  /* EQUIPMENT TILES */
-  .equip-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 8px; }
-  .equip-card { background: #010301; border: 1px solid var(--panel-border); border-radius: 6px; padding: 10px; display: flex; flex-direction: column; gap: 5px; }
-
-  /* SKILL TREE STYLES */
+  
+  /* EXPANDED STORE SHELF SLOTS WITH FULL 128px PREVIEWS */
+  .store-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 10px; }
+  .store-shelf { background: #010401; border: 1px dashed #203020; border-radius: 6px; padding: 10px; display: flex; flex-direction: column; gap: 5px; position: relative; min-height: 220px; align-items: center; text-align: center; }
+  .store-shelf.stocked { border-style: solid; border-color: var(--c-gold); background: #080c08; }
+  
   .skills-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 10px; }
   .skill-branch { background: #020602; border: 1px solid var(--panel-border); border-radius: 6px; padding: 10px; display: flex; flex-direction: column; gap: 8px; }
-  .skill-branch-title { font-size: 11px; font-weight: 900; letter-spacing: 0.5px; text-transform: uppercase; display: flex; justify-content: space-between; align-items: center; }
+  .skill-branch-title { font-size: 11px; font-weight: 900; text-transform: uppercase; display: flex; justify-content: space-between; align-items: center; }
   .skill-node { background: #000; border: 1px solid var(--panel-border); border-radius: 5px; padding: 8px; display: flex; justify-content: space-between; align-items: center; gap: 8px; }
   .skill-node.unlocked { border-color: var(--c-green); background: #051205; }
   .skill-node.maxed { border-color: var(--c-gold); background: #121004; }
-
   select, input[type="text"], input[type="number"] { background: #020502; color: #fff; border: 1px solid var(--silver-dark); padding: 6px; font-size: 9.5px; border-radius: 4px; outline: none; font-weight: bold; width: 100%; }
-  
   .check-item { display: flex; justify-content: space-between; align-items: center; background: #000; padding: 8px 10px; border: 1px solid var(--panel-border); border-radius: 5px; font-size: 10px; gap: 8px; }
-
-  /* MODAL */
-  .modal-overlay {
-    position: fixed; top: 0; left: 0; right: 0; bottom: 0;
-    background: rgba(0,0,0,0.88); backdrop-filter: blur(8px);
-    z-index: 100; display: none; align-items: center; justify-content: center; padding: 12px;
-  }
+  .modal-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.88); backdrop-filter: blur(8px); z-index: 100; display: none; align-items: center; justify-content: center; padding: 12px; }
   .modal-overlay.active { display: flex; }
-  .modal-card {
-    background: #090f09; border: 1px solid var(--c-green); border-radius: 8px;
-    width: 100%; max-width: 480px; max-height: 85vh; overflow-y: auto;
-    padding: 14px; display: flex; flex-direction: column; gap: 10px;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.9);
-  }
-
+  .modal-card { background: #090f09; border: 1px solid var(--c-green); border-radius: 8px; width: 100%; max-width: 520px; max-height: 85vh; overflow-y: auto; padding: 14px; display: flex; flex-direction: column; gap: 10px; box-shadow: 0 10px 30px rgba(0,0,0,0.9); }
   #toast-rack { position: fixed; bottom: 75px; left: 10px; right: 10px; display: flex; flex-direction: column; gap: 6px; z-index: 1000; pointer-events: none; }
   .toast { background: #000; border: 1px solid var(--silver-dark); border-left: 3px solid var(--c-green); color: #fff; padding: 8px 12px; font-size: 10.5px; font-weight: bold; font-family: monospace; border-radius: 4px; box-shadow: 0 4px 20px rgba(0,0,0,0.95); animation: slideUp 0.2s, fadeOut 0.4s 2.6s forwards; pointer-events: auto; }
-  
   @keyframes slideUp { from { transform: translateY(15px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
   @keyframes fadeOut { to { opacity: 0; transform: translateY(-5px); } }
 </style>
@@ -171,7 +141,6 @@
             <feDropShadow dx="0" dy="1" stdDeviation="1.5" flood-color="#ba0c2f" flood-opacity="0.8"/>
           </filter>
         </defs>
-        <!-- Buckeye Leaf -->
         <g fill="#2e6930" stroke="#143316" stroke-width="1.2">
           <path d="M 32 60 Q 30 70 28 78" stroke="#1f4221" stroke-width="2.5" fill="none" stroke-linecap="round"/>
           <path d="M 32 50 C 27 34 25 20 32 12 C 39 20 37 34 32 50 Z"/>
@@ -180,7 +149,6 @@
           <path d="M 32 52 C 18 52 8 55 6 62 C 15 67 25 61 32 52 Z"/>
           <path d="M 32 52 C 44 52 54 55 56 61 C 48 67 38 60 32 52 Z"/>
         </g>
-        <!-- Cannabis Leaf -->
         <g fill="#22c55e" stroke="#0e5326" stroke-width="1">
           <path d="M 68 62 Q 70 72 72 78" stroke="#0e5326" stroke-width="2" fill="none" stroke-linecap="round"/>
           <path d="M 68 52 C 64 34 62 16 68 8 C 74 16 72 34 68 52 Z"/>
@@ -207,11 +175,11 @@
   <div style="display:flex; justify-content:space-between; align-items:center;">
     <div class="hud-stats">
       <div class="hud-pill">BANK: <span id="hud-funds" style="color:var(--c-green);">$1,450</span></div>
-      <div class="hud-pill">LEVEL: <span id="hud-level" style="color:var(--c-gold);">1</span> (<span id="hud-sp" style="color:var(--c-cyan);">2 SP</span>)</div>
+      <div class="hud-pill">LVL: <span id="hud-level" style="color:var(--c-gold);">1</span> (<span id="hud-sp" style="color:var(--c-cyan);">2 SP</span>)</div>
       <div class="hud-pill">BULK: <span id="hud-raw-g" style="color:var(--c-lime);">0g</span></div>
       <div class="hud-pill">SEEDS: <span id="hud-seeds-count" style="color:var(--c-blue);">3</span></div>
       <div class="hud-pill">PACKS: <span id="hud-stash-count">0</span></div>
-      <div class="hud-pill">FACILITY: <span id="hud-fac-name" style="color:var(--c-amber);">Closet</span></div>
+      <div class="hud-pill">SPACE: <span id="hud-fac-name" style="color:var(--c-amber);">2-Plant Closet</span></div>
     </div>
     <span class="badge-ohio" id="hud-rank">OHIO HOMEGROWER</span>
   </div>
@@ -219,36 +187,23 @@
 
 <main>
 
-  <!-- TAB 1: GROW OPS / CULTIVATION -->
+  <!-- TAB 1: CRAFT GROW (2, 4, 8, 16, 32 PLANTS) -->
   <div id="tab-grow" class="view-tab active">
     <div class="panel">
       <div class="panel-header">
-        <span>Active Canopy: <strong id="grow-fac-title" style="color:var(--c-green);">2-Plant Closet</strong></span>
-        <button class="btn btn-gold" id="btn-upgrade-fac" onclick="upgradeFacility()">Expand Facility</button>
+        <span>Personal Craft Space: <strong id="grow-fac-title" style="color:var(--c-green);">2-Plant Closet</strong></span>
+        <button class="btn btn-gold" id="btn-upgrade-fac" onclick="upgradeFacility()">Expand Canopy Space</button>
       </div>
       
-      <!-- ENVIRONMENT METRICS BAR -->
       <div class="env-strip">
-        <div class="env-node">
-          <div class="env-val" id="env-ppfd" style="color:var(--c-amber);">420 µmol</div>
-          <div class="env-lbl">PPFD LIGHT</div>
-        </div>
-        <div class="env-node">
-          <div class="env-val" id="env-co2" style="color:var(--c-cyan);">450 PPM</div>
-          <div class="env-lbl">ROOM CO₂</div>
-        </div>
-        <div class="env-node">
-          <div class="env-val" id="env-vpd" style="color:var(--c-lime);">1.2 kPa</div>
-          <div class="env-lbl">VPD (LEAF)</div>
-        </div>
-        <div class="env-node">
-          <div class="env-val" id="env-ec" style="color:var(--c-purple);">1.4 EC</div>
-          <div class="env-lbl">ROOT FERT</div>
-        </div>
+        <div class="env-node"><div class="env-val" id="env-ppfd" style="color:var(--c-amber);">420 µmol</div><div class="env-lbl">PPFD LIGHT</div></div>
+        <div class="env-node"><div class="env-val" id="env-co2" style="color:var(--c-cyan);">450 PPM</div><div class="env-lbl">ROOM CO₂</div></div>
+        <div class="env-node"><div class="env-val" id="env-vpd" style="color:var(--c-lime);">1.2 kPa</div><div class="env-lbl">VPD (LEAF)</div></div>
+        <div class="env-node"><div class="env-val" id="env-ec" style="color:var(--c-purple);">1.4 EC</div><div class="env-lbl">ROOT FERT</div></div>
       </div>
 
       <div style="display:flex; justify-content:space-between; align-items:center; font-size:9.5px; color:var(--silver-dim); margin-top:2px;">
-        <span>Pots Occupied: <b id="pots-count-txt" style="color:#fff;">0/2</b></span>
+        <span>Craft Pots: <b id="pots-count-txt" style="color:#fff;">0/2</b></span>
         <div style="display:flex; gap:4px;">
           <button class="btn btn-green" onclick="harvestAllPlants()">Chop All Ready</button>
           <button class="btn" onclick="quickPlantBestSeed()">Auto-Plant Top Cut</button>
@@ -257,71 +212,58 @@
       <div id="grow-pots-grid" class="grow-grid"></div>
     </div>
 
-    <!-- AUTOMATION SUITE -->
     <div class="panel">
       <div class="panel-header">Canopy Automation Systems</div>
       <div style="display:flex; flex-direction:column; gap:6px;">
         <div class="check-item">
-          <div>
-            <div style="font-weight:bold; color:#fff;">Precision Drip Irrigation</div>
-            <div style="font-size:8.5px; color:var(--silver-dim);">Auto-germinates seeds into empty pots &amp; dispenses fertigation.</div>
-          </div>
+          <div><div style="font-weight:bold; color:#fff;">Precision Drip Irrigation</div><div style="font-size:8.5px; color:var(--silver-dim);">Auto-germinates seeds into empty pots &amp; dispenses fertigation.</div></div>
           <button id="chk-autowater" class="btn" onclick="toggleAuto('autoWater')">ENABLE</button>
         </div>
         <div class="check-item">
-          <div>
-            <div style="font-weight:bold; color:#fff;">Automated Dry Trimmer &amp; Shucker</div>
-            <div style="font-size:8.5px; color:var(--silver-dim);">Harvests mature canopies directly into raw cured bulk flower.</div>
-          </div>
+          <div><div style="font-weight:bold; color:#fff;">Automated Dry Trimmer &amp; Shucker</div><div style="font-size:8.5px; color:var(--silver-dim);">Harvests mature canopies directly into raw cured bulk flower.</div></div>
           <button id="chk-autoharvest" class="btn" onclick="toggleAuto('autoHarvest')">ENABLE</button>
         </div>
         <div class="check-item">
-          <div>
-            <div style="font-weight:bold; color:#fff;">Automatic Packaging Station</div>
-            <div style="font-size:8.5px; color:var(--silver-dim);">Auto-jars harvested bulk into 2.83g Ohio Tenths for retail menu.</div>
-          </div>
+          <div><div style="font-weight:bold; color:#fff;">Automatic Packaging Station</div><div style="font-size:8.5px; color:var(--silver-dim);">Auto-jars harvested bulk into 2.83g Ohio Tenths for retail menu.</div></div>
           <button id="chk-autopack" class="btn" onclick="toggleAuto('autoPack')">ENABLE</button>
         </div>
         <div class="check-item">
-          <div>
-            <div style="font-weight:bold; color:#fff;">Dispensary Shelf Restocker</div>
-            <div style="font-size:8.5px; color:var(--silver-dim);">Refills sold storefront shelves from your cured inventory.</div>
-          </div>
+          <div><div style="font-weight:bold; color:#fff;">Dispensary Shelf Restocker</div><div style="font-size:8.5px; color:var(--silver-dim);">Refills sold storefront shelves from your cured inventory.</div></div>
           <button id="chk-autorestock" class="btn" onclick="toggleAuto('autoRestock')">ENABLE</button>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- TAB 2: GROW EQUIPMENT -->
-  <div id="tab-equip" class="view-tab">
+  <!-- TAB 2: COMMERCIAL WAREHOUSES (200 - 1000 PLANTS) -->
+  <div id="tab-warehouse" class="view-tab">
     <div class="panel">
       <div class="panel-header">
-        <span>Grow Room Equipment &amp; Horticultural Setup</span>
-        <span style="font-size:9px; color:var(--c-gold);">MODIFIERS ACTIVE</span>
+        <span>Commercial Ohio Cultivation Warehouses (200 - 1,000 Plants)</span>
+        <span class="badge" style="color:var(--c-cyan); border-color:var(--c-cyan);">COMMERCIAL FACILITY</span>
       </div>
-      <p style="font-size:9.5px; color:var(--silver-dim);">Upgrading lights, nutrients, irrigation, and climate gear boosts canopy growth rates, terpene production, and THC ceilings.</p>
+      <p style="font-size:9.5px; color:var(--silver-dim);">Operate large-scale automated warehouses. Push massive plant cycles, pull the cheapest seeds automatically, and flood your dispensary shelves with high-turnover bulk flower.</p>
+      
+      <div id="warehouse-management-card" style="background:#000; border:1px solid var(--panel-border); border-radius:6px; padding:10px; display:flex; flex-direction:column; gap:8px;"></div>
 
-      <div class="equip-grid" id="equip-container"></div>
+      <div class="panel-header" style="margin-top:6px;">Commercial Facilities Available</div>
+      <div id="warehouse-upgrade-grid" style="display:flex; flex-direction:column; gap:6px;"></div>
     </div>
   </div>
 
-  <!-- TAB 3: SEED VAULT & CATALOG -->
+  <!-- TAB 3: SEED VAULT & FULL RESTORED CATALOG -->
   <div id="tab-seeds" class="view-tab">
     <div class="panel">
       <div class="panel-header">
         <span>Personal Seed Vault (<span id="owned-seeds-total">0</span>)</span>
         <button class="btn btn-green" onclick="setTab('grow')">Go To Grow Room</button>
       </div>
-      <div id="owned-seeds-list" style="display:flex; flex-wrap:wrap; gap:6px; min-height:40px;">
-        <div style="color:var(--silver-dim); font-size:9.5px;">No seeds currently stored. Buy certified cuts below or crossbreed parents!</div>
-      </div>
+      <div id="owned-seeds-dossiers" style="display:flex; flex-direction:column; gap:10px; min-height:40px;"></div>
     </div>
 
-    <!-- GLOBAL SEED BANK -->
     <div class="panel">
       <div class="panel-header">
-        <span>Ohio Certified Seed Bank &amp; Breeder Stock</span>
+        <span>Ohio Certified Seed Bank &amp; Breeder Stock (All 40 Strains)</span>
         <span style="font-size:9px; color:var(--c-blue);">$35 - $160 / 3-PACK</span>
       </div>
       <div class="control-bar">
@@ -347,44 +289,54 @@
           </select>
         </div>
       </div>
-      <div id="seed-catalog-grid" style="display:flex; flex-direction:column; gap:8px;"></div>
+      <div id="seed-catalog-grid" style="display:flex; flex-direction:column; gap:10px;"></div>
     </div>
   </div>
 
-  <!-- TAB 4: PACKAGING STATION & MULTI-WEIGHT VAULT -->
+  <!-- TAB 4: PACKAGING & LARGE DOSSIER VAULT -->
   <div id="tab-packaging" class="view-tab">
     <div class="panel">
       <div class="panel-header">
         <span>Packaging Station: Multi-Weight Ohio Formats</span>
         <span style="font-size:9px; color:var(--c-green);">BULK CURED BATCHES</span>
       </div>
-      <p style="font-size:9.5px; color:var(--silver-dim);">Break your high-yielding bulk harvests down into official packaging units to stock in your dispensary storefront.</p>
-      
-      <div id="packaging-bulk-list" style="display:flex; flex-direction:column; gap:8px;"></div>
+      <p style="font-size:9.5px; color:var(--silver-dim);">Break your high-yielding bulk harvests down into official packaging units to sell in the dispensary storefront.</p>
+      <div id="packaging-bulk-list" style="display:flex; flex-direction:column; gap:10px;"></div>
     </div>
 
-    <!-- PACKAGED UNITS READY FOR STORE -->
     <div class="panel">
       <div class="panel-header">
-        <span>Packaged Vault Inventory</span>
+        <span>Packaged Vault Inventory (High-Visibility Dossiers)</span>
         <button class="btn btn-green" onclick="setTab('store')">Go To Dispensary Menu</button>
       </div>
-      <div id="packaged-vault-list" style="display:flex; flex-direction:column; gap:6px;"></div>
+      <div id="packaged-vault-list" style="display:flex; flex-direction:column; gap:10px;"></div>
     </div>
   </div>
 
-  <!-- TAB 5: DISPENSARY STOREFRONT (OHIO RETAIL) -->
+  <!-- TAB 5: DISPENSARY STOREFRONT & HEADSHOP -->
   <div id="tab-store" class="view-tab">
     <div class="panel">
       <div class="panel-header">
-        <span>Buckeye Buds Dispensary Menu</span>
-        <span style="font-size:9.5px; color:var(--c-gold);">PATRONS: <b id="store-visits">165</b>/hr</span>
+        <span>Buckeye Buds Dispensary Menu (<span id="store-slot-count">6</span> Slots)</span>
+        <div style="display:flex; gap:4px;">
+          <button class="btn btn-gold" id="btn-expand-store" onclick="expandStoreShelves()">Expand Storefront</button>
+          <button class="btn btn-green" onclick="autoStockAllShelves()">Auto Stock Shelves</button>
+        </div>
       </div>
       <div style="display:flex; justify-content:space-between; align-items:center; font-size:9.5px; color:var(--silver-dim);">
-        <span>Stock Tenths (2.83g), Fifths (5.66g), Halves (14.15g), Zips (28.3g), or Pre-Rolls. Price flexibly!</span>
-        <button class="btn btn-green" onclick="autoStockAllShelves()">Auto Stock Shelves</button>
+        <span>Stock Tenths, Fifths, Halves, Zips, Pre-rolls, and Glassware.</span>
+        <span style="color:var(--c-gold);">PATRONS: <b id="store-visits">180</b>/hr</span>
       </div>
       <div id="store-shelves-grid" class="store-grid" style="margin-top:6px;"></div>
+    </div>
+
+    <div class="panel">
+      <div class="panel-header">
+        <span>Headshop Paraphernalia Wholesale Market</span>
+        <span class="badge" style="color:var(--c-amber); border-color:var(--c-amber);">LIVE WHOLESALE PRICING</span>
+      </div>
+      <p style="font-size:9.5px; color:var(--silver-dim);">Large-format dossiers for all paraphernalia items. Trade market dips and stock shelves for high profit margins.</p>
+      <div id="paraphernalia-grid" style="display:flex; flex-direction:column; gap:10px;"></div>
     </div>
 
     <div class="panel">
@@ -426,8 +378,14 @@
     </div>
   </div>
 
-  <!-- TAB 7: CANNABIS CUPS & LAB -->
+  <!-- TAB 7: MISSIONS & CUPS -->
   <div id="tab-cups" class="view-tab">
+    <div class="panel">
+      <div class="panel-header">Ohio Cultivator Missions &amp; Milestones</div>
+      <p style="font-size:9.5px; color:var(--silver-dim);">Complete key operational milestones to earn massive cash bounties, XP, and rare certified genetics.</p>
+      <div id="missions-list" style="display:flex; flex-direction:column; gap:6px; margin-top:4px;"></div>
+    </div>
+
     <div class="panel">
       <div class="panel-header">Midwest &amp; Ohio Cannabis Competitions</div>
       <p style="font-size:9.5px; color:var(--silver-dim);">Submit your highest scoring cured cultivars to earn official cups, medals, prestige, and permanent price markups.</p>
@@ -440,37 +398,9 @@
         <span style="font-size:9.5px; color:var(--silver-dim);">No championships won yet. Enter competitions with 80+ score cultivars.</span>
       </div>
     </div>
-
-    <!-- PROCESSING LAB -->
-    <div class="panel">
-      <div class="panel-header">Extraction &amp; Solventless Lab</div>
-      <div style="display:flex; flex-direction:column; gap:6px;">
-        <div class="check-item">
-          <div>
-            <div style="font-weight:bold; color:var(--c-gold);">Cold-Cure Live Hash Rosin (1.0g Gram)</div>
-            <div style="font-size:8.5px; color:var(--silver-dim);">Wash 10g of cured whole flower into a solventless $70 dab jar.</div>
-          </div>
-          <button class="btn btn-gold" onclick="processProduct('ROSIN')">Wash &amp; Press</button>
-        </div>
-        <div class="check-item">
-          <div>
-            <div style="font-weight:bold; color:var(--c-blue);">Ohio Luster Pod Terp Cartridge (0.84g)</div>
-            <div style="font-size:8.5px; color:var(--silver-dim);">Refine 6g of cured buds into an authentic $50 Luster Cart.</div>
-          </div>
-          <button class="btn btn-blue" onclick="processProduct('CART')">Fill Pod</button>
-        </div>
-        <div class="check-item">
-          <div>
-            <div style="font-weight:bold; color:var(--c-scarlet);">Live Resin Solventless Gummies (110mg Tin)</div>
-            <div style="font-size:8.5px; color:var(--silver-dim);">Infuse 4g of sugar leaf into 2x $22 gourmet edible tins.</div>
-          </div>
-          <button class="btn btn-scarlet" onclick="processProduct('EDIBLE')">Infuse Gummies</button>
-        </div>
-      </div>
-    </div>
   </div>
 
-  <!-- TAB 8: MASTER CULTIVATOR SKILL TREE -->
+  <!-- TAB 8: MASTER SKILL TREE -->
   <div id="tab-skills" class="view-tab">
     <div class="panel">
       <div class="panel-header">
@@ -480,23 +410,21 @@
           <button class="btn btn-danger" style="padding:2px 6px; font-size:7.5px;" onclick="respecSkills()">Reset Skills</button>
         </div>
       </div>
-      <p style="font-size:9px; color:var(--silver-dim);">Gain XP by harvesting, packaging, selling in the dispensary, and winning Ohio Cups. Invest Skill Points to permanently boost yield, accelerate vegetative cycles, enhance THC and terps, and supercharge breeding.</p>
-
+      <p style="font-size:9px; color:var(--silver-dim);">Invest Skill Points to permanently boost yield, accelerate vegetative cycles, enhance THC and terps, and supercharge breeding.</p>
       <div class="skills-grid" id="skills-container"></div>
     </div>
   </div>
 
 </main>
 
-<!-- SEED GERMINATE MODAL -->
+<!-- SEED PICKER MODAL -->
 <div id="modal-seed-picker" class="modal-overlay">
   <div class="modal-card">
     <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid var(--panel-border); padding-bottom:6px;">
       <span style="font-weight:900; color:#fff; font-size:12px;">GERMINATE SEED FOR POT #<span id="target-pot-num">1</span></span>
       <button class="btn btn-danger" onclick="closeSeedModal()">✕ Close</button>
     </div>
-    <p style="font-size:9px; color:var(--silver-dim);">Pick an authentic cut from your seed vault to transplant:</p>
-    <div id="modal-seeds-available" style="display:flex; flex-direction:column; gap:6px; max-height:55vh; overflow-y:auto;"></div>
+    <div id="modal-seeds-available" style="display:flex; flex-direction:column; gap:8px; max-height:55vh; overflow-y:auto;"></div>
   </div>
 </div>
 
@@ -514,10 +442,9 @@
   </div>
 </div>
 
-<!-- 8-TAB BOTTOM THUMB NAVIGATION -->
 <nav class="bottom-nav">
-  <button class="nav-btn active" onclick="setTab('grow')"><span class="icon">🌱</span><span>Grow</span></button>
-  <button class="nav-btn" onclick="setTab('equip')"><span class="icon">💡</span><span>Gear</span></button>
+  <button class="nav-btn active" onclick="setTab('grow')"><span class="icon">🌱</span><span>Craft</span></button>
+  <button class="nav-btn" onclick="setTab('warehouse')"><span class="icon">🏭</span><span>Whse</span></button>
   <button class="nav-btn" onclick="setTab('seeds')"><span class="icon">🧬</span><span>Seeds</span></button>
   <button class="nav-btn" onclick="setTab('packaging')"><span class="icon">⚖️</span><span>Pack</span></button>
   <button class="nav-btn" onclick="setTab('store')"><span class="icon">🏪</span><span>Store</span></button>
@@ -529,7 +456,7 @@
 <div id="toast-rack"></div>
 
 <script>
-  /* ================= 128x128 PIXEL ART ENGINE ================= */
+  /* ================= ORIGINAL 128x128 PIXEL ART ENGINE ================= */
   function Mulberry32(a) {
     return function() {
       var t = a += 0x6D2B79F5;
@@ -586,6 +513,7 @@
 
   const MORPHOLOGIES = ["DENSE_NUG", "MAIN_COLA", "FOXTAIL", "WHOLE_PLANT"];
 
+  /* RESTORED EXACT ORIGINAL BOTANICAL ENGINE */
   function renderBudPixelArt128(canvas, seedInt, paletteKey, morphology, tierIdx) {
     if (!canvas) return;
     const ctx = canvas.getContext('2d');
@@ -745,28 +673,229 @@
     }
   }
 
-  /* ================= REALISTIC OHIO DISPENSARY GENETICS CATALOG ================= */
-  const REAL_STRAINS_DATABASE = [
-    // OHIO HOMEGROWN LEGENDS & LOCAL ICONS
-    { name: "Lemon G (Original Athens Cut)", role: "SATIVA", lineage: "Original Columbian Sativa Heirloom (Athens, OH)", tierIdx: 5, thc: 24, terps: 5.6, pal: "LIME_DIESEL", morph: "FOXTAIL", cost: 95, desc: "The holy grail of Ohio cannabis. Unrivaled sweet lemon pledge terp bomb from Athens, Ohio." },
-    { name: "Ohio Deathstar", role: "INDICA", lineage: "Sour Diesel × Sensi Star (Bred in Southwestern OH)", tierIdx: 6, thc: 29, terps: 5.8, pal: "MIDNIGHT_OBSIDIAN", morph: "DENSE_NUG", cost: 110, desc: "Legendary Ohio creation by Team Deathstar. Extreme fuel, skunk, and heavy narcotic sedation." },
-    { name: "Dumpster (Columbus 1990s)", role: "INDICA", lineage: "Northern Lights #1 × G13 Clone (Columbus, OH)", tierIdx: 4, thc: 23, terps: 4.8, pal: "EMERALD_MINT", morph: "DENSE_NUG", cost: 80, desc: "Mythical Columbus Ohio heirloom rescued in 1994. Deep musky berry candy and heavy couchlock." },
-    { name: "Orange 43 (Ohio Connoisseur)", role: "SATIVA", lineage: "White Fire 43 × Orange", tierIdx: 7, thc: 32, terps: 6.4, pal: "GOLDEN_HONEY", morph: "MAIN_COLA", cost: 125, desc: "Ohio's biggest medical cult favorite. Explosive high-terpinolene orange gas and soaring euphoria." },
-    { name: "Sherbhead (Ohio Craft Cut)", role: "HYBRID", lineage: "Sunset Sherbet × Loompa's Headband", tierIdx: 6, thc: 28, terps: 5.2, pal: "ROYAL_VIOLET", morph: "MAIN_COLA", cost: 105, desc: "A constant top seller across Ohio dispensaries. Creamy gas, sherbet zest, and frosty purple calyxes." },
+  /* HIGH-FIDELITY TEMPLATE ENGINE FOR PACKAGING & PARAPHERNALIA */
+  function renderUniversalVisual128(canvas, category, seedInt, paletteKey, meta = {}) {
+    if (!canvas) return;
+    if (category === "BUD") {
+      renderBudPixelArt128(canvas, seedInt, paletteKey, meta.morphology || "DENSE_NUG", meta.tierIdx || 4);
+      return;
+    }
 
-    // HERITAGE CLASSICS & LANDRACE
+    const ctx = canvas.getContext('2d');
+    ctx.clearRect(0, 0, 128, 128);
+    const rng = Mulberry32(seedInt || 1337);
+    const grid = Array(128).fill(0).map(() => Array(128).fill(null));
+    const pal = BOTANICAL_PALETTES[paletteKey] || BOTANICAL_PALETTES.EMERALD_MINT;
+
+    if (category === "JAR") {
+      // First, render mini calyxes inside using the exact botanical shading algorithm
+      const clusters = [];
+      for (let i = 0; i < 22; i++) {
+        let cx = 42 + rng() * 44; let cy = 56 + rng() * 48; let r = 8 + rng() * 6;
+        clusters.push({ cx, cy, r, z: rng() });
+      }
+      clusters.sort((a,b) => a.z - b.z);
+      for (let cl of clusters) {
+        for (let y = Math.floor(cl.cy - cl.r); y <= Math.ceil(cl.cy + cl.r); y++) {
+          for (let x = Math.floor(cl.cx - cl.r); x <= Math.ceil(cl.cx + cl.r); x++) {
+            if (x >= 32 && x <= 96 && y >= 34 && y <= 110 && Math.hypot(x - cl.cx, y - cl.cy) <= cl.r) {
+              let dot = (x - cl.cx + y - cl.cy) / cl.r;
+              let c = dot < -0.2 ? pal.high[Math.floor(rng() * pal.high.length)] : (dot > 0.35 ? pal.base[0] : pal.mid[Math.floor(rng() * pal.mid.length)]);
+              grid[y][x] = c;
+            }
+          }
+        }
+      }
+      // Glass container walls & base
+      for (let y = 30; y <= 114; y++) {
+        for (let x = 28; x <= 100; x++) {
+          if (x === 28 || x === 29 || x === 99 || x === 100 || y === 113 || y === 114) {
+            grid[y][x] = '#4a6b52';
+          }
+        }
+      }
+      // Matte Black Child-Resistant Threaded Lid
+      for (let y = 16; y <= 29; y++) {
+        for (let x = 32; x <= 96; x++) {
+          let isBorder = (y === 16 || y === 29 || x === 32 || x === 96);
+          let isKnurl = (x % 3 === 0);
+          grid[y][x] = isBorder ? '#0a0d0a' : (isKnurl ? '#1e241e' : '#2d382d');
+        }
+      }
+      // Specular Glass Gleam
+      for (let y = 32; y <= 111; y++) {
+        grid[y][33] = '#e0f2e3';
+        grid[y][34] = '#9ec2a4';
+      }
+      // White Official Dispensary Label with Ohio Scarlet Stamp
+      for (let y = 62; y <= 86; y++) {
+        for (let x = 36; x <= 92; x++) {
+          grid[y][x] = '#edf4ed';
+        }
+      }
+      for (let x = 40; x <= 88; x++) { grid[68][x] = '#ba0c2f'; grid[78][x] = '#183818'; }
+    } else if (category === "BAG") {
+      // Mylar Foil Pouch with Transparent Die-Cut Inspection Window
+      for (let y = 14; y <= 116; y++) {
+        for (let x = 24; x <= 104; x++) {
+          let isBorder = (y === 14 || y === 116 || x === 24 || x === 104);
+          let isCrimp = (y <= 24 || y >= 106);
+          grid[y][x] = isBorder ? '#050a05' : (isCrimp ? '#1e281e' : '#101710');
+        }
+      }
+      // Render botanical flower cluster inside the clear die-cut window
+      for (let i = 0; i < 20; i++) {
+        let cx = 44 + rng() * 40; let cy = 64 + rng() * 32; let r = 7 + rng() * 6;
+        for (let y = Math.floor(cy - r); y <= Math.ceil(cy + r); y++) {
+          for (let x = Math.floor(cx - r); x <= Math.ceil(cx + r); x++) {
+            if (x >= 38 && x <= 90 && y >= 58 && y <= 98 && Math.hypot(x - cx, y - cy) <= r) {
+              grid[y][x] = pal.mid[Math.floor(rng() * pal.mid.length)];
+            }
+          }
+        }
+      }
+      // Window frame
+      for (let x = 38; x <= 90; x++) { grid[58][x] = '#446644'; grid[98][x] = '#446644'; }
+      for (let y = 58; y <= 98; y++) { grid[y][38] = '#446644'; grid[y][90] = '#446644'; }
+      // Buckeye Red & Green Printed Logo Crest
+      for (let y = 32; y <= 48; y++) {
+        for (let x = 54; x <= 74; x++) grid[y][x] = '#ba0c2f';
+      }
+    } else if (category === "CONE") {
+      // Unbleached Craft Cone with Cardboard Crutch & Twisted Paper Crown
+      for (let y = 20; y <= 112; y++) {
+        let prog = (y - 20) / 92;
+        let halfW = 4 + prog * 14;
+        let isFilter = y > 94;
+        for (let x = Math.floor(64 - halfW); x <= Math.ceil(64 + halfW); x++) {
+          grid[y][x] = isFilter ? '#d1b894' : '#e0cfb8';
+          if (!isFilter && rng() < 0.25) grid[y][x] = pal.mid[0]; // Herb shadow visible through paper
+        }
+      }
+      // Crutch spiral
+      for (let y = 96; y <= 112; y += 4) {
+        for (let x = 60; x <= 68; x++) grid[y][x] = '#8f7756';
+      }
+      // Twisted tip
+      for (let y = 14; y <= 20; y++) {
+        for (let x = 62; x <= 66; x++) grid[y][x] = '#c2ae95';
+      }
+    } else if (category === "PIPE") {
+      // 3D Glass Spoon Pipe with Indented Bowl & Specular Glass Curve
+      for (let y = 20; y <= 62; y++) {
+        for (let x = 20; x <= 66; x++) {
+          if (Math.hypot(x - 43, y - 41) <= 21) {
+            let dot = (x - 43 + y - 41) / 21;
+            grid[y][x] = dot < -0.2 ? '#60a5fa' : (dot > 0.3 ? '#1e3a8a' : '#2563eb');
+          }
+        }
+      }
+      // Deep indented bowl cavity
+      for (let y = 30; y <= 50; y++) {
+        for (let x = 33; x <= 53; x++) {
+          if (Math.hypot(x - 43, y - 40) <= 9) grid[y][x] = '#090d14';
+        }
+      }
+      // Stem
+      for (let y = 46; y <= 114; y++) {
+        for (let x = 37; x <= 49; x++) {
+          let dot = (x - 43) / 6;
+          grid[y][x] = dot < -0.2 ? '#60a5fa' : (dot > 0.3 ? '#1e3a8a' : '#2563eb');
+        }
+      }
+      // Specular glare line
+      for (let y = 24; y <= 110; y++) { grid[y][39] = '#dbeafe'; }
+    } else if (category === "BONG") {
+      // 14" Heavy Beaker Bong with Water Chamber & Slide
+      for (let y = 72; y <= 118; y++) {
+        let halfW = Math.floor((y - 72) * 0.72) + 10;
+        for (let x = 64 - halfW; x <= 64 + halfW; x++) {
+          let isWater = y >= 92;
+          grid[y][x] = isWater ? '#06b6d4' : '#164e63';
+        }
+      }
+      // Straight Neck
+      for (let y = 14; y <= 72; y++) {
+        for (let x = 58; x <= 70; x++) {
+          grid[y][x] = '#082f49';
+        }
+      }
+      // Specular highlight down the glass
+      for (let y = 16; y <= 114; y++) { grid[y][60] = '#e0f2fe'; }
+      // Slide joint
+      for (let step = 0; step < 12; step++) {
+        grid[84 - step][70 + step] = '#94a3b8';
+      }
+    } else if (category === "TRAY") {
+      // Metal Enamel Rolling Tray with Buckeye Leaf
+      for (let y = 24; y <= 104; y++) {
+        for (let x = 16; x <= 112; x++) {
+          let isRim = (y < 32 || y > 96 || x < 24 || x > 104);
+          grid[y][x] = isRim ? '#ba0c2f' : '#111827';
+        }
+      }
+      // Leaf Emblem
+      for (let y = 52; y <= 76; y++) {
+        for (let x = 52; x <= 76; x++) {
+          if (Math.hypot(x - 64, y - 64) <= 10) grid[y][x] = '#22c55e';
+        }
+      }
+    } else if (category === "GRINDER") {
+      // 4-Piece Aircraft Aluminum Grinder with Knurled Grip Bands
+      for (let tier = 0; tier < 4; tier++) {
+        let sy = 32 + tier * 16;
+        for (let y = sy; y < sy + 14; y++) {
+          for (let x = 32; x <= 96; x++) {
+            let isKnurl = (tier === 0 || tier === 3) && (x % 3 === 0);
+            grid[y][x] = isKnurl ? '#94a3b8' : '#334155';
+          }
+        }
+      }
+      for (let y = 32; y <= 94; y++) { grid[y][34] = '#f1f5f9'; }
+    } else if (category === "BATTERY") {
+      // 510 Thread Vape Battery with Amber Distillate Cartridge
+      for (let y = 14; y <= 46; y++) {
+        for (let x = 58; x <= 70; x++) grid[y][x] = '#f59e0b';
+      }
+      for (let y = 14; y <= 46; y++) { grid[y][64] = '#e2e8f0'; }
+      for (let y = 47; y <= 114; y++) {
+        for (let x = 56; x <= 72; x++) grid[y][x] = '#ba0c2f';
+      }
+      for (let y = 62; y <= 68; y++) {
+        for (let x = 61; x <= 67; x++) grid[y][x] = '#ffffff';
+      }
+    }
+
+    for (let y = 0; y < 128; y++) {
+      for (let x = 0; x < 128; x++) {
+        if (grid[y][x]) {
+          ctx.fillStyle = grid[y][x];
+          ctx.fillRect(x, y, 1, 1);
+        }
+      }
+    }
+  }
+
+  /* ================= ALL 40 CERTIFIED STRAINS DATABASE ================= */
+  const REAL_STRAINS_DATABASE = [
+    { name: "Lemon G (Original Athens Cut)", role: "SATIVA", lineage: "Original Columbian Sativa Heirloom (Athens, OH)", tierIdx: 5, thc: 24, terps: 5.6, pal: "LIME_DIESEL", morph: "FOXTAIL", cost: 95, desc: "The holy grail of Ohio cannabis. Sweet lemon pledge terp bomb from Athens, OH." },
+    { name: "Ohio Deathstar", role: "INDICA", lineage: "Sour Diesel × Sensi Star (Bred in Southwestern OH)", tierIdx: 6, thc: 29, terps: 5.8, pal: "MIDNIGHT_OBSIDIAN", morph: "DENSE_NUG", cost: 110, desc: "Legendary Ohio cut by Team Deathstar. Heavy industrial fuel and narcotic sedation." },
+    { name: "Dumpster (Columbus 1990s)", role: "INDICA", lineage: "Northern Lights #1 × G13 Clone (Columbus, OH)", tierIdx: 4, thc: 23, terps: 4.8, pal: "EMERALD_MINT", morph: "DENSE_NUG", cost: 80, desc: "Mythical Columbus heirloom rescued in 1994. Sweet berry candy funk and deep couchlock." },
+    { name: "Orange 43 (Ohio Connoisseur)", role: "SATIVA", lineage: "White Fire 43 × Orange", tierIdx: 7, thc: 32, terps: 6.4, pal: "GOLDEN_HONEY", morph: "MAIN_COLA", cost: 125, desc: "Ohio's biggest medical cult favorite. Explosive high-terpinolene orange gas and soaring euphoria." },
+    { name: "Sherbhead (Ohio Craft Cut)", role: "HYBRID", lineage: "Sunset Sherbet × Loompa's Headband", tierIdx: 6, thc: 28, terps: 5.2, pal: "ROYAL_VIOLET", morph: "MAIN_COLA", cost: 105, desc: "Top seller across Ohio dispensaries. Creamy gas, sherbet zest, and frosted purple calyxes." },
+    { name: "Buckeye Purple", role: "INDICA", lineage: "Gorilla Grape × North American Indica", tierIdx: 5, thc: 26, terps: 5.0, pal: "ROYAL_VIOLET", morph: "DENSE_NUG", cost: 90, desc: "Ohio deep purple bred phenotype. Floral grapes, hash spice, and therapeutic pain relief." },
+    { name: "Dual OG (Galenas Cut)", role: "INDICA", lineage: "True OG × Banana OG", tierIdx: 7, thc: 33, terps: 5.5, pal: "MIDNIGHT_OBSIDIAN", morph: "DENSE_NUG", cost: 120, desc: "Ohio connoisseur organic favorite. Earthy gas, overripe banana peel, and heavy sedation." },
+    { name: "Ice Cream Cake (Klutch Cut)", role: "HYBRID", lineage: "Wedding Cake × Gelato #33", tierIdx: 7, thc: 31, terps: 5.8, pal: "ROYAL_VIOLET", morph: "MAIN_COLA", cost: 115, desc: "Sugary vanilla cake batter, dark purple marbling, and ultra-heavy resin." },
     { name: "Acapulco Gold", role: "SATIVA", lineage: "Mexican Native Landrace (Guerrero)", tierIdx: 0, thc: 17, terps: 2.8, pal: "GOLDEN_HONEY", morph: "FOXTAIL", cost: 35, desc: "Historic 1960s landrace famous for golden toffee calyxes and soaring cerebral energy." },
     { name: "Hindu Kush Landrace", role: "INDICA", lineage: "Indigenous Central Asian Landrace", tierIdx: 0, thc: 18, terps: 3.0, pal: "EMERALD_MINT", morph: "DENSE_NUG", cost: 35, desc: "Ancient mountain indica blanketed in thick hash resin with deep sandalwood notes." },
     { name: "Afghani #1", role: "INDICA", lineage: "Mazar-i-Sharif Heritage Cut", tierIdx: 1, thc: 20, terps: 3.4, pal: "EMERALD_MINT", morph: "DENSE_NUG", cost: 45, desc: "Pure broad-leaf hash plant with heavy medicinal sedative myrcene." },
     { name: "Durban Poison", role: "SATIVA", lineage: "South African Landrace", tierIdx: 1, thc: 21, terps: 4.0, pal: "LIME_DIESEL", morph: "MAIN_COLA", cost: 45, desc: "Energizing pure sativa with anise licorice and sweet spicy pine aromas." },
-    { name: "Northern Lights #5", role: "INDICA", lineage: "Afghani Landrace × Thai Heritage", tierIdx: 2, thc: 22, terps: 3.8, pal: "EMERALD_MINT", morph: "MAIN_COLA", cost: 50, desc: "The definitive indoor Dutch champion. Ultra-dense resin clusters with sweet pine." },
-    { name: "Original White Widow", role: "HYBRID", lineage: "Brazilian Sativa × South Indian Indica", tierIdx: 2, thc: 21, terps: 3.6, pal: "EMERALD_MINT", morph: "DENSE_NUG", cost: 50, desc: "1995 High Times Cup champion. Absurd sheet of glistening white trichomes." },
-    { name: "DJ Short Blueberry", role: "INDICA", lineage: "Afghani × Thai × Purple Thai", tierIdx: 3, thc: 22, terps: 4.5, pal: "ROYAL_VIOLET", morph: "DENSE_NUG", cost: 65, desc: "Bred by DJ Short in 1979. Iconic true sweet blueberry muffin bouquet." },
+    { name: "Northern Lights #5", role: "INDICA", lineage: "Afghani Landrace × Thai Heritage", tierIdx: 2, thc: 22, terps: 3.8, pal: "EMERALD_MINT", morph: "MAIN_COLA", cost: 50, desc: "Definitive Dutch indoor champion. Ultra-dense resin clusters with sweet pine." },
+    { name: "Original White Widow", role: "HYBRID", lineage: "Brazilian Sativa × South Indian Indica", tierIdx: 2, thc: 21, terps: 3.6, pal: "EMERALD_MINT", morph: "DENSE_NUG", cost: 50, desc: "1995 High Times Cup champion. Solid sheet of glistening white trichomes." },
+    { name: "DJ Short Blueberry", role: "INDICA", lineage: "Afghani × Thai × Purple Thai", tierIdx: 3, thc: 22, terps: 4.5, pal: "ROYAL_VIOLET", morph: "DENSE_NUG", cost: 65, desc: "Bred in 1979 by DJ Short. Iconic sweet blueberry muffin bouquet." },
     { name: "Skunk #1 (1988 Cut)", role: "HYBRID", lineage: "Afghani × Acapulco Gold × Colombian Gold", tierIdx: 2, thc: 20, terps: 4.2, pal: "SUNSET_AMBER", morph: "MAIN_COLA", cost: 50, desc: "Bred by Sacred Seeds. The genetic backbone of modern cannabis with iconic sour skunk." },
     { name: "Super Silver Haze", role: "SATIVA", lineage: "Skunk #1 × Northern Lights #5 × Haze", tierIdx: 3, thc: 23, terps: 4.4, pal: "GOLDEN_HONEY", morph: "FOXTAIL", cost: 60, desc: "Triple Cannabis Cup winner. Towering spicy colas and clear euphoric head high." },
     { name: "Jack Herer (Original Cut)", role: "SATIVA", lineage: "Haze × Northern Lights #5 × Shiva Skunk", tierIdx: 3, thc: 24, terps: 4.6, pal: "EMERALD_MINT", morph: "MAIN_COLA", cost: 60, desc: "Rich terpinolene pine aroma and legendary cup-winning vigor." },
-
-    // GAS & DIESEL CHAMPIONS
     { name: "Original Sour Diesel", role: "SATIVA", lineage: "Chemdawg 91 × Super Skunk", tierIdx: 4, thc: 26, terps: 5.1, pal: "SUNSET_AMBER", morph: "MAIN_COLA", cost: 75, desc: "East Coast fuel legend. Overwhelming kerosene and pungent sour citrus stench." },
     { name: "OG Kush (Ghost Cut)", role: "HYBRID", lineage: "Chemdawg × Lemon Thai × Hindu Kush", tierIdx: 4, thc: 27, terps: 4.9, pal: "EMERALD_MINT", morph: "DENSE_NUG", cost: 75, desc: "Foundational California mother plant. Fuel, lemon pine cleaner, and heavy body relief." },
     { name: "Motorbreath #15", role: "INDICA", lineage: "Chemdawg D × SFV OG Kush", tierIdx: 7, thc: 33, terps: 5.7, pal: "MIDNIGHT_OBSIDIAN", morph: "DENSE_NUG", cost: 120, desc: "Noxious industrial diesel exhaust and garlic funk. Knockout sedative power." },
@@ -778,7 +907,7 @@
     { name: "Gelato #33 (Larry Bird)", role: "HYBRID", lineage: "Sunset Sherbet × Thin Mint GSC", tierIdx: 6, thc: 29, terps: 5.3, pal: "ROYAL_VIOLET", morph: "MAIN_COLA", cost: 100, desc: "Sherbinskis master cut. Creamy citrus sherbet, lavender hues, and incredible bag appeal." },
     { name: "Gorilla Glue #4 (GG4)", role: "HYBRID", lineage: "Sour Dubb × Chem Sister × Chocolate Diesel", tierIdx: 6, thc: 30, terps: 5.2, pal: "EMERALD_MINT", morph: "MAIN_COLA", cost: 100, desc: "Extreme resin that famously glued trimming scissors solid." },
     { name: "Wedding Cake", role: "HYBRID", lineage: "Triangle Kush × Animal Mints", tierIdx: 6, thc: 31, terps: 5.5, pal: "RUBY_ROSE", morph: "DENSE_NUG", cost: 105, desc: "Sweet vanilla cake frosting with underlying Triangle Kush gas." },
-    { name: "Apple Fritter (Lumpy's Cut)", role: "HYBRID", lineage: "Sour Apple × Animal Cookies", tierIdx: 7, thc: 32, terps: 5.4, pal: "LIME_DIESEL", morph: "DENSE_NUG", cost: 115, desc: "Warm baked pastry, crisp Granny Smith apples, and profound full-body relaxation." },
+    { name: "Apple Fritter (Lumpy's Cut)", role: "HYBRID", lineage: "Sour Apple × Animal Cookies", tierIdx: 7, thc: 32, terps: 5.4, pal: "LIME_DIESEL", morph: "DENSE_NUG", cost: 115, desc: "Warm baked pastry, crisp Granny Smith apples, and profound relaxation." },
     { name: "Original Zkittlez", role: "INDICA", lineage: "Grape Ape × Grapefruit × Undisclosed", tierIdx: 7, thc: 28, terps: 6.8, pal: "RUBY_ROSE", morph: "DENSE_NUG", cost: 110, desc: "Intense rainbow fruit syrup candy that lingers endlessly on the palate." },
     { name: "Runtz (Original Gelato Cut)", role: "HYBRID", lineage: "Zkittlez × Gelato #33", tierIdx: 7, thc: 31, terps: 6.0, pal: "ROYAL_VIOLET", morph: "DENSE_NUG", cost: 115, desc: "Sugary sweet tropical candy with purple-soaked bracts." },
     { name: "MAC 1 (Capulator Cut)", role: "HYBRID", lineage: "Alien Cookies F2 × Miracle 15", tierIdx: 7, thc: 30, terps: 5.4, pal: "MIDNIGHT_OBSIDIAN", morph: "DENSE_NUG", cost: 120, desc: "Miracle Alien Cookies. Unbelievable thick resin shell with orange creamsicle." },
@@ -791,44 +920,48 @@
     { name: "RS-11 (Rainbow Sherbert #11)", role: "HYBRID", lineage: "Pink Guava × OZ Kush", tierIdx: 9, thc: 34, terps: 7.0, pal: "ROYAL_VIOLET", morph: "MAIN_COLA", cost: 160, desc: "Deep tropical guava syrup and sour sherbet petrol. Supreme bag appeal." }
   ];
 
-  /* OHIO PACKAGING & RETAIL WEIGHTS */
+  /* PACKAGING WEIGHTS */
   const PACKAGING_WEIGHTS = {
-    PREROLL: { id: "PREROLL", name: "1.0g Craft Cone", grams: 1.0, basePricePerGram: 14.0, patronSpeed: 1.5 },
-    TENTH:   { id: "TENTH",   name: "2.83g Ohio Tenth Jar", grams: 2.83, basePricePerGram: 12.0, patronSpeed: 1.2 },
-    FIFTH:   { id: "FIFTH",   name: "5.66g Ohio Fifth Jar", grams: 5.66, basePricePerGram: 10.5, patronSpeed: 0.9 },
-    HALF:    { id: "HALF",    name: "14.15g Ohio Half-Zip", grams: 14.15, basePricePerGram: 9.0, patronSpeed: 0.6 },
-    OUNCE:   { id: "OUNCE",   name: "28.30g Full Ounce Pouch", grams: 28.3, basePricePerGram: 7.8, patronSpeed: 0.4 }
+    PREROLL: { id: "PREROLL", name: "1.0g Craft Cone", grams: 1.0, basePricePerGram: 14.0, visualCat: "CONE" },
+    TENTH:   { id: "TENTH",   name: "2.83g Ohio Tenth Jar", grams: 2.83, basePricePerGram: 12.0, visualCat: "JAR" },
+    FIFTH:   { id: "FIFTH",   name: "5.66g Ohio Fifth Jar", grams: 5.66, basePricePerGram: 10.5, visualCat: "JAR" },
+    HALF:    { id: "HALF",    name: "14.15g Ohio Half-Zip", grams: 14.15, basePricePerGram: 9.0, visualCat: "BAG" },
+    OUNCE:   { id: "OUNCE",   name: "28.30g Full Zip Pouch", grams: 28.3, basePricePerGram: 7.8, visualCat: "BAG" }
   };
 
-  /* GROW ROOM EQUIPMENT DEFINITIONS */
-  const EQUIPMENT_DATABASE = {
-    lights: [
-      { id: "L_CFL", name: "Shop Fluorescent 150W", cost: 0, ppfd: 320, thcBonus: 0, yieldBonus: 1.0, speedBonus: 1.0, desc: "Basic cold tubes from the local hardware store." },
-      { id: "L_HPS", name: "Eye Hortilux 1000W HPS", cost: 650, ppfd: 750, thcBonus: 2, yieldBonus: 1.25, speedBonus: 1.25, desc: "Intense orange sodium spectrum. Heavy heat, massive fat sticky colas." },
-      { id: "L_LED", name: "Commercial SpiderBar 720W LED", cost: 1800, ppfd: 1150, thcBonus: 4, yieldBonus: 1.50, speedBonus: 1.5, desc: "Samsung LM301H full-spectrum diodes. Ultra dense trichome carpets." },
-      { id: "L_PRO", name: "Ag-Tech UV/Far-Red Supplemental Array", cost: 4500, ppfd: 1600, thcBonus: 6, yieldBonus: 1.85, speedBonus: 1.8, desc: "Industrial high-PPFD photons with targeted UV stress for maximum cannabinoid output." }
-    ],
-    water: [
-      { id: "W_HAND", name: "Plastic Watering Pitcher", cost: 0, ec: 1.2, speedBonus: 1.0, yieldBonus: 1.0, desc: "Tap water from the sink. Requires manual watering attention." },
-      { id: "W_BLUMAT", name: "Gravity Blumat Ceramic Drippers", cost: 350, ec: 1.6, speedBonus: 1.2, yieldBonus: 1.15, desc: "Automatic tension-sensing moisture stakes keep roots perfectly moist." },
-      { id: "W_RDWC", name: "Recirculating Deep Water Culture (RDWC)", cost: 1500, ec: 2.1, speedBonus: 1.45, yieldBonus: 1.35, desc: "Highly oxygenated nutrient whirlpool for explosive root system expansion." },
-      { id: "W_RO_AUTO", name: "Medical RO Filtration & Peristaltic Doser", cost: 3800, ec: 2.6, speedBonus: 1.7, yieldBonus: 1.60, desc: "0-PPM pure osmosis water with 24/7 computer controlled pH and nutrient dosing." }
-    ],
-    nutrients: [
-      { id: "N_GENERIC", name: "Hardware Store Soluble Fertilizer", cost: 0, terpBonus: 0, appealBonus: 0, yieldBonus: 1.0, desc: "Basic blue plant food. Gets the job done, but mutes terps." },
-      { id: "N_FOXFARM", name: "FoxFarm Mineral Salt Trio", cost: 250, terpBonus: 0.6, appealBonus: 4, yieldBonus: 1.15, desc: "Classic American craft liquid formulas for heavy flowering vigor." },
-      { id: "N_ORGANIC", name: "No-Till Super Soil & Compost Teas", cost: 1200, terpBonus: 1.4, appealBonus: 8, yieldBonus: 1.30, desc: "Living mycorrhizae, kelp, and guano brews that explode terpene flavor profiles." },
-      { id: "N_ATHENA", name: "Athena Pro Cleanroom Line + Silicate", cost: 3200, terpBonus: 2.2, appealBonus: 12, yieldBonus: 1.55, desc: "Tournament-grade clean formulation. Crystal-clear vascular transport." }
-    ],
-    climate: [
-      { id: "C_FAN", name: "Oscillating Clip-On Fan", cost: 0, vpd: 1.6, co2: 420, speedBonus: 1.0, desc: "Moves stale air around the tent. Little heat or humidity control." },
-      { id: "C_INLINE", name: "VIVOSUN 6\" Inline Carbon Extraction", cost: 400, vpd: 1.3, co2: 500, speedBonus: 1.15, desc: "Exhausts intense heat and eliminates terpene odors from neighborhood." },
-      { id: "C_SPLIT", name: "Mini-Split Inverter AC + Quest Dehum", cost: 2400, vpd: 1.1, co2: 650, speedBonus: 1.35, desc: "Locks VPD in tight sweetspot. Completely immunizes canopy to mold." },
-      { id: "C_SEALED", name: "Sealed Co2 Burner/Tank System (1500 PPM)", cost: 5500, vpd: 0.95, co2: 1500, speedBonus: 1.70, desc: "Enriches sealed canopy in 1500 PPM carbon dioxide. 35% faster vegetative/bloom push." }
-    ]
-  };
+  /* PERSONAL CANOPY EXPANSIONS: 2, 4, 8, 16, 32 PLANTS */
+  const PERSONAL_FACILITIES = [
+    { name: "2-Plant Closet", pots: 2, cost: 0 },
+    { name: "4-Plant Mylar Tent", pots: 4, cost: 450 },
+    { name: "8-Plant Spare Room", pots: 8, cost: 1800 },
+    { name: "16-Plant Master Suite", pots: 16, cost: 4500 },
+    { name: "32-Plant Dedicated Garage Canopy", pots: 32, cost: 9500 }
+  ];
 
-  /* REALISTIC DISPENSARY TIERS */
+  /* COMMERCIAL WAREHOUSES: 200, 500, 1000 PLANTS */
+  const COMMERCIAL_WAREHOUSES = [
+    { id: "W_200", name: "Franklin Co. Commercial Warehouse (200 Plants)", capacity: 200, cost: 25000, cycleTimeSec: 15, baseYieldG: 12500 },
+    { id: "W_500", name: "Cuyahoga Industrial Cultivation Facility (500 Plants)", capacity: 500, cost: 65000, cycleTimeSec: 20, baseYieldG: 35000 },
+    { id: "W_1000", name: "Scioto Valley Mega-AgTech Complex (1,000 Plants)", capacity: 1000, cost: 150000, cycleTimeSec: 25, baseYieldG: 75000 }
+  ];
+
+  /* STOREFRONT SLOTS: 6, 12, 24, 36 */
+  const STORE_EXPANSIONS = [
+    { slots: 6, cost: 0, title: "Standard Countertop" },
+    { slots: 12, cost: 1200, title: "Glass Display Case (12 Slots)" },
+    { slots: 24, cost: 3500, title: "Boutique Dispensary Floor (24 Slots)" },
+    { slots: 36, cost: 8000, title: "Flagship Ohio Retail Emporium (36 Slots)" }
+  ];
+
+  /* PARAPHERNALIA WHOLESALE CATALOG */
+  const PARAPHERNALIA_CATALOG = [
+    { id: "pipe", name: "Borosilicate Glass Hand Pipe", visualCat: "PIPE", baseCost: 12, minCost: 8, maxCost: 18, baseRetail: 25, desc: "Hand-blown 3D spoon pipe with deep bowl cavity and dichroic glass swirl." },
+    { id: "bong", name: "14\" Heavy Glass Beaker Bong", visualCat: "BONG", baseCost: 45, minCost: 32, maxCost: 65, baseRetail: 85, desc: "Heavy laboratory borosilicate beaker with ice pinch and removable downstem." },
+    { id: "tray", name: "Buckeye Buds Metal Rolling Tray", visualCat: "TRAY", baseCost: 6, minCost: 4, maxCost: 10, baseRetail: 18, desc: "Curved spill-proof edge metal tray with certified scarlet BB Ohio leaf emblem." },
+    { id: "grinder", name: "4-Piece Aircraft Aluminum Grinder", visualCat: "GRINDER", baseCost: 14, minCost: 10, maxCost: 22, baseRetail: 32, desc: "Precision CNC diamond teeth with stainless steel kief sifting screen." },
+    { id: "battery", name: "Variable Voltage 510 Vape Battery", visualCat: "BATTERY", baseCost: 8, minCost: 5, maxCost: 14, baseRetail: 20, desc: "Universal 510 thread stylus battery with preheat mode and LED ring button." }
+  ];
+
   const TIERS = [
     { tier: 1, name: "Tier I: Heritage", color: "var(--t0-col)", basePriceG: 7.0, baseTHC: 16 },
     { tier: 2, name: "Tier II: Classic", color: "var(--t1-col)", basePriceG: 8.5, baseTHC: 19 },
@@ -842,13 +975,13 @@
     { tier: 10, name: "Tier X: Diamond Elite", color: "var(--t9-col)", basePriceG: 30.0, baseTHC: 37 }
   ];
 
-  const FACILITIES = [
-    { name: "2-Plant Closet", pots: 2, cost: 0 },
-    { name: "4-Plant Mylar Tent", pots: 4, cost: 450 },
-    { name: "8-Plant Spare Room", pots: 8, cost: 2200 },
-    { name: "24-Plant Pole Barn", pots: 24, cost: 8500 },
-    { name: "60-Plant Commercial Greenhouse", pots: 60, cost: 28000 },
-    { name: "200-Plant Ag-Tech Facility", pots: 200, cost: 75000 }
+  const MISSIONS = [
+    { id: "m1", title: "Harvest First Ohio Craft Cola", desc: "Chop any plant in your personal craft grow room.", rewardFunds: 250, rewardXP: 100 },
+    { id: "m2", title: "Package 10 Retail Tenths", desc: "Jar up 10 official 2.83g units at the packaging station.", rewardFunds: 500, rewardXP: 180 },
+    { id: "m3", title: "Expand Craft Space to 8 Plants", desc: "Upgrade your personal canopy to 8 pots.", rewardFunds: 1000, rewardXP: 300 },
+    { id: "m4", title: "Acquire Commercial Warehouse", desc: "Lease a 200+ plant industrial warehouse.", rewardFunds: 5000, rewardXP: 1000 },
+    { id: "m5", title: "Stock Paraphernalia on Shelves", desc: "Stock glassware or smoke gear in dispensary storefront.", rewardFunds: 1500, rewardXP: 400 },
+    { id: "m6", title: "Win Ohio Cannabis Cup", desc: "Take 1st place in the Ohio Cannabis Cup Championship.", rewardFunds: 10000, rewardXP: 2500 }
   ];
 
   const CUPS = [
@@ -858,7 +991,6 @@
     { id: "cup4", name: "Great Lakes Invitational", minTier: 7, fee: 5000, prize: 50000, minScore: 94 }
   ];
 
-  /* MASTER SKILL TREE CONFIGURATION */
   const SKILL_TREE = [
     {
       id: "branch_yield",
@@ -897,38 +1029,33 @@
       skills: [
         { id: "gen_1", name: "Mendelian Precision", maxRank: 3, costPerRank: 1, desc: "+4 overall score guarantee on all cross-pollinated F1 crosses.", effectDesc: "+4/rank Est Score" },
         { id: "gen_2", name: "Tier Leap Mutation", maxRank: 2, costPerRank: 2, desc: "Increases chance for crossbred seeds to jump 2 whole Tiers.", effectDesc: "+30%/rank Tier Leap" },
-        { id: "gen_3", name: "Prolific Pollinator", maxRank: 1, costPerRank: 3, desc: "Breeding generates 5 seeds instead of 3, and seed orders receive +1 bonus seed.", effectDesc: "+2 Seeds / Breeding" }
+        { id: "gen_3", name: "Prolific Pollinator", maxRank: 1, costPerRank: 3, desc: "Breeding generates 5 seeds instead of 3, and orders get +1 seed.", effectDesc: "+2 Seeds / Breeding" }
       ]
     }
   ];
 
-  /* ================= GAME STATE ================= */
+  /* ================= STATE ================= */
   let State = {
     funds: 1450,
     xp: 0,
     level: 1,
     skillPoints: 2,
-    skills: {}, // { skill_id: rank }
+    skills: {},
     facIdx: 0,
-    equip: {
-      lightIdx: 0,
-      waterIdx: 0,
-      nutrientsIdx: 0,
-      climateIdx: 0
-    },
+    warehouseIdx: -1,
+    warehouseState: { activeCycleProgress: 0, stagedStrain: null, cycleRunning: false },
+    storeExpansionIdx: 0,
+    paraphernaliaMarket: {},
+    paraphernaliaInventory: {},
     growPots: [],
     seedInventory: [],
-    bulkHarvests: [],    // Raw cured bulk flower
-    packagedVault: [],   // Packaged retail jars/pouches
+    bulkHarvests: [],
+    packagedVault: [],
     storeShelves: [],
     trophies: [],
+    completedMissions: [],
     godMode: false,
-    auto: {
-      autoWater: false,
-      autoHarvest: false,
-      autoPack: false,
-      autoRestock: false
-    },
+    auto: { autoWater: false, autoHarvest: false, autoPack: false, autoRestock: false },
     targetPotForSeed: null
   };
 
@@ -947,31 +1074,30 @@
     setTimeout(() => e.remove(), 2800);
   }
 
-  function getSkillRank(id) {
-    return State.skills[id] || 0;
-  }
-
-  function getActiveEquip() {
-    return {
-      light: EQUIPMENT_DATABASE.lights[State.equip.lightIdx],
-      water: EQUIPMENT_DATABASE.water[State.equip.waterIdx],
-      nutrients: EQUIPMENT_DATABASE.nutrients[State.equip.nutrientsIdx],
-      climate: EQUIPMENT_DATABASE.climate[State.equip.climateIdx]
-    };
-  }
+  function getSkillRank(id) { return State.skills[id] || 0; }
 
   function addXP(amount) {
     State.xp += amount;
-    let nextThreshold = State.level * 250;
-    while (State.xp >= nextThreshold) {
-      State.xp -= nextThreshold;
+    let next = State.level * 250;
+    while (State.xp >= next) {
+      State.xp -= next;
       State.level++;
       State.skillPoints += 1;
       toast(`⭐ LEVEL UP! You reached Cultivator Level ${State.level}! (+1 Skill Point)`);
-      nextThreshold = State.level * 250;
+      next = State.level * 250;
     }
-    updateHUD();
-    renderSkills();
+    updateHUD(); renderSkills();
+  }
+
+  function checkMission(id) {
+    if (State.completedMissions.includes(id)) return;
+    let m = MISSIONS.find(x => x.id === id);
+    if (!m) return;
+    State.completedMissions.push(id);
+    State.funds += m.rewardFunds;
+    addXP(m.rewardXP);
+    toast(`🎯 MISSION COMPLETED: ${m.title}! +$${fmt(m.rewardFunds)} & +${m.rewardXP} XP!`);
+    updateHUD(); renderMissions();
   }
 
   function updateHUD() {
@@ -980,33 +1106,26 @@
     if ($('hud-sp')) $('hud-sp').innerText = `${State.skillPoints} SP`;
     if ($('skills-sp-count')) $('skills-sp-count').innerText = `${State.skillPoints} SP`;
     if ($('hud-seeds-count')) $('hud-seeds-count').innerText = State.seedInventory.length;
-    let totalBulkG = State.bulkHarvests.reduce((a, b) => a + b.weightG, 0);
-    if ($('hud-raw-g')) $('hud-raw-g').innerText = `${totalBulkG.toFixed(1)}g`;
+    let totalBulk = State.bulkHarvests.reduce((a, b) => a + b.weightG, 0);
+    if ($('hud-raw-g')) $('hud-raw-g').innerText = `${totalBulk.toFixed(1)}g`;
     let totalPacks = State.packagedVault.reduce((a, b) => a + b.unitsRemaining, 0);
     if ($('hud-stash-count')) $('hud-stash-count').innerText = totalPacks;
-    let fac = FACILITIES[State.facIdx];
-    if ($('hud-fac-name')) $('hud-fac-name').innerText = fac.name.split(' ')[1] || fac.name;
-    
+    let fac = PERSONAL_FACILITIES[State.facIdx];
+    if ($('hud-fac-name')) $('hud-fac-name').innerText = fac.name;
     let count = State.trophies.length;
     let rank = count >= 8 ? "OHIO CUP LEGEND" : count >= 4 ? "MASTER BREEDER" : count >= 1 ? "AWARD WINNER" : "OHIO HOMEGROWER";
     if ($('hud-rank')) $('hud-rank').innerText = rank;
-
-    const eq = getActiveEquip();
-    if ($('env-ppfd')) $('env-ppfd').innerText = `${eq.light.ppfd} µmol`;
-    if ($('env-co2')) $('env-co2').innerText = `${eq.climate.co2} PPM`;
-    if ($('env-vpd')) $('env-vpd').innerText = `${eq.climate.vpd} kPa`;
-    if ($('env-ec')) $('env-ec').innerText = `${eq.water.ec} EC`;
   }
 
   function toggleGodMode() {
     State.godMode = !State.godMode;
     if (State.godMode) {
-      State.funds += 50000;
+      State.funds += 100000;
       State.skillPoints += 25;
       State.bulkHarvests.forEach(s => { s.score = Math.max(95, s.score); });
       $('btn-god').innerText = "GOD ON";
       $('btn-god').style.borderColor = "var(--c-green)";
-      toast("GOD MODE ACTIVATED: +$50,000, +25 SP & Rapid Bloom!");
+      toast("GOD MODE ACTIVATED: +$100,000, +25 SP & Rapid Turnover!");
     } else {
       $('btn-god').innerText = "GOD MODE";
       $('btn-god').style.borderColor = "var(--c-scarlet)";
@@ -1029,80 +1148,54 @@
   }
 
   function saveGame() {
-    localStorage.setItem('buckeyeBudsExtremeV2', JSON.stringify(State));
-    toast("Canopy, Skills & Operations Saved.");
+    localStorage.setItem('buckeyeBudsExtreme_V5', JSON.stringify(State));
+    toast("Buckeye Buds canopy, warehouses & store saved.");
   }
 
   function loadGame() {
-    let s = localStorage.getItem('buckeyeBudsExtremeV2');
+    let s = localStorage.getItem('buckeyeBudsExtreme_V5');
     if (s) {
       State = JSON.parse(s);
-      if (!State.skills) State.skills = {};
-      if (State.skillPoints === undefined) State.skillPoints = 2;
-      if (State.level === undefined) State.level = 1;
-      if (State.xp === undefined) State.xp = 0;
-      updateHUD(); renderGrowUI(); renderEquip(); renderStore(); renderBulkHarvests(); renderPackagedVault(); renderOwnedSeeds(); renderSeedCatalog(); renderCups(); renderTrophies(); renderSkills(); updateAutoUI();
-      toast("Saved Operations Restored.");
+      updateHUD(); renderGrowUI(); renderWarehouseUI(); renderStore(); renderBulkHarvests(); renderPackagedVault(); renderOwnedSeeds(); renderSeedCatalog(); renderCups(); renderMissions(); renderSkills(); renderParaphernaliaMarket(); updateAutoUI();
+      toast("Buckeye Buds operations restored.");
     } else {
       toast("No save found.");
     }
   }
 
-  /* ================= REALISTIC YIELD CALCULATOR ================= */
+  /* ================= YIELD & CULTIVAR GENERATION ================= */
   function calculateHarvestYield(plant) {
-    const eq = getActiveEquip();
-    // Realistic base craft indoor yields: 50g to 85g per plant base
     let baseMin = 50 + (plant.tierIdx * 3);
     let baseMax = 85 + (plant.tierIdx * 6);
-
-    // Skill 1: Bumper Harvest Floor
     let floorBonus = getSkillRank('yield_2') * 25;
     baseMin += floorBonus;
     baseMax += floorBonus;
 
-    // Fluctuating roll
     let roll = baseMin + (Math.random() * (baseMax - baseMin));
-
-    // Equipment Multipliers
-    let equipMult = eq.light.yieldBonus * eq.water.yieldBonus * eq.nutrients.yieldBonus;
-    roll = roll * equipMult;
-
-    // Skill 2: Colossal Colas (+15% per rank)
     let skillYieldMult = 1.0 + (getSkillRank('yield_1') * 0.15);
     roll = roll * skillYieldMult;
 
-    // Skill 3: Monster Jackpot Pheno (25% chance of +50% weight)
     let isJackpot = false;
     if (getSkillRank('yield_3') > 0 && Math.random() < 0.25) {
       roll *= 1.50;
       isJackpot = true;
     }
-
-    return {
-      dryGrams: Number(roll.toFixed(1)),
-      isJackpot: isJackpot
-    };
+    return { dryGrams: Number(roll.toFixed(1)), isJackpot: isJackpot };
   }
 
-  /* ================= PROCEDURAL CULTIVAR GENERATOR ================= */
   function calculateScore(thc, appeal, terps, cure) {
     return Math.min(99, Math.max(45, Math.floor((thc * 1.35) + (appeal * 0.35) + (terps * 0.20) + (cure * 0.1))));
   }
 
   function createCultivar(name, role, tierIdx, seedInt=null, thc=null, terps=null, appeal=null, palette=null, morph=null, lineage=null) {
     let tD = TIERS[tierIdx] || TIERS[0];
-    const eq = getActiveEquip();
-
-    // Base Cannabinoids + Equipment + Skill Trees
     let thcSkillBoost = getSkillRank('pot_1') * 2;
-    let actualThc = (thc || (tD.baseTHC + Math.floor(Math.random() * 4))) + eq.light.thcBonus + thcSkillBoost;
-    if (getSkillRank('pot_3') > 0 && Math.random() < 0.30) {
-      actualThc = Math.min(38, actualThc + 3); // Gas pheno mutation
-    }
+    let actualThc = (thc || (tD.baseTHC + Math.floor(Math.random() * 4))) + thcSkillBoost;
+    if (getSkillRank('pot_3') > 0 && Math.random() < 0.30) actualThc = Math.min(38, actualThc + 3);
 
     let terpSkillBoost = Number((getSkillRank('pot_2') * 0.8).toFixed(1));
-    let actualTerps = Number(((terps || Number((2.0 + (tierIdx * 0.5) + Math.random() * 1.5).toFixed(1))) + eq.nutrients.terpBonus + terpSkillBoost).toFixed(1));
-    let actualAppeal = Math.min(99, (appeal || Math.floor(75 + (tierIdx * 2.5) + Math.random() * 5)) + eq.nutrients.appealBonus);
+    let actualTerps = Number(((terps || Number((2.0 + (tierIdx * 0.5) + Math.random() * 1.5).toFixed(1))) + terpSkillBoost).toFixed(1));
+    let actualAppeal = Math.min(99, (appeal || Math.floor(75 + (tierIdx * 2.5) + Math.random() * 5)));
     let seed = seedInt !== null ? seedInt : Math.floor(Math.random() * 9999999);
     let palKeys = Object.keys(BOTANICAL_PALETTES);
     let actualPal = palette || palKeys[Math.floor(Math.random() * palKeys.length)];
@@ -1129,9 +1222,9 @@
     };
   }
 
-  /* ================= GROW OPS / CULTIVATION ================= */
+  /* ================= PERSONAL CRAFT GROW (2, 4, 8, 16, 32 PLANTS) ================= */
   function initPots() {
-    let fac = FACILITIES[State.facIdx];
+    let fac = PERSONAL_FACILITIES[State.facIdx];
     State.growPots = [];
     for (let i = 0; i < fac.pots; i++) {
       State.growPots.push({ id: i, occupied: false, plant: null, progress: 0, phase: 'EMPTY' });
@@ -1139,12 +1232,12 @@
   }
 
   function renderGrowUI() {
-    let fac = FACILITIES[State.facIdx];
-    $('grow-fac-title').innerText = `${fac.name} (${fac.pots} Pots)`;
+    let fac = PERSONAL_FACILITIES[State.facIdx];
+    $('grow-fac-title').innerText = `${fac.name}`;
     let occ = State.growPots.filter(p => p.occupied).length;
     $('pots-count-txt').innerText = `${occ}/${fac.pots}`;
 
-    let next = FACILITIES[State.facIdx + 1];
+    let next = PERSONAL_FACILITIES[State.facIdx + 1];
     let btnUpg = $('btn-upgrade-fac');
     if (next) {
       btnUpg.style.display = 'block';
@@ -1156,7 +1249,7 @@
     const grid = $('grow-pots-grid'); if (!grid) return;
     grid.innerHTML = '';
 
-    State.growPots.slice(0, 36).forEach(pot => {
+    State.growPots.forEach(pot => {
       let div = document.createElement('div');
       div.id = `pot-card-${pot.id}`;
       div.className = `grow-pot ${pot.occupied ? 'occupied' : ''} ${pot.progress >= 100 ? 'ready' : ''}`;
@@ -1165,7 +1258,7 @@
         div.innerHTML = `
           <div style="font-size:9.5px; font-weight:bold; color:#fff;" id="pot-title-${pot.id}">${pot.plant.name}</div>
           <div style="font-size:8px; color:${pot.progress >= 100 ? 'var(--c-gold)' : 'var(--c-green)'}; font-weight:bold;" id="pot-phase-${pot.id}">
-            ${pot.progress >= 100 ? '⭐ READY TO HARVEST' : pot.phase}
+            ${pot.progress >= 100 ? '⭐ READY TO CHOP' : pot.phase}
           </div>
           <div class="progress-bg"><div class="progress-fill" id="pot-bar-${pot.id}" style="width:${pot.progress}%;"></div></div>
           <button class="btn btn-green" id="pot-chop-btn-${pot.id}" style="padding:4px 6px; font-size:8px; width:100%; margin-top:3px;" ${pot.progress >= 100 ? '' : 'disabled'} onclick="harvestPot(${pot.id})">
@@ -1182,9 +1275,8 @@
     });
   }
 
-  /* LIGHTWEIGHT LIVE TICK UPDATE TO PREVENT SWALLOWING CLICKS */
   function updateGrowPotsInPlace() {
-    State.growPots.slice(0, 36).forEach(pot => {
+    State.growPots.forEach(pot => {
       let card = document.getElementById(`pot-card-${pot.id}`);
       if (!card) return;
 
@@ -1195,7 +1287,7 @@
 
         if (bar) bar.style.width = `${pot.progress}%`;
         if (phase) {
-          phase.innerText = pot.progress >= 100 ? '⭐ READY TO HARVEST' : pot.phase;
+          phase.innerText = pot.progress >= 100 ? '⭐ READY TO CHOP' : pot.phase;
           phase.style.color = pot.progress >= 100 ? 'var(--c-gold)' : 'var(--c-green)';
         }
         if (chopBtn) {
@@ -1220,7 +1312,7 @@
     list.innerHTML = '';
 
     if (State.seedInventory.length === 0) {
-      list.innerHTML = `<div style="text-align:center; padding:15px; color:var(--silver-dim);">Your Seed Vault is empty! Visit Seeds to order breeder stock.</div>`;
+      list.innerHTML = `<div style="text-align:center; padding:15px; color:var(--silver-dim);">Seed Vault empty. Visit Seeds tab to purchase certified cuts!</div>`;
     } else {
       State.seedInventory.forEach((seed, idx) => {
         let div = document.createElement('div');
@@ -1235,7 +1327,6 @@
         list.appendChild(div);
       });
     }
-
     $('modal-seed-picker').classList.add('active');
   }
 
@@ -1246,9 +1337,7 @@
     let pot = State.growPots.find(p => p.id === State.targetPotForSeed);
     if (!pot) return;
 
-    // Instant Rooting Skill
     let startProgress = getSkillRank('speed_2') * 15;
-
     pot.occupied = true;
     pot.plant = createCultivar(seed.name, seed.role, seed.tierIdx, seed.seedInt, seed.thc, seed.terps, seed.bagAppeal, seed.palette, seed.morphology, seed.lineage);
     pot.progress = startProgress;
@@ -1261,11 +1350,10 @@
 
   function quickPlantBestSeed() {
     let empty = State.growPots.filter(p => !p.occupied);
-    if (empty.length === 0) { toast("Canopy is completely full."); return; }
+    if (empty.length === 0) { toast("Craft space canopy is completely full."); return; }
     if (State.seedInventory.length === 0) { toast("No seeds in inventory. Buy cuts from the Seed Catalog!"); return; }
 
     State.seedInventory.sort((a,b) => b.thc - a.thc);
-
     let startProgress = getSkillRank('speed_2') * 15;
     let planted = 0;
     empty.forEach(pot => {
@@ -1279,7 +1367,7 @@
       }
     });
 
-    toast(`Planted ${planted} cuts across active canopy!`);
+    toast(`Planted ${planted} cuts across personal canopy!`);
     updateHUD(); renderGrowUI(); renderOwnedSeeds();
   }
 
@@ -1287,13 +1375,12 @@
     let pot = State.growPots.find(p => p.id === potId);
     if (!pot || !pot.occupied || pot.progress < 100) return;
     
-    // Calculate full fluctuating harvest weight
     let yieldResult = calculateHarvestYield(pot.plant);
     let batch = { ...pot.plant, weightG: yieldResult.dryGrams };
     State.bulkHarvests.push(batch);
 
-    // XP calculation
     addXP(Math.floor(25 + batch.weightG * 0.4));
+    checkMission('m1');
 
     if (yieldResult.isJackpot) {
       toast(`🔥 JACKPOT MONSTER COLA! Chopped ${batch.name}: <b style="color:var(--c-gold);">${batch.weightG}g</b> cured craft flower!`);
@@ -1307,7 +1394,7 @@
 
   function harvestAllPlants() {
     let ready = State.growPots.filter(p => p.occupied && p.progress >= 100);
-    if (ready.length === 0) { toast("No plants fully flowered yet."); return; }
+    if (ready.length === 0) { toast("No personal plants fully flowered yet."); return; }
     
     let totalHarvestG = 0;
     ready.forEach(pot => {
@@ -1319,220 +1406,217 @@
     });
 
     addXP(Math.floor(ready.length * 30 + totalHarvestG * 0.25));
+    checkMission('m1');
     toast(`✂️ Canopy Chopped! Harvested <b>${totalHarvestG.toFixed(1)}g</b> across ${ready.length} plants into Bulk Vault!`);
     updateHUD(); renderGrowUI(); renderBulkHarvests();
   }
 
   function upgradeFacility() {
-    let next = FACILITIES[State.facIdx + 1]; if (!next) return;
-    if (State.funds < next.cost) { toast("Insufficient funds for facility expansion."); return; }
+    let next = PERSONAL_FACILITIES[State.facIdx + 1]; if (!next) return;
+    if (State.funds < next.cost) { toast("Insufficient funds for craft space expansion."); return; }
     State.funds -= next.cost; State.facIdx++;
     initPots();
-    toast(`Facility expanded to ${next.name}!`);
+    if (PERSONAL_FACILITIES[State.facIdx].pots >= 8) checkMission('m3');
+    toast(`Personal craft space expanded to ${next.name}!`);
     updateHUD(); renderGrowUI();
   }
 
-  /* ================= EQUIPMENT & ROOM SETUP UI ================= */
-  function renderEquip() {
-    const c = $('equip-container'); if (!c) return; c.innerHTML = '';
+  /* ================= COMMERCIAL WAREHOUSES (200 - 1000 PLANTS) ================= */
+  function renderWarehouseUI() {
+    const card = $('warehouse-management-card');
+    const upgGrid = $('warehouse-upgrade-grid');
+    if (!card || !upgGrid) return;
 
-    const categories = [
-      { key: 'lights', title: '☀️ Grow Lighting Systems', curr: State.equip.lightIdx, list: EQUIPMENT_DATABASE.lights },
-      { key: 'water', title: '💧 Irrigation & Hydroponics', curr: State.equip.waterIdx, list: EQUIPMENT_DATABASE.water },
-      { key: 'nutrients', title: '🧪 Nutrients & Soil Regimens', curr: State.equip.nutrientsIdx, list: EQUIPMENT_DATABASE.nutrients },
-      { key: 'climate', title: '🌬️ HVAC, VPD & CO₂ Enrichment', curr: State.equip.climateIdx, list: EQUIPMENT_DATABASE.climate }
-    ];
-
-    categories.forEach(cat => {
-      let curItem = cat.list[cat.curr];
-      let nextItem = cat.list[cat.curr + 1];
-
-      let card = document.createElement('div');
-      card.className = 'equip-card';
+    if (State.warehouseIdx < 0) {
+      card.innerHTML = `
+        <div style="text-align:center; padding:15px; color:var(--silver-dim); font-size:10px;">
+          No commercial warehouse leased yet. Purchase a 200 - 1,000 plant automated complex below to flood your retail dispensary with bulk inventory!
+        </div>
+      `;
+    } else {
+      let wh = COMMERCIAL_WAREHOUSES[State.warehouseIdx];
+      let pStrain = State.warehouseState.stagedStrain ? State.warehouseState.stagedStrain.name : "None (Auto-Pull Cheapest)";
       card.innerHTML = `
         <div style="display:flex; justify-content:space-between; align-items:center;">
-          <span style="font-weight:900; color:var(--c-gold); font-size:11px;">${cat.title}</span>
-          <span class="badge" style="font-size:8px;">Tier ${cat.curr + 1}/${cat.list.length}</span>
+          <span style="font-weight:900; color:var(--c-gold); font-size:12px;">${wh.name}</span>
+          <span class="badge" style="color:var(--c-green); border-color:var(--c-green);">COMMERCIAL FACILITY</span>
         </div>
-        <div style="font-size:11px; font-weight:bold; color:#fff; margin-top:2px;">${curItem.name}</div>
-        <div style="font-size:8.5px; color:var(--silver-dim);">${curItem.desc}</div>
-        <div style="margin-top:4px;">
-          ${nextItem ? `
-            <button class="btn btn-green" style="width:100%; padding:6px; font-size:8.5px;" onclick="upgradeEquip('${cat.key}')">
-              Upgrade: ${nextItem.name} ($${fmt(nextItem.cost)})
-            </button>
-          ` : `
-            <button class="btn" style="width:100%; padding:6px; font-size:8.5px;" disabled>Max Commercial Spec</button>
-          `}
+        <div style="font-size:9px; color:var(--silver-main); line-height:1.4;">
+          Active Canopy: <b style="color:#fff;">${wh.capacity} Industrial Pots</b> | Output: <b style="color:var(--c-lime);">${wh.baseYieldG}g Bulk Batches</b><br>
+          Staged Production Strain: <b style="color:var(--c-amber);">${pStrain}</b>
+        </div>
+        <div style="display:flex; flex-direction:column; gap:4px; margin-top:4px;">
+          <div style="display:flex; justify-content:space-between; font-size:8.5px; color:var(--silver-dim);">
+            <span>Turnover Cycle Progress</span>
+            <span id="wh-progress-txt">${Math.floor(State.warehouseState.activeCycleProgress)}%</span>
+          </div>
+          <div class="progress-bg"><div class="progress-fill" id="wh-progress-bar" style="width:${State.warehouseState.activeCycleProgress}%; background:var(--c-gold);"></div></div>
+        </div>
+        <div style="display:flex; flex-wrap:wrap; gap:5px; margin-top:6px;">
+          <button class="btn btn-blue" onclick="warehousePullCheapestSeeds()">1. Pull Cheapest Bulk Seeds</button>
+          <button class="btn btn-green" onclick="warehouseTriggerCycle()">2. Cycle Bulk Turnover</button>
+          <button class="btn btn-gold" onclick="warehouseHarvest()">3. Harvest Warehouse</button>
+          <button class="btn btn-scarlet" onclick="warehouseAutoStockDispensary()">4. Bulk Package &amp; Stock Store</button>
         </div>
       `;
-      c.appendChild(card);
-    });
-  }
-
-  function upgradeEquip(categoryKey) {
-    let currIdxKey = categoryKey === 'lights' ? 'lightIdx' : categoryKey === 'water' ? 'waterIdx' : categoryKey === 'nutrients' ? 'nutrientsIdx' : 'climateIdx';
-    let currIdx = State.equip[currIdxKey];
-    let nextItem = EQUIPMENT_DATABASE[categoryKey][currIdx + 1];
-    if (!nextItem) return;
-
-    if (State.funds < nextItem.cost) {
-      toast("Insufficient capital for this equipment upgrade.");
-      return;
     }
 
-    State.funds -= nextItem.cost;
-    State.equip[currIdxKey]++;
-    addXP(100);
-    toast(`Installed ${nextItem.name}! Canopy upgraded.`);
-    updateHUD();
-    renderEquip();
-  }
-
-  /* ================= PACKAGING STATION & MULTI-WEIGHT VAULT ================= */
-  function renderBulkHarvests() {
-    const list = $('packaging-bulk-list'); if (!list) return; list.innerHTML = '';
-
-    if (State.bulkHarvests.length === 0) {
-      list.innerHTML = `<div style="text-align:center; padding:15px; color:var(--silver-dim); font-size:9.5px;">No raw bulk flower in bins. Chop mature crops in Grow Room!</div>`;
-      return;
-    }
-
-    State.bulkHarvests.forEach((b, idx) => {
-      let card = document.createElement('div');
-      card.className = 'check-item';
-      card.style.borderColor = b.tierColor;
-      card.innerHTML = `
-        <div style="flex:1;">
-          <div style="display:flex; gap:6px; align-items:center;">
-            <span style="font-weight:900; color:#fff; font-size:11px;">${b.name}</span>
-            <span class="score-pill">SCORE: ${b.score}</span>
-            <span style="color:${b.tierColor}; font-size:8.5px; font-weight:bold;">${b.tierName}</span>
-          </div>
-          <div style="font-size:9px; color:var(--c-lime); font-weight:bold; margin-top:2px;">
-            Available Bulk: <b style="color:#fff; font-size:11px;">${b.weightG.toFixed(1)}g</b> | THC: ${b.thc}% | Terps: ${b.terpenes}%
-          </div>
-          <div style="display:flex; flex-wrap:wrap; gap:4px; margin-top:6px;">
-            <button class="btn btn-green" onclick="packageBatch(${idx}, 'PREROLL')">1.0g Joint</button>
-            <button class="btn btn-scarlet" onclick="packageBatch(${idx}, 'TENTH')">2.83g Tenth</button>
-            <button class="btn btn-gold" onclick="packageBatch(${idx}, 'FIFTH')">5.66g Fifth</button>
-            <button class="btn btn-blue" onclick="packageBatch(${idx}, 'HALF')">14.15g Half</button>
-            <button class="btn btn-cyan" onclick="packageBatch(${idx}, 'OUNCE')">28.3g Zip</button>
-          </div>
-        </div>
-        <button class="btn btn-danger" style="padding:6px; font-size:8px;" onclick="dumpBulkWholesale(${idx})">Wholesale Remainder</button>
-      `;
-      list.appendChild(card);
-    });
-  }
-
-  function packageBatch(bulkIdx, formatKey) {
-    let bulk = State.bulkHarvests[bulkIdx];
-    let fmtObj = PACKAGING_WEIGHTS[formatKey];
-    if (!bulk || !fmtObj) return;
-
-    if (bulk.weightG < fmtObj.grams) {
-      toast(`Need at least ${fmtObj.grams}g of ${bulk.name} to package a ${fmtObj.name}! Available: ${bulk.weightG.toFixed(1)}g`);
-      return;
-    }
-
-    let units = Math.floor(bulk.weightG / fmtObj.grams);
-    let usedWeight = Number((units * fmtObj.grams).toFixed(2));
-    bulk.weightG = Number((bulk.weightG - usedWeight).toFixed(2));
-
-    let unitPrice = Math.floor(fmtObj.grams * fmtObj.basePricePerGram * (bulk.score / 70));
-
-    State.packagedVault.push({
-      packUid: 'PK-' + Math.random().toString(36).substring(2,7).toUpperCase(),
-      cultivarUid: bulk.uid,
-      name: bulk.name,
-      role: bulk.role,
-      lineage: bulk.lineage,
-      tierIdx: bulk.tierIdx,
-      tierColor: bulk.tierColor,
-      thc: bulk.thc,
-      terpenes: bulk.terpenes,
-      score: bulk.score,
-      seedInt: bulk.seedInt,
-      palette: bulk.palette,
-      morphology: bulk.morphology,
-      formatKey: formatKey,
-      formatName: fmtObj.name,
-      gramsPerUnit: fmtObj.grams,
-      unitsRemaining: units,
-      pricePerUnit: unitPrice,
-      trophiesWon: bulk.trophiesWon || 0
-    });
-
-    if (bulk.weightG < 0.5) {
-      State.bulkHarvests.splice(bulkIdx, 1);
-    }
-
-    addXP(units * 4);
-    toast(`Packaged ${units}x ${fmtObj.name} of ${bulk.name}! Ready for dispensary shelves.`);
-    updateHUD();
-    renderBulkHarvests();
-    renderPackagedVault();
-  }
-
-  function dumpBulkWholesale(idx) {
-    let bulk = State.bulkHarvests[idx];
-    let payout = Math.floor(bulk.weightG * 5.0);
-    State.funds += payout;
-    addXP(15);
-    State.bulkHarvests.splice(idx, 1);
-    toast(`Wholesaled ${bulk.weightG}g raw trim/flower to licensed processor for $${payout}!`);
-    updateHUD(); renderBulkHarvests();
-  }
-
-  function renderPackagedVault() {
-    const list = $('packaged-vault-list'); if (!list) return; list.innerHTML = '';
-
-    if (State.packagedVault.length === 0) {
-      list.innerHTML = `<div style="color:var(--silver-dim); font-size:9px; text-align:center; padding:10px;">No packaged goods in inventory. Use packaging buttons above!</div>`;
-      return;
-    }
-
-    State.packagedVault.forEach((p, idx) => {
+    upgGrid.innerHTML = '';
+    COMMERCIAL_WAREHOUSES.forEach((wh, idx) => {
+      let isOwned = State.warehouseIdx === idx;
       let div = document.createElement('div');
       div.className = 'check-item';
       div.innerHTML = `
-        <div style="flex:1;">
-          <div style="display:flex; gap:6px; align-items:center;">
-            <span style="font-weight:900; color:#fff; font-size:10.5px;">${p.name}</span>
-            <span class="badge" style="font-size:8px;">${p.formatName}</span>
-            <span class="score-pill">SCORE: ${p.score}</span>
-          </div>
-          <div style="font-size:8.5px; color:var(--silver-dim); margin-top:2px;">
-            In Stock: <b style="color:#fff;">${p.unitsRemaining}</b> units | THC: ${p.thc}% | Value: $${p.pricePerUnit}/ea
-          </div>
+        <div>
+          <div style="font-weight:bold; color:#fff;">${wh.name}</div>
+          <div style="font-size:8.5px; color:var(--silver-dim);">Capacity: ${wh.capacity} Pots | Expected Harvest: ~${wh.baseYieldG}g</div>
         </div>
-        <div style="display:flex; gap:4px;">
-          <button class="btn btn-gold" style="padding:4px 6px; font-size:8px;" onclick="openDossierModalByData('${p.cultivarUid}')">Dossier</button>
-          <button class="btn btn-green" style="padding:4px 6px; font-size:8px;" onclick="stockDirectlyFromVault(${idx})">Put On Shelf</button>
+        <div>
+          ${isOwned ? `
+            <span class="badge" style="color:var(--c-gold); border-color:var(--c-gold);">OPERATIONAL</span>
+          ` : `
+            <button class="btn btn-gold" onclick="buyWarehouse(${idx})">Lease ($${fmt(wh.cost)})</button>
+          `}
         </div>
       `;
-      list.appendChild(div);
+      upgGrid.appendChild(div);
     });
   }
 
-  /* ================= SEED BANK & INVENTORY ================= */
+  function buyWarehouse(idx) {
+    let wh = COMMERCIAL_WAREHOUSES[idx];
+    if (State.funds < wh.cost) { toast("Insufficient funds for warehouse acquisition."); return; }
+    State.funds -= wh.cost;
+    State.warehouseIdx = idx;
+    State.warehouseState.activeCycleProgress = 0;
+    addXP(1000);
+    checkMission('m4');
+    toast(`COMMERCIAL LEASE SIGNED: Acquired ${wh.name}!`);
+    updateHUD(); renderWarehouseUI();
+  }
+
+  function warehousePullCheapestSeeds() {
+    if (State.warehouseIdx < 0) { toast("No active warehouse."); return; }
+    let sorted = [...REAL_STRAINS_DATABASE].sort((a,b) => a.cost - b.cost);
+    let cheapest = sorted[0];
+    let bulkCost = cheapest.cost * 4;
+    if (State.funds < bulkCost) { toast(`Requires $${bulkCost} for wholesale batch of ${cheapest.name} seeds.`); return; }
+    State.funds -= bulkCost;
+    State.warehouseState.stagedStrain = cheapest;
+    toast(`Pulled bulk cuts of ${cheapest.name} for $${bulkCost}! Ready for commercial bloom.`);
+    updateHUD(); renderWarehouseUI();
+  }
+
+  function warehouseTriggerCycle() {
+    if (State.warehouseIdx < 0) { toast("No active warehouse."); return; }
+    if (!State.warehouseState.stagedStrain) warehousePullCheapestSeeds();
+    if (!State.warehouseState.stagedStrain) return;
+    State.warehouseState.cycleRunning = true;
+    toast("Warehouse canopy cycle activated!");
+  }
+
+  function warehouseHarvest() {
+    if (State.warehouseIdx < 0) return;
+    if (State.warehouseState.activeCycleProgress < 100) { toast("Warehouse canopy is still blooming. Wait for 100%!"); return; }
+    let wh = COMMERCIAL_WAREHOUSES[State.warehouseIdx];
+    let st = State.warehouseState.stagedStrain || REAL_STRAINS_DATABASE[0];
+
+    let dryG = Math.floor(wh.baseYieldG * (0.9 + Math.random() * 0.3));
+    let batch = createCultivar(st.name, st.role, st.tierIdx, null, st.thc, st.terps, 85, st.pal, st.morph, st.lineage);
+    batch.weightG = dryG;
+    State.bulkHarvests.push(batch);
+
+    State.warehouseState.activeCycleProgress = 0;
+    State.warehouseState.cycleRunning = false;
+    addXP(500);
+    toast(`COMMERCIAL HARVEST: Harvested ${dryG}g of ${st.name} directly into bulk vault!`);
+    updateHUD(); renderWarehouseUI(); renderBulkHarvests();
+  }
+
+  function warehouseAutoStockDispensary() {
+    if (State.bulkHarvests.length === 0) { toast("No bulk flower in bins. Run warehouse cycle first!"); return; }
+    let batch = State.bulkHarvests[0];
+    let totalJars = Math.floor(batch.weightG / 2.83);
+    if (totalJars < 1) { toast("Bulk batch too small for auto-jarring."); return; }
+    packageBatch(0, 'TENTH');
+    autoStockAllShelves();
+    toast(`Automated lines jarred & stocked ${totalJars} Tenths across dispensary!`);
+  }
+
+  /* ================= LARGE HIGH-VISIBILITY DOSSIER CARDS ================= */
+  function createDossierCardHTML(item, options = {}) {
+    let tD = TIERS[item.tierIdx] || TIERS[0];
+    let rCol = item.role === 'INDICA' ? 'var(--c-purple)' : item.role === 'SATIVA' ? 'var(--c-amber)' : 'var(--c-green)';
+    let isWinner = (item.trophiesWon || 0) > 0;
+
+    return `
+      <div class="large-dossier-card ${isWinner ? 'winner' : ''}" style="border-color:${tD.color};">
+        <div style="display:flex; justify-content:space-between; align-items:center;">
+          <div style="display:flex; gap:6px; align-items:center;">
+            <span style="font-weight:900; color:#fff; font-size:12px;">${item.name}</span>
+            <span class="badge" style="color:${rCol}; border-color:${rCol};">${item.role}</span>
+            <span class="score-pill">SCORE: ${item.score || 85}</span>
+          </div>
+          <span style="font-size:9px; color:${tD.color}; font-weight:bold;">${tD.name}</span>
+        </div>
+
+        <div class="dossier-body">
+          <div class="dossier-canvas-wrap">
+            <canvas id="canvas-${options.uniqueId || item.uid || item.packUid}" width="128" height="128"></canvas>
+          </div>
+          <div class="dossier-info">
+            <div style="color:var(--silver-dim);"><b>Lineage:</b> ${item.lineage}</div>
+            <div style="color:var(--silver-main); font-size:8.5px; margin-top:2px;">${item.desc || 'Certified Ohio phenotype selected for intense bag appeal and rich terpene bouquet.'}</div>
+            
+            <div class="dossier-meta-grid">
+              <div>THC: <b style="color:var(--c-lime);">${item.thc}%</b></div>
+              <div>TERPENES: <b style="color:var(--c-cyan);">${item.terpenes || item.terps}%</b></div>
+              <div>BAG APPEAL: <b style="color:var(--c-gold);">${item.bagAppeal || 88}/100</b></div>
+              <div>CURE: <b style="color:var(--c-green);">${item.cure || 100}%</b></div>
+            </div>
+
+            ${options.extraMetaHTML || ''}
+          </div>
+        </div>
+
+        ${options.actionButtonsHTML ? `<div style="display:flex; justify-content:flex-end; gap:6px; margin-top:4px;">${options.actionButtonsHTML}</div>` : ''}
+      </div>
+    `;
+  }
+
+  /* ================= SEED BANK & INVENTORY WITH DOSSIERS ================= */
   function renderOwnedSeeds() {
     $('owned-seeds-total').innerText = State.seedInventory.length;
-    const rack = $('owned-seeds-list'); if (!rack) return;
+    const rack = $('owned-seeds-dossiers'); if (!rack) return;
     if (State.seedInventory.length === 0) {
-      rack.innerHTML = `<div style="color:var(--silver-dim); font-size:9.5px;">No seeds currently stored. Buy cuts below or crossbreed parents!</div>`;
+      rack.innerHTML = `<div style="color:var(--silver-dim); font-size:9.5px; text-align:center; padding:15px;">No seeds stored in vault. Buy cuts below or crossbreed parents!</div>`;
       return;
     }
     rack.innerHTML = '';
-    State.seedInventory.forEach((s) => {
-      let b = document.createElement('div');
-      b.className = 'badge';
-      b.style.borderColor = TIERS[s.tierIdx].color;
-      b.style.color = '#fff';
-      b.innerHTML = `🧬 ${s.name} (${s.thc}%)`;
-      rack.appendChild(b);
+    State.seedInventory.forEach((s, idx) => {
+      let uId = 'owned-seed-' + idx;
+      let cardHTML = createDossierCardHTML(s, {
+        uniqueId: uId,
+        extraMetaHTML: `<div style="color:var(--c-green); font-weight:bold; margin-top:3px;">Seed Vault Pack: Certified Craft Cut #BB-${idx+1}</div>`,
+        actionButtonsHTML: `<button class="btn btn-green" onclick="quickPlantSpecificSeed(${idx})">Plant in Craft Pot</button>`
+      });
+      rack.insertAdjacentHTML('beforeend', cardHTML);
+      let cv = $(`canvas-${uId}`);
+      if (cv) renderUniversalVisual128(cv, "BUD", s.seedInt, s.palette, { morphology: s.morphology, tierIdx: s.tierIdx });
     });
+  }
+
+  function quickPlantSpecificSeed(idx) {
+    let emptyPot = State.growPots.find(p => !p.occupied);
+    if (!emptyPot) { toast("No empty pots in craft space canopy. Expand or chop first!"); return; }
+    let seed = State.seedInventory.splice(idx, 1)[0];
+    let startProgress = getSkillRank('speed_2') * 15;
+    emptyPot.occupied = true;
+    emptyPot.plant = createCultivar(seed.name, seed.role, seed.tierIdx, seed.seedInt, seed.thc, seed.terps, seed.bagAppeal, seed.palette, seed.morphology, seed.lineage);
+    emptyPot.progress = startProgress;
+    emptyPot.phase = 'VEGETATIVE';
+    toast(`Planted ${seed.name} into Pot #${emptyPot.id + 1}!`);
+    updateHUD(); renderGrowUI(); renderOwnedSeeds(); setTab('grow');
   }
 
   function renderSeedCatalog() {
@@ -1548,29 +1632,16 @@
       return true;
     });
 
-    filtered.forEach((st) => {
-      let tD = TIERS[st.tierIdx];
-      let rCol = st.role === 'INDICA' ? 'var(--c-purple)' : st.role === 'SATIVA' ? 'var(--c-amber)' : 'var(--c-green)';
-      let card = document.createElement('div');
-      card.className = 'check-item';
-      card.style.borderColor = tD.color;
-      card.innerHTML = `
-        <div style="flex:1;">
-          <div style="display:flex; gap:6px; align-items:center;">
-            <span style="font-weight:900; color:#fff; font-size:11px;">${st.name}</span>
-            <span class="badge" style="color:${rCol}; border-color:${rCol};">${st.role}</span>
-            <span style="font-size:8.5px; color:${tD.color}; font-weight:bold;">[${tD.name.split(':')[1]}]</span>
-          </div>
-          <div style="font-size:8.5px; color:var(--silver-dim); margin-top:2px;"><b>Lineage:</b> ${st.lineage}</div>
-          <div style="font-size:8px; color:var(--silver-main); margin-top:2px;">${st.desc}</div>
-          <div style="font-size:9px; color:var(--c-lime); font-weight:bold; margin-top:2px;">THC: ${st.thc}% | Terpenes: ${st.terps}%</div>
-        </div>
-        <div style="text-align:right;">
-          <div style="font-size:11px; font-weight:bold; color:var(--c-green); font-family:monospace; margin-bottom:4px;">$${st.cost} / Pack</div>
-          <button class="btn btn-green" onclick="buyCatalogSeed('${st.name}')">Buy 3-Pack</button>
-        </div>
-      `;
-      grid.appendChild(card);
+    filtered.forEach((st, idx) => {
+      let uId = 'cat-seed-' + idx;
+      let cardHTML = createDossierCardHTML(st, {
+        uniqueId: uId,
+        extraMetaHTML: `<div style="font-size:10px; color:var(--c-green); font-weight:bold; margin-top:3px;">Wholesale Price: $${st.cost} / 3-Pack</div>`,
+        actionButtonsHTML: `<button class="btn btn-green" onclick="buyCatalogSeed('${st.name}')">Buy 3-Pack ($${st.cost})</button>`
+      });
+      grid.insertAdjacentHTML('beforeend', cardHTML);
+      let cv = $(`canvas-${uId}`);
+      if (cv) renderUniversalVisual128(cv, "BUD", 1000 + idx * 77, st.pal, { morphology: st.morph, tierIdx: st.tierIdx });
     });
   }
 
@@ -1602,60 +1673,215 @@
     updateHUD(); renderOwnedSeeds();
   }
 
-  /* ================= DISPENSARY STOREFRONT (OHIO RETAIL) ================= */
+  /* ================= PACKAGING STATION & MULTI-WEIGHT VAULT ================= */
+  function renderBulkHarvests() {
+    const list = $('packaging-bulk-list'); if (!list) return; list.innerHTML = '';
+    if (State.bulkHarvests.length === 0) {
+      list.innerHTML = `<div style="text-align:center; padding:15px; color:var(--silver-dim); font-size:9.5px;">No raw bulk flower in bins. Chop mature crops in Craft Grow or Warehouse!</div>`;
+      return;
+    }
+
+    State.bulkHarvests.forEach((b, idx) => {
+      let uId = 'bulk-batch-' + idx;
+      let cardHTML = createDossierCardHTML(b, {
+        uniqueId: uId,
+        extraMetaHTML: `
+          <div style="font-size:10.5px; color:var(--c-lime); font-weight:bold; margin-top:2px;">
+            Available Weight: <b style="color:#fff; font-size:12px;">${b.weightG.toFixed(1)}g</b>
+          </div>
+          <div style="display:flex; flex-wrap:wrap; gap:4px; margin-top:6px;">
+            <button class="btn btn-green" onclick="packageBatch(${idx}, 'PREROLL')">1.0g Joint</button>
+            <button class="btn btn-scarlet" onclick="packageBatch(${idx}, 'TENTH')">2.83g Tenth</button>
+            <button class="btn btn-gold" onclick="packageBatch(${idx}, 'FIFTH')">5.66g Fifth</button>
+            <button class="btn btn-blue" onclick="packageBatch(${idx}, 'HALF')">14.15g Half</button>
+            <button class="btn btn-cyan" onclick="packageBatch(${idx}, 'OUNCE')">28.3g Zip</button>
+          </div>
+        `,
+        actionButtonsHTML: `<button class="btn btn-danger" style="font-size:8px;" onclick="dumpBulkWholesale(${idx})">Wholesale Remainder</button>`
+      });
+      list.insertAdjacentHTML('beforeend', cardHTML);
+      let cv = $(`canvas-${uId}`);
+      if (cv) renderUniversalVisual128(cv, "BUD", b.seedInt, b.palette, { morphology: b.morphology, tierIdx: b.tierIdx });
+    });
+  }
+
+  function packageBatch(bulkIdx, formatKey) {
+    let bulk = State.bulkHarvests[bulkIdx];
+    let fmtObj = PACKAGING_WEIGHTS[formatKey];
+    if (!bulk || !fmtObj) return;
+
+    if (bulk.weightG < fmtObj.grams) {
+      toast(`Need at least ${fmtObj.grams}g of ${bulk.name} to package a ${fmtObj.name}! Available: ${bulk.weightG.toFixed(1)}g`);
+      return;
+    }
+
+    let units = Math.floor(bulk.weightG / fmtObj.grams);
+    let usedWeight = Number((units * fmtObj.grams).toFixed(2));
+    bulk.weightG = Number((bulk.weightG - usedWeight).toFixed(2));
+    let unitPrice = Math.floor(fmtObj.grams * fmtObj.basePricePerGram * (bulk.score / 70));
+
+    State.packagedVault.push({
+      packUid: 'PK-' + Math.random().toString(36).substring(2,7).toUpperCase(),
+      cultivarUid: bulk.uid,
+      name: bulk.name,
+      role: bulk.role,
+      lineage: bulk.lineage,
+      tierIdx: bulk.tierIdx,
+      tierColor: bulk.tierColor,
+      thc: bulk.thc,
+      terpenes: bulk.terpenes,
+      score: bulk.score,
+      seedInt: bulk.seedInt,
+      palette: bulk.palette,
+      morphology: bulk.morphology,
+      formatKey: formatKey,
+      formatName: fmtObj.name,
+      visualCat: fmtObj.visualCat,
+      gramsPerUnit: fmtObj.grams,
+      unitsRemaining: units,
+      pricePerUnit: unitPrice,
+      trophiesWon: bulk.trophiesWon || 0
+    });
+
+    if (bulk.weightG < 0.5) State.bulkHarvests.splice(bulkIdx, 1);
+    addXP(units * 4);
+    if (formatKey === 'TENTH') checkMission('m2');
+    toast(`Packaged ${units}x ${fmtObj.name} of ${bulk.name}! Ready for dispensary shelves.`);
+    updateHUD();
+    renderBulkHarvests();
+    renderPackagedVault();
+  }
+
+  function dumpBulkWholesale(idx) {
+    let bulk = State.bulkHarvests[idx];
+    let payout = Math.floor(bulk.weightG * 5.0);
+    State.funds += payout;
+    addXP(15);
+    State.bulkHarvests.splice(idx, 1);
+    toast(`Wholesaled ${bulk.weightG}g raw trim/flower to processor for $${payout}!`);
+    updateHUD(); renderBulkHarvests();
+  }
+
+  function renderPackagedVault() {
+    const list = $('packaged-vault-list'); if (!list) return; list.innerHTML = '';
+    if (State.packagedVault.length === 0) {
+      list.innerHTML = `<div style="color:var(--silver-dim); font-size:9.5px; text-align:center; padding:15px;">No packaged goods in inventory. Package bulk harvests above!</div>`;
+      return;
+    }
+
+    State.packagedVault.forEach((p, idx) => {
+      let uId = 'pack-vault-' + idx;
+      let cardHTML = createDossierCardHTML(p, {
+        uniqueId: uId,
+        extraMetaHTML: `
+          <div style="font-size:10px; color:var(--c-gold); font-weight:bold; margin-top:2px;">
+            In Stock: <b style="color:#fff;">${p.unitsRemaining}</b> units of ${p.formatName} ($${p.pricePerUnit}/ea)
+          </div>
+        `,
+        actionButtonsHTML: `
+          <button class="btn btn-gold" style="font-size:8px;" onclick="openDossierModalByData('${p.cultivarUid}')">Dossier</button>
+          <button class="btn btn-green" style="font-size:8px;" onclick="stockDirectlyFromVault(${idx})">Put On Shelf</button>
+        `
+      });
+      list.insertAdjacentHTML('beforeend', cardHTML);
+      let cv = $(`canvas-${uId}`);
+      if (cv) renderUniversalVisual128(cv, p.visualCat || "JAR", p.seedInt, p.palette, { morphology: p.morphology, tierIdx: p.tierIdx });
+    });
+  }
+
+  /* ================= EXPANDABLE DISPENSARY STOREFRONT (6 - 36 SLOTS) ================= */
   function initStore() {
-    State.storeShelves = [
-      { id: 0, item: null, pricePerUnit: 0, remainingUnits: 0 },
-      { id: 1, item: null, pricePerUnit: 0, remainingUnits: 0 },
-      { id: 2, item: null, pricePerUnit: 0, remainingUnits: 0 },
-      { id: 3, item: null, pricePerUnit: 0, remainingUnits: 0 },
-      { id: 4, item: null, pricePerUnit: 0, remainingUnits: 0 }
-    ];
+    let targetSlots = STORE_EXPANSIONS[State.storeExpansionIdx].slots;
+    State.storeShelves = [];
+    for (let i = 0; i < targetSlots; i++) {
+      State.storeShelves.push({ id: i, item: null, pricePerUnit: 0, remainingUnits: 0, isGear: false });
+    }
+  }
+
+  function expandStoreShelves() {
+    let nextIdx = State.storeExpansionIdx + 1;
+    let nextExp = STORE_EXPANSIONS[nextIdx];
+    if (!nextExp) { toast("Storefront already at maximum flagship 36-slot capacity!"); return; }
+    if (State.funds < nextExp.cost) { toast("Insufficient funds to expand storefront."); return; }
+    State.funds -= nextExp.cost;
+    State.storeExpansionIdx = nextIdx;
+    
+    while (State.storeShelves.length < nextExp.slots) {
+      State.storeShelves.push({ id: State.storeShelves.length, item: null, pricePerUnit: 0, remainingUnits: 0, isGear: false });
+    }
+
+    toast(`Dispensary retail space upgraded to ${nextExp.title}!`);
+    updateHUD(); renderStore();
   }
 
   function renderStore() {
     const grid = $('store-shelves-grid'); if (!grid) return; grid.innerHTML = '';
+    let currentExp = STORE_EXPANSIONS[State.storeExpansionIdx];
+    $('store-slot-count').innerText = currentExp.slots;
+
+    let nextExp = STORE_EXPANSIONS[State.storeExpansionIdx + 1];
+    let btnExp = $('btn-expand-store');
+    if (btnExp) {
+      if (nextExp) {
+        btnExp.style.display = 'block';
+        btnExp.innerText = `Expand Store: ${nextExp.slots} Slots ($${fmt(nextExp.cost)})`;
+      } else {
+        btnExp.style.display = 'none';
+      }
+    }
+
     State.storeShelves.forEach(shelf => {
       let div = document.createElement('div');
       div.className = `store-shelf ${shelf.item ? 'stocked' : ''}`;
       if (shelf.item) {
+        let cvId = `shelf-canvas-${shelf.id}`;
         div.innerHTML = `
-          <div style="font-size:9.5px; font-weight:bold; color:#fff;">${shelf.item.name}</div>
-          <div style="font-size:8px; color:var(--c-green);">${shelf.item.formatName} [${shelf.item.score} Score]</div>
-          <div style="font-size:8.5px; color:var(--silver-dim); margin-top:2px;">Stock: <b style="color:#fff;">${shelf.remainingUnits}</b> units</div>
-          <div style="font-size:8px; color:var(--c-gray);">Fair Value: $${shelf.item.pricePerUnit}/unit</div>
-          <div style="display:flex; align-items:center; gap:3px; margin-top:4px;">
-            <span style="font-size:8px; font-weight:bold;">$</span>
-            <input type="number" value="${shelf.pricePerUnit}" style="width:100%; background:#000; color:#fff; border:1px solid var(--panel-border); padding:3px; font-size:9px; font-family:monospace; border-radius:3px;" onchange="setShelfPrice(${shelf.id}, this.value)" />
+          <div style="width:128px; height:128px; background:#000; border-radius:6px; overflow:hidden; border:1px solid #1c2e1c; margin-bottom:4px;">
+            <canvas id="${cvId}" width="128" height="128" style="width:128px; height:128px; image-rendering:pixelated;"></canvas>
           </div>
-          <button class="btn btn-danger" style="padding:2px 4px; font-size:7.5px; margin-top:3px;" onclick="unstockShelf(${shelf.id})">Return To Vault</button>
+          <div style="font-size:10px; font-weight:900; color:#fff; line-height:1.2;">${shelf.item.name}</div>
+          <div style="font-size:8px; color:${shelf.isGear ? 'var(--c-cyan)' : 'var(--c-green)'}; font-weight:bold;">${shelf.isGear ? 'HEADSHOP GLASSWARE' : shelf.item.formatName}</div>
+          <div style="font-size:8.5px; color:var(--silver-dim);">Stock: <b style="color:#fff;">${shelf.remainingUnits}</b> units</div>
+          <div style="display:flex; align-items:center; gap:3px; margin-top:3px; width:100%; justify-content:center;">
+            <span style="font-size:9px; font-weight:bold;">$</span>
+            <input type="number" value="${shelf.pricePerUnit}" style="width:65px; background:#000; color:#fff; border:1px solid var(--panel-border); padding:3px; font-size:9px; font-family:monospace; text-align:center;" onchange="setShelfPrice(${shelf.id}, this.value)" />
+          </div>
+          <button class="btn btn-danger" style="padding:3px 6px; font-size:7.5px; margin-top:3px; width:100%;" onclick="unstockShelf(${shelf.id})">Return To Vault</button>
         `;
+        grid.appendChild(div);
+        let cv = $(cvId);
+        if (cv) {
+          if (shelf.isGear) renderUniversalVisual128(cv, shelf.item.visualCat, 555);
+          else renderUniversalVisual128(cv, shelf.item.visualCat || "JAR", shelf.item.seedInt, shelf.item.palette, { morphology: shelf.item.morphology, tierIdx: shelf.item.tierIdx });
+        }
       } else {
         div.innerHTML = `
-          <div style="font-size:8.5px; color:var(--silver-dim); text-align:center;">Empty Shelf #${shelf.id + 1}</div>
-          <button class="btn btn-green" style="padding:3px 5px; font-size:7.5px; margin-top:6px;" onclick="stockShelfFromPackagedVault(${shelf.id})">Stock Shelf</button>
+          <div style="font-size:9px; color:var(--silver-dim); margin-top:70px;">[Slot #${shelf.id + 1} Empty]</div>
+          <button class="btn btn-green" style="padding:6px 10px; font-size:8px; margin-top:20px;" onclick="stockShelfFromPackagedVault(${shelf.id})">+ Stock Item</button>
         `;
+        grid.appendChild(div);
       }
-      grid.appendChild(div);
     });
   }
 
   function stockDirectlyFromVault(packIdx) {
     let emptyShelf = State.storeShelves.find(s => !s.item);
-    if (!emptyShelf) { toast("Dispensary shelves are completely full! Unstock or sell first."); return; }
+    if (!emptyShelf) { toast("Storefront full! Expand display floor first."); return; }
     let pack = State.packagedVault.splice(packIdx, 1)[0];
     emptyShelf.item = pack;
+    emptyShelf.isGear = false;
     emptyShelf.remainingUnits = pack.unitsRemaining;
     emptyShelf.pricePerUnit = Math.floor(pack.pricePerUnit * 1.15);
-    toast(`Stocked ${pack.unitsRemaining}x ${pack.formatName} of ${pack.name} on storefront shelf!`);
+    toast(`Stocked ${pack.unitsRemaining}x ${pack.formatName} on display shelf!`);
     updateHUD(); renderStore(); renderPackagedVault();
   }
 
   function stockShelfFromPackagedVault(shelfId) {
-    if (State.packagedVault.length === 0) { toast("No packaged inventory in vault! Package your bulk flower first."); return; }
+    if (State.packagedVault.length === 0) { toast("No packaged goods in vault! Package bulk flower first."); return; }
     let item = State.packagedVault.shift();
     let shelf = State.storeShelves.find(s => s.id === shelfId);
     shelf.item = item;
+    shelf.isGear = false;
     shelf.remainingUnits = item.unitsRemaining;
     shelf.pricePerUnit = Math.floor(item.pricePerUnit * 1.15);
     toast(`Stocked ${item.unitsRemaining} units on shelf #${shelfId + 1}!`);
@@ -1664,7 +1890,7 @@
 
   function autoStockAllShelves() {
     let emptyShelves = State.storeShelves.filter(s => !s.item);
-    if (emptyShelves.length === 0) { toast("All dispensary shelves are stocked."); return; }
+    if (emptyShelves.length === 0) { toast("All dispensary displays are stocked."); return; }
     if (State.packagedVault.length === 0) { toast("No packaged goods ready in vault. Package bulk flower!"); return; }
 
     let count = 0;
@@ -1672,12 +1898,13 @@
       if (State.packagedVault.length > 0) {
         let item = State.packagedVault.shift();
         shelf.item = item;
+        shelf.isGear = false;
         shelf.remainingUnits = item.unitsRemaining;
         shelf.pricePerUnit = Math.floor(item.pricePerUnit * 1.15);
         count++;
       }
     });
-    toast(`Stocked ${count} items onto dispensary storefront!`);
+    toast(`Stocked ${count} items across dispensary shelves!`);
     updateHUD(); renderStore(); renderPackagedVault();
   }
 
@@ -1689,10 +1916,107 @@
   function unstockShelf(shelfId) {
     let shelf = State.storeShelves.find(s => s.id === shelfId);
     if (!shelf || !shelf.item) return;
-    shelf.item.unitsRemaining = shelf.remainingUnits;
-    State.packagedVault.push(shelf.item);
-    shelf.item = null; shelf.pricePerUnit = 0; shelf.remainingUnits = 0;
+    if (!shelf.isGear) {
+      shelf.item.unitsRemaining = shelf.remainingUnits;
+      State.packagedVault.push(shelf.item);
+    }
+    shelf.item = null; shelf.pricePerUnit = 0; shelf.remainingUnits = 0; shelf.isGear = false;
     updateHUD(); renderStore(); renderPackagedVault();
+  }
+
+  /* ================= LARGE-FORMAT HEADSHOP PARAPHERNALIA MARKET ================= */
+  function initParaphernaliaMarket() {
+    PARAPHERNALIA_CATALOG.forEach(item => {
+      State.paraphernaliaMarket[item.id] = { currentWholesale: item.baseCost, trend: 'FLAT' };
+      if (State.paraphernaliaInventory[item.id] === undefined) State.paraphernaliaInventory[item.id] = 0;
+    });
+  }
+
+  function updateParaphernaliaPrices() {
+    PARAPHERNALIA_CATALOG.forEach(item => {
+      let m = State.paraphernaliaMarket[item.id];
+      let delta = (Math.random() - 0.48) * 3;
+      let newPrice = Math.max(item.minCost, Math.min(item.maxCost, Math.round(m.currentWholesale + delta)));
+      m.trend = newPrice > m.currentWholesale ? 'UP' : newPrice < m.currentWholesale ? 'DOWN' : 'FLAT';
+      m.currentWholesale = newPrice;
+    });
+    if ($('tab-store').classList.contains('active')) renderParaphernaliaMarket();
+  }
+
+  function renderParaphernaliaMarket() {
+    const grid = $('paraphernalia-grid'); if (!grid) return; grid.innerHTML = '';
+    PARAPHERNALIA_CATALOG.forEach(item => {
+      let m = State.paraphernaliaMarket[item.id] || { currentWholesale: item.baseCost, trend: 'FLAT' };
+      let owned = State.paraphernaliaInventory[item.id] || 0;
+      let trendCol = m.trend === 'UP' ? 'var(--c-scarlet)' : m.trend === 'DOWN' ? 'var(--c-green)' : 'var(--silver-dim)';
+      let trendIcon = m.trend === 'UP' ? '▲ PRICE HIGH' : m.trend === 'DOWN' ? '▼ PRICE DIP' : '━ STEADY';
+
+      let div = document.createElement('div');
+      div.className = 'large-dossier-card';
+      let cvId = `gear-cv-${item.id}`;
+      div.innerHTML = `
+        <div style="display:flex; justify-content:space-between; align-items:center;">
+          <div style="display:flex; gap:6px; align-items:center;">
+            <span style="font-weight:900; color:#fff; font-size:12px;">${item.name}</span>
+            <span class="badge" style="color:var(--c-cyan); border-color:var(--c-cyan);">HEADSHOP ITEM</span>
+          </div>
+          <span class="badge" style="color:${trendCol}; border-color:${trendCol};">${trendIcon}</span>
+        </div>
+
+        <div class="dossier-body">
+          <div class="dossier-canvas-wrap">
+            <canvas id="${cvId}" width="128" height="128"></canvas>
+          </div>
+          <div class="dossier-info">
+            <div style="color:var(--silver-dim);"><b>Specification:</b> Authentic Ohio smoke shop gear.</div>
+            <div style="color:var(--silver-main); font-size:8.5px; margin-top:2px;">${item.desc}</div>
+            
+            <div class="dossier-meta-grid">
+              <div>WHOLESALE: <b style="color:#fff;">$${m.currentWholesale}</b></div>
+              <div>SUGGESTED: <b style="color:var(--c-green);">$${item.baseRetail}</b></div>
+              <div>OWNED: <b style="color:var(--c-gold);">${owned} Units</b></div>
+              <div>MARKET: <b style="color:${trendCol};">${m.trend}</b></div>
+            </div>
+
+            <div style="display:flex; gap:6px; margin-top:6px;">
+              <button class="btn btn-green" style="flex:1;" onclick="buyParaphernalia('${item.id}', 1)">Buy Wholesale ($${m.currentWholesale})</button>
+              <button class="btn btn-gold" style="flex:1;" ${owned > 0 ? '' : 'disabled'} onclick="stockParaphernaliaOnShelf('${item.id}')">Stock on Shelf</button>
+            </div>
+          </div>
+        </div>
+      `;
+      grid.appendChild(div);
+      let cv = $(cvId);
+      if (cv) renderUniversalVisual128(cv, item.visualCat, 888);
+    });
+  }
+
+  function buyParaphernalia(id, count) {
+    let item = PARAPHERNALIA_CATALOG.find(x => x.id === id);
+    let m = State.paraphernaliaMarket[id];
+    let cost = m.currentWholesale * count;
+    if (State.funds < cost) { toast("Insufficient funds to buy wholesale paraphernalia."); return; }
+    State.funds -= cost;
+    State.paraphernaliaInventory[id] = (State.paraphernaliaInventory[id] || 0) + count;
+    toast(`Purchased ${count}x ${item.name} for $${cost}!`);
+    updateHUD(); renderParaphernaliaMarket();
+  }
+
+  function stockParaphernaliaOnShelf(id) {
+    let owned = State.paraphernaliaInventory[id] || 0;
+    if (owned <= 0) { toast("No units in inventory."); return; }
+    let emptyShelf = State.storeShelves.find(s => !s.item);
+    if (!emptyShelf) { toast("Storefront full! Expand display floor first."); return; }
+    let item = PARAPHERNALIA_CATALOG.find(x => x.id === id);
+    State.paraphernaliaInventory[id]--;
+    emptyShelf.item = item;
+    emptyShelf.isGear = true;
+    emptyShelf.remainingUnits = 1;
+    emptyShelf.pricePerUnit = item.baseRetail;
+
+    checkMission('m5');
+    toast(`Stocked ${item.name} on display counter for $${item.baseRetail}!`);
+    updateHUD(); renderStore(); renderParaphernaliaMarket();
   }
 
   function customerTick() {
@@ -1700,11 +2024,11 @@
     if (activeShelves.length === 0) return;
 
     let shelf = activeShelves[Math.floor(Math.random() * activeShelves.length)];
-    let fairVal = shelf.item.pricePerUnit;
+    let fairVal = shelf.isGear ? shelf.item.baseRetail : shelf.item.pricePerUnit;
     let ratio = shelf.pricePerUnit / fairVal;
 
     let buyChance = ratio <= 0.95 ? 0.88 : ratio <= 1.25 ? 0.60 : ratio <= 1.6 ? 0.28 : 0.08;
-    if (shelf.item.trophiesWon > 0) buyChance += 0.25;
+    if (!shelf.isGear && shelf.item.trophiesWon > 0) buyChance += 0.25;
 
     const ticker = $('customer-ticker');
 
@@ -1713,29 +2037,113 @@
       let saleTotal = unitsBought * shelf.pricePerUnit;
       State.funds += saleTotal;
       shelf.remainingUnits -= unitsBought;
-
       addXP(unitsBought * 5);
 
       let log = document.createElement('div');
       log.style.color = "var(--c-green)";
-      log.innerText = `✓ Patient bought ${unitsBought}x ${shelf.item.formatName} (${shelf.item.name}) for $${saleTotal}!`;
+      log.innerText = `✓ Patient bought ${unitsBought}x ${shelf.item.name} for $${saleTotal}!`;
       if (ticker) { ticker.prepend(log); if (ticker.children.length > 8) ticker.removeChild(ticker.lastChild); }
 
       if (shelf.remainingUnits <= 0) {
         shelf.item = null;
         shelf.pricePerUnit = 0;
+        shelf.isGear = false;
       }
       updateHUD();
       if ($('tab-store').classList.contains('active')) renderStore();
-    } else if (ratio > 1.4 && Math.random() < 0.35) {
-      let log = document.createElement('div');
-      log.style.color = "var(--silver-dim)";
-      log.innerText = `✗ Connoisseur passed on ${shelf.item.name}. ("$${shelf.pricePerUnit} is too steep for this tier...")`;
-      if (ticker) { ticker.prepend(log); if (ticker.children.length > 8) ticker.removeChild(ticker.lastChild); }
     }
   }
 
-  /* ================= MASTER SKILL TREE SYSTEM ================= */
+  /* ================= MISSIONS & CUPS ================= */
+  function renderMissions() {
+    const list = $('missions-list'); if (!list) return; list.innerHTML = '';
+    MISSIONS.forEach(m => {
+      let done = State.completedMissions.includes(m.id);
+      let div = document.createElement('div');
+      div.className = 'check-item';
+      div.style.borderColor = done ? 'var(--c-gold)' : 'var(--panel-border)';
+      div.innerHTML = `
+        <div>
+          <div style="font-weight:900; color:${done ? 'var(--c-gold)' : '#fff'}; font-size:10.5px;">
+            ${done ? '✓ ' : '○ '} ${m.title}
+          </div>
+          <div style="font-size:8px; color:var(--silver-dim); margin-top:2px;">${m.desc}</div>
+          <div style="font-size:8.5px; color:var(--c-green); font-weight:bold; margin-top:2px;">Reward: $${fmt(m.rewardFunds)} + ${m.rewardXP} XP</div>
+        </div>
+        <div>
+          <span class="badge" style="color:${done ? 'var(--c-gold)' : 'var(--silver-dim)'}; border-color:${done ? 'var(--c-gold)' : 'var(--silver-dark)'};">
+            ${done ? 'COMPLETED' : 'ACTIVE'}
+          </span>
+        </div>
+      `;
+      list.appendChild(div);
+    });
+  }
+
+  function renderCups() {
+    const list = $('cups-grid'); if (!list) return; list.innerHTML = '';
+    CUPS.forEach(cup => {
+      let div = document.createElement('div');
+      div.className = 'check-item';
+      div.innerHTML = `
+        <div>
+          <div style="font-weight:900; color:var(--c-gold); font-size:11px;">🏆 ${cup.name}</div>
+          <div style="font-size:8.5px; color:var(--silver-dim); margin-top:2px;">Req Score: ${cup.minScore}+ | Tier ${cup.minTier+1}+</div>
+          <div style="font-size:9px; color:var(--c-green); font-weight:bold; margin-top:2px;">Prize: $${fmt(cup.prize)} + Trophy</div>
+        </div>
+        <button class="btn btn-gold" onclick="enterCup('${cup.id}')">Enter ($${cup.fee})</button>
+      `;
+      list.appendChild(div);
+    });
+  }
+
+  function enterCup(cupId) {
+    let cup = CUPS.find(c => c.id === cupId); if (!cup) return;
+    if (State.funds < cup.fee) { toast("Insufficient funds for cup entry fee."); return; }
+
+    let all = [...State.bulkHarvests, ...State.packagedVault];
+    let contenders = all.filter(s => s.score >= cup.minScore && s.tierIdx >= cup.minTier);
+    if (contenders.length === 0) { toast(`No cultivar meets required ${cup.minScore}+ score!`); return; }
+
+    State.funds -= cup.fee;
+    contenders.sort((a,b) => b.score - a.score);
+    let champ = contenders[0];
+
+    let chance = (champ.score - cup.minScore) * 6 + 45;
+    if (Math.random() * 100 < chance) {
+      State.funds += cup.prize;
+      champ.trophiesWon = (champ.trophiesWon || 0) + 1;
+      State.trophies.push({ cup: cup.name, strain: champ.name });
+      addXP(250);
+      if (cup.id === 'cup3') checkMission('m6');
+      toast(`🏆 1ST PLACE CHAMPION! ${champ.name} won ${cup.name}! +$${fmt(cup.prize)}`);
+    } else {
+      addXP(30);
+      toast(`Judges awarded 4th place to ${champ.name}. Just missed podium.`);
+    }
+
+    updateHUD(); renderTrophies();
+  }
+
+  function renderTrophies() {
+    $('trophy-count').innerText = State.trophies.length;
+    const rack = $('trophies-rack'); if (!rack) return;
+    if (State.trophies.length === 0) {
+      rack.innerHTML = `<span style="font-size:9.5px; color:var(--silver-dim);">No championships won yet. Enter competitions with 80+ score cultivars.</span>`;
+      return;
+    }
+    rack.innerHTML = '';
+    State.trophies.forEach(t => {
+      let b = document.createElement('div');
+      b.className = 'badge';
+      b.style.borderColor = 'var(--c-gold)';
+      b.style.color = 'var(--c-gold)';
+      b.innerHTML = `🏆 ${t.cup}: <i>${t.strain}</i>`;
+      rack.appendChild(b);
+    });
+  }
+
+  /* ================= SKILL TREE ================= */
   function renderSkills() {
     const container = $('skills-container'); if (!container) return; container.innerHTML = '';
     $('skills-sp-count').innerText = `${State.skillPoints} SP`;
@@ -1743,11 +2151,7 @@
     SKILL_TREE.forEach(branch => {
       let branchCard = document.createElement('div');
       branchCard.className = 'skill-branch';
-      branchCard.innerHTML = `
-        <div class="skill-branch-title" style="color:${branch.color};">
-          <span>${branch.title}</span>
-        </div>
-      `;
+      branchCard.innerHTML = `<div class="skill-branch-title" style="color:${branch.color};"><span>${branch.title}</span></div>`;
 
       branch.skills.forEach(skill => {
         let currentRank = getSkillRank(skill.id);
@@ -1766,9 +2170,7 @@
             <div style="font-size:8px; color:var(--c-green); font-weight:bold; margin-top:2px;">Active: ${skill.effectDesc}</div>
           </div>
           <div>
-            ${isMax ? `
-              <button class="btn btn-gold" style="font-size:7.5px; padding:4px 6px;" disabled>MASTERED</button>
-            ` : `
+            ${isMax ? `<button class="btn btn-gold" style="font-size:7.5px; padding:4px 6px;" disabled>MASTERED</button>` : `
               <button class="btn btn-green" style="font-size:7.5px; padding:4px 6px;" ${canAfford ? '' : 'disabled'} onclick="upgradeSkill('${skill.id}', ${skill.costPerRank})">
                 +1 (${skill.costPerRank} SP)
               </button>
@@ -1777,7 +2179,6 @@
         `;
         branchCard.appendChild(node);
       });
-
       container.appendChild(branchCard);
     });
   }
@@ -1787,8 +2188,7 @@
     State.skillPoints -= cost;
     State.skills[skillId] = (State.skills[skillId] || 0) + 1;
     toast(`⭐ Skill Unlocked! (${State.skills[skillId]} Rank)`);
-    updateHUD();
-    renderSkills();
+    updateHUD(); renderSkills();
   }
 
   function respecSkills() {
@@ -1799,12 +2199,10 @@
         refund += (rank * skill.costPerRank);
       });
     });
-
     State.skills = {};
     State.skillPoints += refund;
     toast(`Skills Reset! Refunded ${refund} Skill Points.`);
-    updateHUD();
-    renderSkills();
+    updateHUD(); renderSkills();
   }
 
   /* ================= BREEDING LAB ================= */
@@ -1812,7 +2210,6 @@
     const s1 = $('breed-mother'); const s2 = $('breed-father');
     if (!s1 || !s2) return;
     let opts = `<option value="">-- Choose Cultivar --</option>`;
-    
     let combined = [...State.bulkHarvests, ...State.packagedVault];
     combined.forEach(st => {
       opts += `<option value="${st.uid || st.cultivarUid}">${st.name} [Score: ${st.score} | THC: ${st.thc}%]</option>`;
@@ -1853,11 +2250,8 @@
     if (!p1 || !p2) return;
 
     State.funds -= 150;
-
-    // Skill 2: Tier Leap
     let leapChance = 0.40 + (getSkillRank('gen_2') * 0.30);
     let nTier = Math.min(9, Math.max(p1.tierIdx, p2.tierIdx) + (Math.random() < leapChance ? 1 : 0));
-
     let nThc = Math.min(38, Math.floor((p1.thc + p2.thc) / 2 + (Math.random() * 3 + 1)));
     let nTerps = Number((((p1.terpenes + p2.terpenes) / 2) + (Math.random() * 0.8)).toFixed(1));
     let nAppeal = Math.min(99, Math.floor((p1.bagAppeal + p2.bagAppeal) / 2 + (Math.random() * 4)));
@@ -1868,7 +2262,6 @@
     let hybridMorph = Math.random() < 0.5 ? p1.morphology : p2.morphology;
     let lineageDesc = `${p1.name} × ${p2.name}`;
 
-    // Skill 3: Prolific Pollinator (5 seeds instead of 3)
     let seedCount = 3 + (getSkillRank('gen_3') > 0 ? 2 : 0);
 
     for (let i = 0; i < seedCount; i++) {
@@ -1891,7 +2284,7 @@
     updateHUD(); renderOwnedSeeds(); updateBreedingSelects();
   }
 
-  /* ================= DOSSIER INSPECTOR ================= */
+  /* ================= DOSSIER MODAL ================= */
   function openDossierModalByData(cultivarUid) {
     let all = [...State.bulkHarvests, ...State.packagedVault];
     let p = all.find(x => (x.uid === cultivarUid || x.cultivarUid === cultivarUid));
@@ -1899,7 +2292,7 @@
 
     $('dossier-strain-name').innerText = p.name;
     const cv = $('dossier-canvas');
-    renderBudPixelArt128(cv, p.seedInt, p.palette, p.morphology, p.tierIdx);
+    renderUniversalVisual128(cv, p.visualCat || "BUD", p.seedInt, p.palette, { morphology: p.morphology, tierIdx: p.tierIdx });
 
     $('dossier-content').innerHTML = `
       <div style="display:flex; justify-content:space-between; margin-bottom:6px;">
@@ -1909,118 +2302,21 @@
       <div><b>Pedigree Lineage:</b> ${p.lineage}</div>
       <div><b>Cannabinoid Profile:</b> ${p.thc}% THC | 0.8% CBD | 1.1% CBG</div>
       <div><b>Terpene Concentration:</b> ${p.terpenes}% Total Terpenes</div>
-      <div><b>Visual Phenotype:</b> ${p.morphology.replace('_',' ')} architecture with ${p.palette.replace('_',' ')} pigmentation</div>
+      <div><b>Visual Phenotype:</b> ${p.morphology ? p.morphology.replace('_',' ') : 'CRAFT DENSE NUG'} with ${p.palette.replace('_',' ')} pigmentation</div>
       <div><b>Bag Appeal:</b> ${p.bagAppeal || 85}/100 crystalline resin coat</div>
       <div><b>Championship Pedigree:</b> ${p.trophiesWon || 0}x Midwest / Ohio Cup Winner</div>
     `;
-
     $('modal-dossier').classList.add('active');
   }
 
   function closeDossierModal() { $('modal-dossier').classList.remove('active'); }
 
-  /* ================= PROCESSING & LAB ================= */
-  function processProduct(type) {
-    if (State.bulkHarvests.length === 0) { toast("No bulk cured flower in bins to process."); return; }
-    let batch = State.bulkHarvests[0];
-    
-    if (type === 'ROSIN') {
-      if (batch.weightG < 10) { toast("Requires at least 10g of whole flower to wash Live Rosin!"); return; }
-      batch.weightG -= 10;
-      if (batch.weightG <= 0.5) State.bulkHarvests.shift();
-      State.funds += 70;
-      addXP(40);
-      toast(`Washed & pressed 1g Cold Cure Live Hash Rosin! Sold for $70.`);
-    } else if (type === 'CART') {
-      if (batch.weightG < 6) { toast("Requires at least 6g of cured buds for a 0.84g Luster Pod!"); return; }
-      batch.weightG -= 6;
-      if (batch.weightG <= 0.5) State.bulkHarvests.shift();
-      State.funds += 50;
-      addXP(30);
-      toast(`Extracted 0.84g Ohio Luster Pod! Sold for $50.`);
-    } else if (type === 'EDIBLE') {
-      if (batch.weightG < 4) { toast("Requires at least 4g flower to infuse gummy batch!"); return; }
-      batch.weightG -= 4;
-      if (batch.weightG <= 0.5) State.bulkHarvests.shift();
-      State.funds += 44;
-      addXP(25);
-      toast(`Infused 2x 110mg Solventless Gummy Tins! Sold for $44.`);
-    }
-    updateHUD(); renderBulkHarvests();
-  }
-
-  /* ================= CANNABIS CUPS ================= */
-  function renderCups() {
-    const list = $('cups-grid'); if (!list) return; list.innerHTML = '';
-    CUPS.forEach(cup => {
-      let div = document.createElement('div');
-      div.className = 'check-item';
-      div.innerHTML = `
-        <div>
-          <div style="font-weight:900; color:var(--c-gold); font-size:11px;">🏆 ${cup.name}</div>
-          <div style="font-size:8.5px; color:var(--silver-dim); margin-top:2px;">Req Score: ${cup.minScore}+ | Tier ${cup.minTier+1}+</div>
-          <div style="font-size:9px; color:var(--c-green); font-weight:bold; margin-top:2px;">Prize: $${fmt(cup.prize)} + Trophy</div>
-        </div>
-        <button class="btn btn-gold" onclick="enterCup('${cup.id}')">Enter ($${cup.fee})</button>
-      `;
-      list.appendChild(div);
-    });
-  }
-
-  function enterCup(cupId) {
-    let cup = CUPS.find(c => c.id === cupId); if (!cup) return;
-    if (State.funds < cup.fee) { toast("Insufficient funds for cup entry fee."); return; }
-
-    let all = [...State.bulkHarvests, ...State.packagedVault];
-    let contenders = all.filter(s => s.score >= cup.minScore && s.tierIdx >= cup.minTier);
-    if (contenders.length === 0) { toast(`No cultivar in inventory meets required ${cup.minScore}+ score!`); return; }
-
-    State.funds -= cup.fee;
-    contenders.sort((a,b) => b.score - a.score);
-    let champ = contenders[0];
-
-    let chance = (champ.score - cup.minScore) * 6 + 45;
-    if (Math.random() * 100 < chance) {
-      State.funds += cup.prize;
-      champ.trophiesWon = (champ.trophiesWon || 0) + 1;
-      State.trophies.push({ cup: cup.name, strain: champ.name });
-      addXP(250);
-      toast(`🏆 1ST PLACE CHAMPION! ${champ.name} won ${cup.name}! +$${fmt(cup.prize)}`);
-    } else {
-      addXP(30);
-      toast(`Judges awarded 4th place to ${champ.name}. Just missed the podium.`);
-    }
-
-    updateHUD(); renderTrophies();
-  }
-
-  function renderTrophies() {
-    $('trophy-count').innerText = State.trophies.length;
-    const rack = $('trophies-rack'); if (!rack) return;
-    if (State.trophies.length === 0) {
-      rack.innerHTML = `<span style="font-size:9.5px; color:var(--silver-dim);">No championships won yet. Enter competitions with 80+ score cultivars.</span>`;
-      return;
-    }
-    rack.innerHTML = '';
-    State.trophies.forEach(t => {
-      let b = document.createElement('div');
-      b.className = 'badge';
-      b.style.borderColor = 'var(--c-gold)';
-      b.style.color = 'var(--c-gold)';
-      b.innerHTML = `🏆 ${t.cup}: <i>${t.strain}</i>`;
-      rack.appendChild(b);
-    });
-  }
-
   /* ================= CORE GAME LOOP ================= */
   let tickCounter = 0;
   function gameTick() {
     tickCounter++;
-    const eq = getActiveEquip();
-    
-    // Growth Speed bonuses: Equipment + Skill 1
     let speedSkillMult = 1.0 + (getSkillRank('speed_1') * 0.25);
-    let speedMult = eq.light.speedBonus * eq.water.speedBonus * eq.climate.speedBonus * speedSkillMult;
+    let speedMult = 1.35 * speedSkillMult;
 
     State.growPots.forEach(pot => {
       if (pot.occupied && pot.progress < 100) {
@@ -2028,46 +2324,48 @@
         if (pot.progress < 35) pot.phase = 'VEGETATIVE';
         else if (pot.progress < 80) pot.phase = 'BLOOM / FLOWERING';
         else if (pot.progress < 100) pot.phase = 'RIPENING';
-        else {
-          pot.progress = 100;
-          pot.phase = 'READY';
-        }
+        else { pot.progress = 100; pot.phase = 'READY'; }
       }
     });
 
-    // Auto-Harvest
+    if (State.warehouseIdx >= 0 && State.warehouseState.cycleRunning) {
+      let wh = COMMERCIAL_WAREHOUSES[State.warehouseIdx];
+      let step = (100 / (wh.cycleTimeSec * 10)) * (State.godMode ? 10 : 1);
+      State.warehouseState.activeCycleProgress = Math.min(100, State.warehouseState.activeCycleProgress + step);
+      if ($('tab-warehouse').classList.contains('active')) {
+        let pBar = $('wh-progress-bar'); let pTxt = $('wh-progress-txt');
+        if (pBar) pBar.style.width = `${State.warehouseState.activeCycleProgress}%`;
+        if (pTxt) pTxt.innerText = `${Math.floor(State.warehouseState.activeCycleProgress)}%`;
+      }
+    }
+
     if (State.auto.autoHarvest) {
       let ready = State.growPots.filter(p => p.occupied && p.progress >= 100);
       if (ready.length > 0) harvestAllPlants();
     }
 
-    // Auto-Water / Auto-Seed
     if (State.auto.autoWater) {
       let empty = State.growPots.filter(p => !p.occupied);
       if (empty.length > 0 && State.seedInventory.length > 0) quickPlantBestSeed();
     }
 
-    // Auto-Pack (doubled speed if turbo curing unlocked)
     let packInterval = getSkillRank('speed_3') > 0 ? 15 : 30;
     if (State.auto.autoPack && State.bulkHarvests.length > 0 && tickCounter % packInterval === 0) {
       packageBatch(0, 'TENTH');
     }
 
-    // Auto-Restock
     if (State.auto.autoRestock && tickCounter % 20 === 0) {
       let emptyShelves = State.storeShelves.filter(s => !s.item);
       if (emptyShelves.length > 0 && State.packagedVault.length > 0) autoStockAllShelves();
     }
 
     if (tickCounter % 15 === 0) customerTick();
+    if (tickCounter % 50 === 0) updateParaphernaliaPrices();
 
-    // UPDATE GROW UI IN PLACE TO PREVENT DESTROYING CLICK LISTENERS
-    if ($('tab-grow').classList.contains('active')) {
-      updateGrowPotsInPlace();
-    }
+    if ($('tab-grow').classList.contains('active')) updateGrowPotsInPlace();
   }
 
-  /* ================= NAVIGATION & INITIALIZATION ================= */
+  /* ================= NAVIGATION ================= */
   function setTab(tabId) {
     document.querySelectorAll('.nav-btn').forEach(b => {
       b.classList.remove('active');
@@ -2077,12 +2375,12 @@
     const target = $('tab-' + tabId); if (target) target.classList.add('active');
 
     if (tabId === 'grow') renderGrowUI();
-    if (tabId === 'equip') renderEquip();
+    if (tabId === 'warehouse') renderWarehouseUI();
     if (tabId === 'seeds') { renderOwnedSeeds(); renderSeedCatalog(); }
     if (tabId === 'packaging') { renderBulkHarvests(); renderPackagedVault(); }
-    if (tabId === 'store') renderStore();
+    if (tabId === 'store') { renderStore(); renderParaphernaliaMarket(); }
     if (tabId === 'breeding') { updateBreedingSelects(); previewBreeding(); }
-    if (tabId === 'cups') { renderCups(); renderTrophies(); }
+    if (tabId === 'cups') { renderMissions(); renderCups(); renderTrophies(); }
     if (tabId === 'skills') renderSkills();
   }
 
@@ -2098,12 +2396,14 @@
     initStarterPack();
     initPots();
     initStore();
+    initParaphernaliaMarket();
     updateHUD();
     renderGrowUI();
-    renderEquip();
     renderOwnedSeeds();
     renderSeedCatalog();
     renderStore();
+    renderParaphernaliaMarket();
+    renderMissions();
     renderCups();
     renderSkills();
     updateAutoUI();
