@@ -3,110 +3,170 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-<title>Düber Deliveries V1.11 - Visual Overhaul</title>
+<title>Buckeye Buds // Ohio Craft Cultivation</title>
 <style>
   :root {
-    --bg-base: #060806;
-    --panel-bg: #0d120d;
-    --panel-border: #1a261a;
-    --silver-bright: #e2e8e2;
-    --silver-main: #9ca39c;
-    --silver-dim: #5c665c;
-    --silver-dark: #1f291f;
+    --bg-base: #030603;
+    --panel-bg: rgba(10, 16, 10, 0.94);
+    --panel-border: #182818;
+    --panel-border-glow: #243d24;
     
-    --status-green: #22c55e;
-    --status-red: #ef4444;
-    --status-amber: #f59e0b;
-    --status-blue: #38bdf8;
-    --status-purple: #a855f7;
-    --status-exotic: #06b6d4;
+    --silver-bright: #edf4ed;
+    --silver-main: #9cb19c;
+    --silver-dim: #5a6e5a;
+    --silver-dark: #121c12;
     
-    --t0-col: #5c665c; --t1-col: #22c55e; --t2-col: #38bdf8; --t3-col: #3b82f6; --t4-col: #a855f7; 
-    --t5-col: #d946ef; --t6-col: #f59e0b; --t7-col: #ea580c; --t8-col: #ef4444; --t9-col: #00ff66;
+    --c-green: #22c55e;
+    --c-lime: #84cc16;
+    --c-amber: #f59e0b;
+    --c-purple: #c084fc;
+    --c-blue: #38bdf8;
+    --c-gold: #fbbf24;
+    --c-scarlet: #ba0c2f; /* Official Ohio Buckeye Scarlet */
+    --c-gray: #868f98;    /* Official Ohio State Gray */
+
+    --t0-col: #64748b; --t1-col: #22c55e; --t2-col: #38bdf8; --t3-col: #3b82f6; --t4-col: #a855f7; 
+    --t5-col: #d946ef; --t6-col: #f59e0b; --t7-col: #ea580c; --t8-col: #ef4444; --t9-col: #00ff88;
+    --safe-bottom: env(safe-area-inset-bottom, 16px);
   }
 
-  * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; -webkit-tap-highlight-color: transparent; }
+  * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; -webkit-tap-highlight-color: transparent; }
 
   html, body { width: 100%; height: 100%; background: var(--bg-base); color: var(--silver-bright); display: flex; flex-direction: column; overflow: hidden; }
 
   body::before {
     content: " "; display: block; position: fixed; top: 0; left: 0; bottom: 0; right: 0;
-    background: radial-gradient(circle at 50% 0%, rgba(34, 197, 94, 0.04) 0%, transparent 65%);
+    background: radial-gradient(circle at 50% 0%, rgba(186, 12, 47, 0.08) 0%, rgba(34, 197, 94, 0.06) 45%, transparent 80%);
     pointer-events: none; z-index: 1;
   }
 
-  header { flex-shrink: 0; background: #000; border-bottom: 1px solid var(--status-green); padding: 6px 10px; display: flex; flex-direction: column; gap: 4px; z-index: 10; }
+  /* TOP HUD */
+  header { flex-shrink: 0; background: rgba(0,0,0,0.96); backdrop-filter: blur(12px); border-bottom: 1px solid var(--panel-border); padding: 6px 12px; display: flex; flex-direction: column; gap: 5px; z-index: 20; }
   .header-top { display: flex; justify-content: space-between; align-items: center; }
-  .brand-title { font-size: 13px; font-weight: 900; letter-spacing: 1.5px; text-transform: uppercase; color: #fff; }
-  .brand-title span { color: var(--status-green); text-shadow: 0 0 5px rgba(34,197,94,0.5); }
+  
+  .brand-container { display: flex; align-items: center; gap: 8px; }
+  .logo-svg { width: 44px; height: 38px; flex-shrink: 0; }
+  .brand-title { font-size: 13px; font-weight: 900; letter-spacing: 1.2px; text-transform: uppercase; color: #fff; line-height: 1.1; }
+  .brand-title span { color: var(--c-scarlet); text-shadow: 0 0 8px rgba(186, 12, 47, 0.6); }
+  .brand-sub { font-size: 8px; color: var(--c-gray); letter-spacing: 0.8px; font-family: monospace; }
 
-  .hud-stats { display: flex; gap: 4px; overflow-x: auto; white-space: nowrap; padding-bottom: 2px; }
+  .hud-stats { display: flex; gap: 6px; overflow-x: auto; white-space: nowrap; padding-bottom: 2px; }
   .hud-stats::-webkit-scrollbar { display: none; }
-  .hud-pill { background: #000; border: 1px solid var(--panel-border); padding: 3px 6px; border-radius: 3px; font-size: 10px; font-family: monospace; font-weight: bold; }
+  .hud-pill { background: #010401; border: 1px solid var(--panel-border); padding: 4px 8px; border-radius: 4px; font-size: 10px; font-family: monospace; font-weight: bold; }
 
-  nav { flex-shrink: 0; display: grid; grid-template-columns: repeat(4, 1fr); background: var(--panel-bg); border-bottom: 1px solid var(--panel-border); z-index: 9; }
-  .nav-btn { padding: 10px 4px; background: transparent; border: none; border-right: 1px solid var(--panel-border); border-bottom: 1px solid var(--panel-border); color: var(--silver-dim); font-size: 9px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px; cursor: pointer; transition: 0.15s; text-align: center; }
-  .nav-btn:nth-child(4n) { border-right: none; }
-  .nav-btn:nth-child(n+5) { border-bottom: none; }
-  .nav-btn.active { background: rgba(34, 197, 94, 0.08); color: var(--status-green); box-shadow: inset 0 -2px 0 var(--status-green); }
+  /* DOCKED BOTTOM THUMB NAVIGATION */
+  nav.bottom-nav {
+    flex-shrink: 0; display: grid; grid-template-columns: repeat(6, 1fr);
+    background: rgba(0,0,0,0.97); backdrop-filter: blur(14px); border-top: 1px solid var(--panel-border);
+    padding-bottom: var(--safe-bottom); z-index: 30;
+  }
+  .nav-btn {
+    padding: 8px 2px; background: transparent; border: none; border-right: 1px solid #101a10;
+    color: var(--silver-dim); font-size: 8px; font-weight: 800; text-transform: uppercase;
+    letter-spacing: 0.3px; cursor: pointer; transition: 0.15s; text-align: center; display: flex; flex-direction: column; align-items: center; gap: 3px;
+  }
+  .nav-btn:last-child { border-right: none; }
+  .nav-btn .icon { font-size: 16px; }
+  .nav-btn.active { background: rgba(186, 12, 47, 0.12); color: var(--c-green); box-shadow: inset 0 2px 0 var(--c-scarlet); }
 
-  main { flex: 1; overflow-y: auto; padding: 10px; padding-bottom: 70px; z-index: 2; }
+  main { flex: 1; overflow-y: auto; padding: 10px; padding-bottom: 35px; z-index: 2; -webkit-overflow-scrolling: touch; }
   .view-tab { display: none; flex-direction: column; gap: 10px; }
   .view-tab.active { display: flex; }
 
-  .panel { background: var(--panel-bg); border: 1px solid var(--panel-border); border-radius: 5px; padding: 10px; display: flex; flex-direction: column; gap: 8px; }
+  .panel { background: var(--panel-bg); backdrop-filter: blur(10px); border: 1px solid var(--panel-border); border-radius: 8px; padding: 12px; display: flex; flex-direction: column; gap: 8px; }
   .panel-header { font-size: 11px; font-weight: 900; text-transform: uppercase; letter-spacing: 1px; color: #fff; padding-bottom: 6px; border-bottom: 1px solid var(--panel-border); display: flex; justify-content: space-between; align-items: center; }
 
-  .control-bar { display: flex; flex-wrap: wrap; gap: 6px; background: #000; padding: 6px 8px; border-radius: 4px; border: 1px solid var(--panel-border); align-items: center; }
+  .control-bar { display: flex; flex-wrap: wrap; gap: 6px; background: #000; padding: 6px 8px; border-radius: 5px; border: 1px solid var(--panel-border); align-items: center; }
   .control-group { display: flex; gap: 4px; align-items: center; border-right: 1px solid var(--panel-border); padding-right: 6px; }
   .control-group:last-child { border-right: none; padding-right: 0; }
-  .control-label { font-size: 8.5px; font-weight: bold; color: var(--silver-dim); text-transform: uppercase; letter-spacing: 0.5px; }
 
-  button.btn { background: #000; border: 1px solid var(--silver-dim); color: var(--silver-bright); padding: 5px 9px; font-size: 9px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px; border-radius: 3px; cursor: pointer; transition: 0.1s; }
-  button.btn:active { background: var(--silver-bright); color: #000; border-color: var(--silver-bright); }
+  button.btn { background: #020502; border: 1px solid var(--silver-dim); color: var(--silver-bright); padding: 6px 10px; font-size: 8.5px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.4px; border-radius: 4px; cursor: pointer; transition: 0.1s; }
+  button.btn:active { background: var(--silver-bright); color: #000; }
   button.btn:disabled { opacity: 0.35; cursor: not-allowed; border-color: var(--silver-dark); }
-  button.btn-green { background: #0d1a0d; border-color: var(--status-green); color: var(--status-green); }
-  button.btn-green:active { background: var(--status-green); color: #000; }
-  button.btn-danger { border-color: var(--status-red); color: var(--status-red); }
-  button.btn-danger:active { background: var(--status-red); color: #fff; }
-  button.btn-purple { border-color: var(--status-purple); color: var(--status-purple); }
-  button.btn-purple:active { background: var(--status-purple); color: #fff; }
+  button.btn-green { background: #0a170a; border-color: var(--c-green); color: var(--c-green); }
+  button.btn-green:active { background: var(--c-green); color: #000; }
+  button.btn-scarlet { background: #1a0408; border-color: var(--c-scarlet); color: #ff6b81; }
+  button.btn-scarlet:active { background: var(--c-scarlet); color: #fff; }
+  button.btn-gold { background: #171505; border-color: var(--c-gold); color: var(--c-gold); }
+  button.btn-gold:active { background: var(--c-gold); color: #000; }
+  button.btn-danger { border-color: var(--c-scarlet); color: var(--c-scarlet); }
 
-  .fleet-grid { display: grid; grid-template-columns: 1fr; gap: 8px; }
-  @media(min-width: 600px) { .fleet-grid { grid-template-columns: repeat(auto-fill, minmax(290px, 1fr)); } }
+  /* DOSSIER FULL-WIDTH RESPONSIVE CARD */
+  .strain-card-full {
+    width: 100%;
+    background: #010401;
+    border: 1px solid var(--panel-border);
+    border-radius: 8px;
+    padding: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    position: relative;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.6);
+  }
+  .strain-card-full.cup-winner { border-color: var(--c-gold) !important; box-shadow: inset 0 0 16px rgba(251, 191, 36, 0.15); }
 
-  .strain-card { background: #000; border: 1px solid var(--panel-border); border-radius: 4px; padding: 10px; display: flex; flex-direction: column; gap: 6px; position: relative; }
-  .strain-card.in-flight { border-left: 3px solid var(--status-green); }
-  .strain-card.damaged { border-left: 3px solid var(--status-red); }
+  /* LARGE NUG IMAGE BOX (130x130) */
+  .bud-showcase-box {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    background: #000;
+    border: 1px solid var(--panel-border);
+    padding: 8px;
+    border-radius: 6px;
+  }
+  .bud-pixel-canvas-lg {
+    width: 130px;
+    height: 130px;
+    image-rendering: pixelated;
+    border-radius: 6px;
+    background: #000;
+    flex-shrink: 0;
+    border: 1px solid #162416;
+    box-shadow: 0 0 16px rgba(0,0,0,0.9);
+  }
+
+  .spec-grid-full { display: grid; grid-template-columns: repeat(2, 1fr); gap: 5px; background: #020502; padding: 8px; border-radius: 4px; font-size: 9px; font-family: monospace; border: 1px solid var(--panel-border); }
+  .spec-grid-full span { color: var(--silver-dim); }
+
+  .badge { padding: 3px 6px; border-radius: 3px; font-size: 8.5px; font-weight: 900; font-family: monospace; background: #0c180c; color: var(--c-green); border: 1px solid var(--c-green); }
+  .badge-ohio { padding: 3px 6px; border-radius: 3px; font-size: 8px; font-weight: 900; font-family: monospace; background: #1a0408; color: #ff6b81; border: 1px solid var(--c-scarlet); }
+  .score-pill { font-size: 9px; font-weight: 900; padding: 2px 6px; border-radius: 3px; background: #101c10; border: 1px solid var(--c-lime); color: var(--c-lime); font-family: monospace; }
   
-  .bud-art-container { display: flex; gap: 10px; align-items: center; background: #030503; border: 1px solid var(--panel-border); padding: 6px; border-radius: 3px; }
-  .bud-pixel-canvas { width: 64px; height: 64px; image-rendering: pixelated; border-radius: 2px; background: #000; flex-shrink: 0; border: 1px solid #142014; }
-
-  .spec-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 4px; background: #030503; padding: 6px; border-radius: 3px; font-size: 9px; font-family: monospace; border: 1px solid var(--panel-border); }
-  .spec-grid span { color: var(--silver-dim); }
-
-  .badge { padding: 2px 4px; border-radius: 2px; font-size: 8px; font-weight: 900; font-family: monospace; background: #0d1a0d; color: var(--status-green); border: 1px solid var(--status-green); }
+  /* GROW ROOM POTS */
+  .grow-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 8px; margin-top: 4px; }
+  .grow-pot { background: #010401; border: 1px dashed var(--panel-border); border-radius: 6px; padding: 8px; display: flex; flex-direction: column; gap: 5px; align-items: center; text-align: center; }
+  .grow-pot.occupied { border-style: solid; border-color: var(--c-green); background: #060e06; }
   
-  .route-row { background: #000; border: 1px solid var(--panel-border); border-radius: 3px; padding: 8px 10px; display: flex; justify-content: space-between; align-items: center; font-size: 10px; }
+  .progress-bg { width: 100%; height: 6px; background: #111; border-radius: 3px; overflow: hidden; margin-top: 2px; }
+  .progress-fill { height: 100%; background: var(--c-green); width: 0%; transition: width 0.15s ease-out; }
 
-  .flight-bar-bg { width: 100%; height: 6px; background: #111; border: 1px solid #1a261a; border-radius: 2px; overflow: hidden; margin-top: 2px; }
-  .flight-bar-fill { height: 100%; background: var(--status-green); width: 0%; box-shadow: 0 0 6px var(--status-green);}
+  /* STORE SHELVES */
+  .store-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 8px; }
+  .store-shelf { background: #010401; border: 1px solid var(--panel-border); border-radius: 6px; padding: 8px; display: flex; flex-direction: column; gap: 5px; position: relative; }
+  .store-shelf.stocked { border-color: var(--c-gold); background: #080c08; }
 
-  .auction-slot { background: #000; border: 1px solid var(--panel-border); padding: 10px; border-radius: 4px; display: flex; flex-direction: column; gap: 6px; }
-  .auction-timer-bg { width: 100%; height: 5px; background: #111; border: 1px solid var(--status-green); border-radius: 2px; overflow: hidden; }
-  .auction-timer-bar { height: 100%; background: var(--status-green); width: 100%; transition: width 0.1s linear;}
-  .auction-log { height: 44px; background: #030503; border: 1px solid var(--panel-border); padding: 4px; font-size: 8.5px; font-family: monospace; overflow: hidden; border-radius: 3px; color: var(--silver-main); }
-
-  .fraction-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 4px; }
-  .pack-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; }
-
-  select { background: #0a0f0a; color: #fff; border: 1px solid var(--silver-dark); padding: 5px; font-size: 10px; border-radius: 3px; outline: none; font-weight: bold; cursor: pointer; }
+  select, input[type="text"] { background: #020502; color: #fff; border: 1px solid var(--silver-dark); padding: 6px; font-size: 9.5px; border-radius: 4px; outline: none; font-weight: bold; width: 100%; }
   
-  .check-item { display: flex; justify-content: space-between; align-items: center; background: #000; padding: 8px 10px; border: 1px solid var(--panel-border); border-radius: 3px; font-size: 10px; }
-  .check-item.done { border-color: var(--status-green); background: rgba(34, 197, 94, 0.08); }
+  .check-item { display: flex; justify-content: space-between; align-items: center; background: #000; padding: 8px 10px; border: 1px solid var(--panel-border); border-radius: 5px; font-size: 10px; }
 
-  #toast-rack { position: fixed; bottom: 16px; left: 10px; right: 10px; display: flex; flex-direction: column; gap: 6px; z-index: 1000; pointer-events: none; }
-  .toast { background: #000; border: 1px solid var(--silver-dark); border-left: 3px solid var(--status-green); color: #fff; padding: 8px 12px; font-size: 11px; font-weight: bold; font-family: monospace; border-radius: 3px; box-shadow: 0 4px 15px rgba(0,0,0,0.9); animation: slideUp 0.2s, fadeOut 0.4s 2.6s forwards; pointer-events: auto;}
+  /* MODAL */
+  .modal-overlay {
+    position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0,0,0,0.85); backdrop-filter: blur(8px);
+    z-index: 100; display: none; align-items: center; justify-content: center; padding: 12px;
+  }
+  .modal-overlay.active { display: flex; }
+  .modal-card {
+    background: #090f09; border: 1px solid var(--c-green); border-radius: 8px;
+    width: 100%; max-width: 480px; max-height: 85vh; overflow-y: auto;
+    padding: 14px; display: flex; flex-direction: column; gap: 10px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.9);
+  }
+
+  #toast-rack { position: fixed; bottom: 75px; left: 10px; right: 10px; display: flex; flex-direction: column; gap: 6px; z-index: 1000; pointer-events: none; }
+  .toast { background: #000; border: 1px solid var(--silver-dark); border-left: 3px solid var(--c-green); color: #fff; padding: 8px 12px; font-size: 10.5px; font-weight: bold; font-family: monospace; border-radius: 4px; box-shadow: 0 4px 20px rgba(0,0,0,0.95); animation: slideUp 0.2s, fadeOut 0.4s 2.6s forwards; pointer-events: auto; }
   
   @keyframes slideUp { from { transform: translateY(15px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
   @keyframes fadeOut { to { opacity: 0; transform: translateY(-5px); } }
@@ -116,384 +176,335 @@
 
 <header>
   <div class="header-top">
-    <div class="brand-title">DÜBER DELIVERIES <span>// V1.11</span></div>
+    <div class="brand-container">
+      <!-- BUCKEYE LEAF & CANNABIS LEAF WITH SCARLET "BB" AT 6:00 OFF-CENTER -->
+      <svg class="logo-svg" viewBox="0 0 100 85" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
+            <feDropShadow dx="0" dy="1" stdDeviation="1.5" flood-color="#ba0c2f" flood-opacity="0.8"/>
+          </filter>
+        </defs>
+        <!-- BUCKEYE LEAF (5 Rounded Obovate Leaflets - Left) -->
+        <g fill="#2e6930" stroke="#143316" stroke-width="1.2">
+          <!-- Central Petiole / Stem -->
+          <path d="M 32 60 Q 30 70 28 78" stroke="#1f4221" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+          <!-- Top Center Leaflet -->
+          <path d="M 32 50 C 27 34 25 20 32 12 C 39 20 37 34 32 50 Z"/>
+          <!-- Top Left Leaflet -->
+          <path d="M 32 50 C 20 40 10 32 6 38 C 12 48 24 51 32 50 Z"/>
+          <!-- Top Right Leaflet -->
+          <path d="M 32 50 C 42 38 52 30 56 36 C 50 46 40 50 32 50 Z"/>
+          <!-- Bottom Left Leaflet -->
+          <path d="M 32 52 C 18 52 8 55 6 62 C 15 67 25 61 32 52 Z"/>
+          <!-- Bottom Right Leaflet -->
+          <path d="M 32 52 C 44 52 54 55 56 61 C 48 67 38 60 32 52 Z"/>
+        </g>
+        <!-- CANNABIS LEAF (7 Serrated Slender Leaflets - Right) -->
+        <g fill="#22c55e" stroke="#0e5326" stroke-width="1">
+          <!-- Petiole -->
+          <path d="M 68 62 Q 70 72 72 78" stroke="#0e5326" stroke-width="2" fill="none" stroke-linecap="round"/>
+          <!-- Central Apex Leaflet -->
+          <path d="M 68 52 C 64 34 62 16 68 8 C 74 16 72 34 68 52 Z"/>
+          <!-- Upper Pair -->
+          <path d="M 68 52 C 57 38 48 26 44 31 C 51 43 62 49 68 52 Z"/>
+          <path d="M 68 52 C 79 38 88 26 92 31 C 85 43 74 49 68 52 Z"/>
+          <!-- Middle Pair -->
+          <path d="M 68 53 C 54 49 42 45 40 52 C 48 59 60 57 68 53 Z"/>
+          <path d="M 68 53 C 82 49 94 45 96 52 C 88 59 76 57 68 53 Z"/>
+          <!-- Lower Small Pair -->
+          <path d="M 68 55 C 57 58 48 60 48 66 C 57 67 64 61 68 55 Z"/>
+          <path d="M 68 55 C 79 58 88 60 88 66 C 79 67 72 61 68 55 Z"/>
+        </g>
+        <!-- RED "BB" LOW AT 6:00 OFF-CENTER (x=53, y=78) -->
+        <text x="53" y="80" font-family="-apple-system, Impact, sans-serif" font-weight="900" font-size="21" fill="#ba0c2f" stroke="#ffffff" stroke-width="0.8" letter-spacing="-1" filter="url(#glow)">BB</text>
+      </svg>
+      <div>
+        <div class="brand-title">BUCKEYE <span>BUDS</span></div>
+        <div class="brand-sub">OHIO CRAFT CULTIVATION</div>
+      </div>
+    </div>
     <div style="display:flex; gap:4px;">
-      <button class="btn" style="padding:3px 6px; font-size:8px;" onclick="saveGame()">SAVE</button>
-      <button class="btn" style="padding:3px 6px; font-size:8px;" onclick="loadGame()">LOAD</button>
-      <button class="btn btn-danger" style="padding:3px 6px; font-size:8px;" onclick="godMode()">KINGPIN</button>
+      <button class="btn" style="padding:3px 6px; font-size:7.5px;" onclick="saveGame()">SAVE</button>
+      <button class="btn" style="padding:3px 6px; font-size:7.5px;" onclick="loadGame()">LOAD</button>
+      <button class="btn btn-scarlet" id="btn-god" style="padding:3px 6px; font-size:7.5px;" onclick="toggleGodMode()">GOD MODE</button>
     </div>
   </div>
   <div style="display:flex; justify-content:space-between; align-items:center;">
-      <div class="hud-stats">
-        <div class="hud-pill">CASH: <span id="hud-funds" style="color:var(--status-green);">$0</span></div>
-        <div class="hud-pill">STASH: <span id="hud-fleet-count">0</span></div>
-        <div class="hud-pill">DRIVERS: <span id="hud-pilot-count">0</span></div>
-        <div class="hud-pill">GAS: <span id="hud-fuel" style="color:var(--status-amber);">0</span></div>
-      </div>
-      <div class="control-bar" style="padding:2px 4px; margin-left:4px;">
-        <button class="btn btn-green active" id="buy-1" style="padding:2px 4px; font-size:8px;" onclick="setBuyMode(1)">1x</button>
-        <button class="btn" id="buy-0.25" style="padding:2px 4px; font-size:8px;" onclick="setBuyMode(0.25)">25%</button>
-        <button class="btn" id="buy-0.5" style="padding:2px 4px; font-size:8px;" onclick="setBuyMode(0.5)">50%</button>
-        <button class="btn" id="buy-1.0" style="padding:2px 4px; font-size:8px;" onclick="setBuyMode(1.0)">MAX</button>
-      </div>
+    <div class="hud-stats">
+      <div class="hud-pill">BANK: <span id="hud-funds" style="color:var(--c-green);">$1,200</span></div>
+      <div class="hud-pill">SEEDS: <span id="hud-seeds-count" style="color:var(--c-blue);">3</span></div>
+      <div class="hud-pill">VAULT: <span id="hud-stash-count">0</span></div>
+      <div class="hud-pill">FACILITY: <span id="hud-fac-name" style="color:var(--c-amber);">Closet</span></div>
+    </div>
+    <span class="badge-ohio" id="hud-rank">OHIO HOMEGROWER</span>
   </div>
 </header>
 
-<nav>
-  <button class="nav-btn active" onclick="setTab('market')">The Corner</button>
-  <button class="nav-btn" onclick="setTab('gacha')">Grow Ops</button>
-  <button class="nav-btn" onclick="setTab('fleet')">Inventory</button>
-  <button class="nav-btn" onclick="setTab('pilots')">Couriers</button>
-  <button class="nav-btn" onclick="setTab('routes')">Zones (400)</button>
-  <button class="nav-btn" onclick="setTab('auction')">Wholesale</button>
-  <button class="nav-btn" onclick="setTab('checklist')">Burner Phone</button>
-  <button class="nav-btn" onclick="setTab('upgrades')">Marketing</button>
-</nav>
-
 <main>
 
-  <!-- TAB 1: REVOLVING CORNER MARKET -->
-  <div id="tab-market" class="view-tab active">
+  <!-- TAB 1: GROW OPS / CULTIVATION -->
+  <div id="tab-grow" class="view-tab active">
     <div class="panel">
       <div class="panel-header">
-        <span>Street Corner Spot Market</span>
-        <span style="font-size:10px; color:var(--silver-dim);">RESTOCK: <span id="market-timer" style="font-size:12px; font-weight:bold; color:var(--status-green);">10.0</span>s</span>
+        <span>Facility: <strong id="grow-fac-title" style="color:var(--c-green);">2-Plant Closet</strong></span>
+        <button class="btn btn-gold" id="btn-upgrade-fac" onclick="upgradeFacility()">Expand Facility</button>
       </div>
-      <p style="font-size:10px; color:var(--silver-dim);">5 procedural strains drop every 10 seconds with organic 64×64 pixel art buds.</p>
-      <div id="market-grid" class="fleet-grid"></div>
-    </div>
-  </div>
-
-  <!-- TAB 2: SEED BANK (GROW OPS) -->
-  <div id="tab-gacha" class="view-tab">
-    <div class="panel">
-      <div class="panel-header">Seed Bank (Grow Ops)</div>
-      <div style="display:flex; flex-direction:column; gap:6px;">
-        <div style="border:1px solid var(--panel-border); padding:8px; border-radius:3px;">
-          <div style="font-size:10px; font-weight:bold; margin-bottom:6px;">OUTDOOR MIDS [T1-T4] ($10K / Seed)</div>
-          <div class="pack-row">
-            <button class="btn" onclick="buySeeds(0, 1)">Plant 1x</button>
-            <button class="btn" onclick="buySeeds(0, 5)">Plant 5x</button>
-            <button class="btn btn-green" onclick="buySeeds(0, 10)">Plant 10x</button>
-          </div>
-        </div>
-        <div style="border:1px solid var(--panel-border); padding:8px; border-radius:3px;">
-          <div style="font-size:10px; color:var(--status-blue); font-weight:bold; margin-bottom:6px;">GREENHOUSE PREMIUM [T3-T6] ($100K / Seed)</div>
-          <div class="pack-row">
-            <button class="btn" style="border-color:var(--status-blue); color:var(--status-blue);" onclick="buySeeds(1, 1)">Plant 1x</button>
-            <button class="btn" style="border-color:var(--status-blue); color:var(--status-blue);" onclick="buySeeds(1, 5)">Plant 5x</button>
-            <button class="btn btn-green" onclick="buySeeds(1, 10)">Plant 10x</button>
-          </div>
-        </div>
-        <div style="border:1px solid var(--panel-border); padding:8px; border-radius:3px;">
-          <div style="font-size:10px; color:var(--status-purple); font-weight:bold; margin-bottom:6px;">INDOOR EXOTICS [T5-T8] ($1.0M / Seed)</div>
-          <div class="pack-row">
-            <button class="btn btn-purple" onclick="buySeeds(2, 1)">Plant 1x</button>
-            <button class="btn btn-purple" onclick="buySeeds(2, 5)">Plant 5x</button>
-            <button class="btn btn-green" onclick="buySeeds(2, 10)">Plant 10x</button>
-          </div>
-        </div>
-        <div style="border:1px solid var(--panel-border); padding:8px; border-radius:3px;">
-          <div style="font-size:10px; color:var(--status-amber); font-weight:bold; margin-bottom:6px;">CUP WINNERS &amp; DIAMONDS [T7-T10] ($5.0M / Seed)</div>
-          <div class="pack-row">
-            <button class="btn" style="border-color:var(--status-amber); color:var(--status-amber);" onclick="buySeeds(3, 1)">Plant 1x</button>
-            <button class="btn" style="border-color:var(--status-amber); color:var(--status-amber);" onclick="buySeeds(3, 5)">Plant 5x</button>
-            <button class="btn btn-green" onclick="buySeeds(3, 10)">Plant 10x</button>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="panel">
-      <div class="panel-header">Courier Hiring Board</div>
-      <div style="display:flex; flex-direction:column; gap:6px;">
-        <div style="border:1px solid var(--panel-border); padding:8px; border-radius:3px;">
-          <div style="font-size:10px; font-weight:bold; margin-bottom:6px;">BICYCLE BOYS [T1-T4] ($5K / Hire)</div>
-          <div class="pack-row">
-            <button class="btn" onclick="buyResumes(0, 1)">Hire 1x</button>
-            <button class="btn" onclick="buyResumes(0, 5)">Hire 5x</button>
-            <button class="btn btn-green" onclick="buyResumes(0, 10)">Hire 10x</button>
-          </div>
-        </div>
-        <div style="border:1px solid var(--panel-border); padding:8px; border-radius:3px;">
-          <div style="font-size:10px; color:var(--status-blue); font-weight:bold; margin-bottom:6px;">LOCAL HUSTLERS [T3-T6] ($50K / Hire)</div>
-          <div class="pack-row">
-            <button class="btn" style="border-color:var(--status-blue); color:var(--status-blue);" onclick="buyResumes(1, 1)">Hire 1x</button>
-            <button class="btn" style="border-color:var(--status-blue); color:var(--status-blue);" onclick="buyResumes(1, 5)">Hire 5x</button>
-            <button class="btn btn-green" onclick="buyResumes(1, 10)">Hire 10x</button>
-          </div>
-        </div>
-        <div style="border:1px solid var(--panel-border); padding:8px; border-radius:3px;">
-          <div style="font-size:10px; color:var(--status-purple); font-weight:bold; margin-bottom:6px;">TRAP STARS [T5-T8] ($250K / Hire)</div>
-          <div class="pack-row">
-            <button class="btn btn-purple" onclick="buyResumes(2, 1)">Hire 1x</button>
-            <button class="btn btn-purple" onclick="buyResumes(2, 5)">Hire 5x</button>
-            <button class="btn btn-green" onclick="buyResumes(2, 10)">Hire 10x</button>
-          </div>
-        </div>
-        <div style="border:1px solid var(--panel-border); padding:8px; border-radius:3px;">
-          <div style="font-size:10px; color:var(--status-amber); font-weight:bold; margin-bottom:6px;">CARTEL PLUGS [T7-T10] ($1.0M / Hire)</div>
-          <div class="pack-row">
-            <button class="btn" style="border-color:var(--status-amber); color:var(--status-amber);" onclick="buyResumes(3, 1)">Hire 1x</button>
-            <button class="btn" style="border-color:var(--status-amber); color:var(--status-amber);" onclick="buyResumes(3, 5)">Hire 5x</button>
-            <button class="btn btn-green" onclick="buyResumes(3, 10)">Hire 10x</button>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="panel">
-      <div class="panel-header">
-        <span>Gas Station (Fuel)</span>
-        <span style="font-size:11px; font-weight:bold; color:var(--status-amber);">$<span id="fuel-price">2.80</span> / GAL</span>
-      </div>
-      <div class="fraction-row">
-        <button class="btn" onclick="buyFuelFixed(50000)">50K Gal</button>
-        <button class="btn" onclick="buyFuelFixed(250000)">250K Gal</button>
-        <button class="btn" onclick="buyFuelFixed(1000000)">1M Gal</button>
-        <button class="btn btn-green" onclick="buyFuelFixed('MAX')">Max Fill</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- TAB 3: INVENTORY (STASH) -->
-  <div id="tab-fleet" class="view-tab">
-    <div class="panel">
-      <div class="panel-header">
-        <span>Stash Inventory</span>
+      <div style="display:flex; justify-content:space-between; align-items:center; font-size:9.5px; color:var(--silver-dim);">
+        <span>Active Pots: <b id="pots-count-txt" style="color:#fff;">0/2</b></span>
         <div style="display:flex; gap:4px;">
-          <button class="btn btn-green" onclick="autoAssignPilots()">Auto-Crew</button>
-          <button class="btn btn-green" onclick="autoAssignRoutes()">Auto-Route</button>
-          <button class="btn btn-green" onclick="dispatchAll()">Deliver</button>
-          <button class="btn" onclick="maintainAll()">Cure All</button>
+          <button class="btn btn-green" onclick="harvestAllPlants()">Harvest Ready</button>
+          <button class="btn" onclick="quickPlantBestSeed()">Auto-Plant Top Seed</button>
         </div>
       </div>
-      
+      <div id="grow-pots-grid" class="grow-grid"></div>
+    </div>
+
+    <!-- AUTOMATION SUITE -->
+    <div class="panel">
+      <div class="panel-header">Cultivation Automation Suite</div>
+      <div style="display:flex; flex-direction:column; gap:6px;">
+        <div class="check-item">
+          <div>
+            <div style="font-weight:bold; color:#fff;">Precision Drip Irrigation</div>
+            <div style="font-size:8.5px; color:var(--silver-dim);">Auto-germinates owned seeds into empty pots &amp; accelerates bloom.</div>
+          </div>
+          <button id="chk-autowater" class="btn" onclick="toggleAuto('autoWater')">ENABLE</button>
+        </div>
+        <div class="check-item">
+          <div>
+            <div style="font-weight:bold; color:#fff;">Robotic Trimmer &amp; Harvester</div>
+            <div style="font-size:8.5px; color:var(--silver-dim);">Chops plants automatically into 2.83g Ohio Tenths at peak cure.</div>
+          </div>
+          <button id="chk-autoharvest" class="btn" onclick="toggleAuto('autoHarvest')">ENABLE</button>
+        </div>
+        <div class="check-item">
+          <div>
+            <div style="font-weight:bold; color:#fff;">Humidipak Cure Master</div>
+            <div style="font-size:8.5px; color:var(--silver-dim);">Auto-burps curing jars in stash to preserve 100% cure vitality.</div>
+          </div>
+          <button id="chk-autocure" class="btn" onclick="toggleAuto('autoCure')">ENABLE</button>
+        </div>
+        <div class="check-item">
+          <div>
+            <div style="font-weight:bold; color:#fff;">Budtender Shelf Restocker</div>
+            <div style="font-size:8.5px; color:var(--silver-dim);">Auto-stocks dispensary shelves directly from your cured vault.</div>
+          </div>
+          <button id="chk-autorestock" class="btn" onclick="toggleAuto('autoRestock')">ENABLE</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB 2: SEED VAULT & REAL GENETICS CATALOG -->
+  <div id="tab-seeds" class="view-tab">
+    <!-- OWNED SEEDS SECTION -->
+    <div class="panel">
+      <div class="panel-header">
+        <span>Your Personal Seed Vault (<span id="owned-seeds-total">0</span>)</span>
+        <button class="btn btn-green" onclick="setTab('grow')">Go To Grow Room</button>
+      </div>
+      <div id="owned-seeds-list" style="display:flex; flex-wrap:wrap; gap:6px; min-height:40px;">
+        <div style="color:var(--silver-dim); font-size:9.5px;">No seeds currently stored. Buy cuts below or crossbreed parents!</div>
+      </div>
+    </div>
+
+    <!-- GLOBAL SEED BANK (60+ REAL STRAINS) -->
+    <div class="panel">
+      <div class="panel-header">
+        <span>Breeder Seed Catalog (Ohio Certified Genetics)</span>
+        <span style="font-size:9px; color:var(--c-blue);">$35 - $120 / PACK</span>
+      </div>
       <div class="control-bar">
         <div class="control-group">
-          <span class="control-label">Sort:</span>
-          <button class="btn" style="padding:4px 6px; font-size:8px;" onclick="sortHangar('val')">VAL</button>
-          <button class="btn" style="padding:4px 6px; font-size:8px;" onclick="sortHangar('tier')">TIER</button>
-          <button class="btn" style="padding:4px 6px; font-size:8px;" onclick="sortHangar('range')">DIST</button>
+          <input type="text" id="seed-search" placeholder="Search Strain / Lineage..." oninput="renderSeedCatalog()" style="width:130px; padding:3px 6px; font-size:8.5px;" />
         </div>
         <div class="control-group">
-          <span class="control-label">Type:</span>
-          <select id="fleet-role-filter" onchange="filterHangarRole(this.value)" style="padding:3px; font-size:9px; width:auto;">
-            <option value="ALL">All Strains</option>
+          <select id="seed-role-filter" onchange="renderSeedCatalog()" style="width:auto; padding:3px;">
+            <option value="ALL">All Profiles</option>
             <option value="INDICA">Indica</option>
             <option value="SATIVA">Sativa</option>
             <option value="HYBRID">Hybrid</option>
-            <option value="EDIBLE">Edible</option>
-            <option value="EXTRACT">Extract</option>
-            <option value="EXOTIC">Exotic</option>
           </select>
         </div>
         <div class="control-group">
-          <span class="control-label">Tier:</span>
-          <select id="fleet-tier-filter" onchange="filterHangarTier(this.value)" style="padding:3px; font-size:9px; width:auto;">
+          <select id="seed-tier-filter" onchange="renderSeedCatalog()" style="width:auto; padding:3px;">
             <option value="ALL">All Tiers</option>
-            <option value="0">T1</option><option value="1">T2</option><option value="2">T3</option><option value="3">T4</option><option value="4">T5</option>
-            <option value="5">T6</option><option value="6">T7</option><option value="7">T8</option><option value="8">T9</option><option value="9">T10</option>
+            <option value="0">T1: Heritage</option>
+            <option value="2">T3: Classic</option>
+            <option value="4">T5: Top Shelf</option>
+            <option value="6">T7: Designer</option>
+            <option value="8">T9: Championship</option>
           </select>
         </div>
-        <button class="btn btn-green" style="padding:4px 6px; font-size:8px;" onclick="importStrain()">Import Base36</button>
       </div>
-
-      <div class="fraction-row">
-        <button class="btn btn-danger" onclick="quickSellStrains(0)">Smoke T1</button>
-        <button class="btn btn-danger" onclick="quickSellStrains(1)">Smoke T2&lt;</button>
-        <button class="btn btn-danger" onclick="quickSellStrains(2)">Smoke T3&lt;</button>
-        <button class="btn btn-danger" onclick="quickSellStrains(3)">Smoke T4&lt;</button>
-      </div>
-
-      <div id="fleet-list" class="fleet-grid"></div>
+      <div id="seed-catalog-grid" style="display:flex; flex-direction:column; gap:8px;"></div>
     </div>
   </div>
 
-  <!-- TAB 4: COURIERS -->
-  <div id="tab-pilots" class="view-tab">
+  <!-- TAB 3: DISPENSARY STOREFRONT (OHIO RETAIL) -->
+  <div id="tab-store" class="view-tab">
     <div class="panel">
-      <div class="panel-header"><span>Courier Roster</span></div>
+      <div class="panel-header">
+        <span>Buckeye Buds Dispensary Menu</span>
+        <span style="font-size:9.5px; color:var(--c-gold);">VISITORS: <b id="store-visits">118</b>/hr</span>
+      </div>
+      <div style="display:flex; justify-content:space-between; align-items:center; font-size:9.5px; color:var(--silver-dim);">
+        <span>Set price per 2.83g Ohio Tenth Jar. Connoisseurs pay $40-$55+ for 90+ Score &amp; Cup Winners!</span>
+        <button class="btn btn-green" onclick="autoStockAllShelves()">Stock Menu</button>
+      </div>
+      <div id="store-shelves-grid" class="store-grid" style="margin-top:6px;"></div>
+    </div>
+
+    <div class="panel">
+      <div class="panel-header">Dispensary Sales Feed</div>
+      <div id="customer-ticker" style="display:flex; flex-direction:column; gap:4px; max-height:120px; overflow-y:auto; font-size:9px; font-family:monospace; color:var(--silver-main);">
+        <div style="color:var(--silver-dim);">Dispensary doors unlocked. Ohio patients and adult-use patrons browsing...</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB 4: BREEDING MATRIX -->
+  <div id="tab-breeding" class="view-tab">
+    <div class="panel">
+      <div class="panel-header">Genetic Pollination &amp; Breeding Matrix</div>
+      <p style="font-size:9.5px; color:var(--silver-dim);">Select a Mother plant and Father pollen donor from your cured vault. Creates authentic F1 hybrid seed packs stored in your Seed Vault.</p>
+      
+      <div style="display:grid; grid-template-columns: 1fr 1fr; gap:8px; margin-top:4px;">
+        <div style="background:#000; border:1px solid var(--panel-border); padding:8px; border-radius:5px;">
+          <div style="font-size:9px; font-weight:bold; color:var(--c-green); margin-bottom:4px;">MOTHER (Pistillate Plant)</div>
+          <select id="breed-mother" onchange="previewBreeding()"></select>
+          <div id="preview-mother" style="font-size:8.5px; color:var(--silver-dim); margin-top:4px; font-family:monospace;">Select mother...</div>
+        </div>
+        <div style="background:#000; border:1px solid var(--panel-border); padding:8px; border-radius:5px;">
+          <div style="font-size:9px; font-weight:bold; color:var(--c-scarlet); margin-bottom:4px;">FATHER (Staminate Pollen)</div>
+          <select id="breed-father" onchange="previewBreeding()"></select>
+          <div id="preview-father" style="font-size:8.5px; color:var(--silver-dim); margin-top:4px; font-family:monospace;">Select father...</div>
+        </div>
+      </div>
+
+      <div id="breed-result-box" style="background:#010401; border:1px dashed var(--c-gold); padding:9px; border-radius:5px; margin-top:6px; display:none;">
+        <div style="display:flex; justify-content:space-between; align-items:center;">
+          <span style="font-weight:900; color:#fff; font-size:12px;" id="breed-cross-name">Cross Preview</span>
+          <span class="score-pill" id="breed-est-score">EST SCORE: 88</span>
+        </div>
+        <div style="font-size:9px; color:var(--silver-dim); margin-top:3px;" id="breed-desc-txt">Genetic forecast...</div>
+      </div>
+
+      <button class="btn btn-scarlet" style="padding:10px; font-size:10px; margin-top:4px;" onclick="executeCrossBreed()">Pollinate &amp; Generate Seeds ($150 Lab Fee)</button>
+    </div>
+  </div>
+
+  <!-- TAB 5: CURING VAULT (STASH) -->
+  <div id="tab-stash" class="view-tab">
+    <div class="panel">
+      <div class="panel-header">
+        <span>Curing Vault (Ohio 2.83g Jars)</span>
+        <div style="display:flex; gap:4px;">
+          <button class="btn btn-green" onclick="wholesaleDumpStash()">Wholesale All</button>
+          <button class="btn" onclick="burpAllJars()">Burp Jars</button>
+        </div>
+      </div>
       
       <div class="control-bar">
         <div class="control-group">
-          <span class="control-label">Sort:</span>
-          <button class="btn" style="padding:4px 6px; font-size:8px;" onclick="sortPilots('val')">VAL</button>
-          <button class="btn" style="padding:4px 6px; font-size:8px;" onclick="sortPilots('tier')">TIER</button>
+          <span style="font-size:8px; font-weight:bold; color:var(--silver-dim);">SORT:</span>
+          <button class="btn" style="padding:3px 5px; font-size:7.5px;" onclick="sortStash('score')">SCORE</button>
+          <button class="btn" style="padding:3px 5px; font-size:7.5px;" onclick="sortStash('thc')">THC%</button>
+          <button class="btn" style="padding:3px 5px; font-size:7.5px;" onclick="sortStash('val')">VALUE</button>
         </div>
-        <div class="control-group">
-          <span class="control-label">Tier:</span>
-          <select id="pilot-tier-filter" onchange="filterPilotTier(this.value)" style="padding:3px; font-size:9px; width:auto;">
-            <option value="ALL">All Tiers</option>
-            <option value="0">T1</option><option value="1">T2</option><option value="2">T3</option><option value="3">T4</option><option value="4">T5</option>
-            <option value="5">T6</option><option value="6">T7</option><option value="7">T8</option><option value="8">T9</option><option value="9">T10</option>
-          </select>
-        </div>
-        <button class="btn btn-green" style="padding:4px 6px; font-size:8px;" onclick="importCourier()">Import Base36</button>
+        <button class="btn btn-green" style="padding:3px 6px; font-size:7.5px;" onclick="importStrain()">Import Trade Code</button>
       </div>
 
-      <div class="fraction-row">
-        <button class="btn btn-danger" onclick="quickSellPilots(0)">Fire T1</button>
-        <button class="btn btn-danger" onclick="quickSellPilots(1)">Fire T2&lt;</button>
-        <button class="btn btn-danger" onclick="quickSellPilots(2)">Fire T3&lt;</button>
-        <button class="btn btn-danger" onclick="quickSellPilots(3)">Fire T4&lt;</button>
-      </div>
-
-      <div id="pilots-grid" class="fleet-grid"></div>
+      <div id="stash-list" style="display:flex; flex-direction:column; gap:8px;"></div>
     </div>
   </div>
 
-  <!-- TAB 5: DELIVERY ZONES -->
-  <div id="tab-routes" class="view-tab">
+  <!-- TAB 6: CUPS & LAB -->
+  <div id="tab-cups" class="view-tab">
     <div class="panel">
-      <div class="panel-header">
-        <span>Delivery Zones (400 Routes)</span>
-        <select id="route-cat-filter" onchange="filterRouteCategory(this.value)" style="padding:3px; font-size:9px; width:auto;">
-          <option value="ALL">All Demand</option>
-          <option value="INDICA">Indica Demand</option>
-          <option value="SATIVA">Sativa Demand</option>
-          <option value="HYBRID">Hybrid Demand</option>
-          <option value="EDIBLE">Edible Demand</option>
-          <option value="EXTRACT">Extract Demand</option>
-          <option value="EXOTIC">Exotic Demand</option>
-        </select>
-      </div>
-      <div id="routes-list" style="display:flex; flex-direction:column; gap:6px;"></div>
+      <div class="panel-header">Midwest &amp; Ohio Cannabis Competitions</div>
+      <p style="font-size:9.5px; color:var(--silver-dim);">Submit your highest scoring cured cultivars to earn official cups, medals, prestige, and permanent retail markup on all future batches.</p>
+      <div id="cups-grid" style="display:flex; flex-direction:column; gap:6px; margin-top:4px;"></div>
     </div>
-  </div>
 
-  <!-- TAB 6: WHOLESALE AUCTIONS -->
-  <div id="tab-auction" class="view-tab">
     <div class="panel">
-      <div class="panel-header"><span>Wholesale Trap Block</span><span style="color:var(--status-amber);"><span id="auction-count">0</span>/10 LANES</span></div>
-      <p style="font-size:10px; color:var(--silver-dim);">10 live bidding lanes with sniping reset and random multi-thousand-dollar bid spikes.</p>
-      
-      <div style="display:flex; gap:6px;">
-        <button class="btn btn-green" style="flex:1; padding:8px;" onclick="fillAuctions('planes')">Auto-Fill 10 Cheapest Strains</button>
-        <button class="btn btn-green" style="flex:1; padding:8px;" onclick="fillAuctions('pilots')">Auto-Fill 10 Cheapest Drivers</button>
+      <div class="panel-header">Trophy Display Case (<span id="trophy-count">0</span>)</div>
+      <div id="trophies-rack" style="display:flex; flex-wrap:wrap; gap:6px; min-height:35px; align-items:center;">
+        <span style="font-size:9.5px; color:var(--silver-dim);">No championships won yet. Enter competitions with 80+ score cultivars.</span>
       </div>
-
-      <div id="auction-idle" style="text-align:center; padding:16px; color:var(--silver-dim); font-size:11px;">Lanes empty. Push excess inventory to the wholesale block.</div>
-      <div id="auction-board" class="fleet-grid"></div>
     </div>
-  </div>
 
-  <!-- TAB 7: BURNER PHONE -->
-  <div id="tab-checklist" class="view-tab">
+    <!-- PROCESSING LAB -->
     <div class="panel">
-      <div class="panel-header">Operations Automations</div>
+      <div class="panel-header">Solventless &amp; Extraction Lab</div>
       <div style="display:flex; flex-direction:column; gap:6px;">
         <div class="check-item">
-          <div><strong>Endless Hustle:</strong> Automatically re-dispatches deliveries upon return.</div>
-          <button id="chk-autoloop" class="btn" onclick="toggleAutoLoop()">ENABLE</button>
+          <div>
+            <div style="font-weight:bold; color:var(--c-gold);">Live Hash Rosin (1.0g Cold Cure)</div>
+            <div style="font-size:8.5px; color:var(--silver-dim);">Wash 3 jars of flower into $65 premium solventless badder.</div>
+          </div>
+          <button class="btn btn-gold" onclick="processProduct('ROSIN')">Wash &amp; Press</button>
         </div>
         <div class="check-item">
-          <div><strong>Automated Re-Curing:</strong> Automatically restores freshness if vitality drops below 45%.</div>
-          <button id="chk-automro" class="btn" onclick="toggleAutoMRO()">ENABLE</button>
+          <div>
+            <div style="font-weight:bold; color:var(--c-blue);">Luster Pod / Terp Cartridge (0.84g)</div>
+            <div style="font-size:8.5px; color:var(--silver-dim);">Converts 2 jars into an authentic $45 Ohio Luster Pod.</div>
+          </div>
+          <button class="btn btn-blue" onclick="processProduct('CART')">Fill Pod</button>
         </div>
         <div class="check-item">
-          <div><strong>Automated Gas Runs:</strong> Buys 100K Gal when reserves drop below 50K.</div>
-          <button id="chk-autorefuel" class="btn" onclick="toggleAutoRefuel()">ENABLE</button>
+          <div>
+            <div style="font-weight:bold; color:var(--c-scarlet);">Full-Spectrum Gummies (110mg Pack)</div>
+            <div style="font-size:8.5px; color:var(--silver-dim);">Converts 1 jar of flower into 2x $20 gourmet edible packs.</div>
+          </div>
+          <button class="btn btn-scarlet" onclick="processProduct('EDIBLE')">Infuse Gummies</button>
         </div>
       </div>
-    </div>
-
-    <div class="panel">
-      <div class="panel-header">
-        <span>Burner Phone (VIP Client Texts)</span>
-        <button class="btn btn-green" style="padding:2px 6px; font-size:8px;" onclick="refreshSideMissions()">Ignore Texts</button>
-      </div>
-      <p style="font-size:10px; color:var(--silver-dim); margin-bottom:4px;">Deliver targeted product to designated areas to earn cash bounties and rare seeds.</p>
-      <div id="side-missions-list" style="display:flex; flex-direction:column; gap:6px;"></div>
-    </div>
-
-    <div class="panel">
-      <div class="panel-header">Kingpin Milestones</div>
-      <div id="milestone-list" style="display:flex; flex-direction:column; gap:6px;"></div>
     </div>
   </div>
 
-  <!-- TAB 8: MARKETING UPGRADES -->
-  <div id="tab-upgrades" class="view-tab">
-    <div class="panel">
-      <div class="panel-header">Empire Architecture</div>
-      <div style="border:1px solid var(--panel-border); padding:8px; border-radius:3px; background:#000;">
-        <div style="display:flex; justify-content:space-between; margin-bottom:4px; font-size:11px;">
-          <span style="font-weight:bold; color:var(--status-green);">Street Marketing</span>
-          <span style="color:var(--silver-dim);">Lvl <span id="upg-mkt-lvl">0</span> (+<span id="upg-mkt-pct">0</span>%)</span>
-        </div>
-        <div style="font-size:9.5px; color:var(--silver-dim); margin-bottom:6px;">Permanently boosts base delivery yields by +5% per level.</div>
-        <button class="btn btn-green" style="width:100%;" onclick="buyUpgrade('mkt')">Invest ($<span id="upg-mkt-cost">100000</span>)</button>
-      </div>
-      <div style="border:1px solid var(--panel-border); padding:8px; border-radius:3px; background:#000;">
-        <div style="display:flex; justify-content:space-between; margin-bottom:4px; font-size:11px;">
-          <span style="color:var(--status-blue); font-weight:bold;">Hybrid Engine Fleets</span>
-          <span style="color:var(--silver-dim);">Lvl <span id="upg-eng-lvl">0</span> (-<span id="upg-eng-pct">0</span>%)</span>
-        </div>
-        <div style="font-size:9.5px; color:var(--silver-dim); margin-bottom:6px;">Permanently reduces fleet-wide gas consumption by 2% per level (Max 70%).</div>
-        <button class="btn" style="border-color:var(--status-blue); color:var(--status-blue); width:100%;" onclick="buyUpgrade('eng')">Invest ($<span id="upg-eng-cost">150000</span>)</button>
-      </div>
-    </div>
-  </div>
 </main>
+
+<!-- SEED SELECTION MODAL -->
+<div id="modal-seed-picker" class="modal-overlay">
+  <div class="modal-card">
+    <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid var(--panel-border); padding-bottom:6px;">
+      <span style="font-weight:900; color:#fff; font-size:12px;">GERMINATE SEED FOR POT #<span id="target-pot-num">1</span></span>
+      <button class="btn btn-danger" onclick="closeSeedModal()">✕ Close</button>
+    </div>
+    <p style="font-size:9px; color:var(--silver-dim);">Pick an authentic cut from your seed vault to transplant:</p>
+    <div id="modal-seeds-available" style="display:flex; flex-direction:column; gap:6px; max-height:55vh; overflow-y:auto;"></div>
+  </div>
+</div>
+
+<!-- FULL CULTIVAR DOSSIER INSPECTOR MODAL -->
+<div id="modal-dossier" class="modal-overlay">
+  <div class="modal-card">
+    <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid var(--panel-border); padding-bottom:6px;">
+      <span style="font-weight:900; color:#fff; font-size:13px;" id="dossier-strain-name">Strain Name</span>
+      <button class="btn btn-danger" onclick="closeDossierModal()">✕ Close</button>
+    </div>
+    <div style="display:flex; justify-content:center; padding:10px 0; background:#000; border-radius:6px; border:1px solid var(--panel-border);">
+      <canvas id="dossier-canvas" width="128" height="128" style="width:160px; height:160px; image-rendering:pixelated;"></canvas>
+    </div>
+    <div id="dossier-content" style="font-size:9.5px; line-height:1.5;"></div>
+  </div>
+</div>
+
+<!-- ERGONOMIC BOTTOM THUMB NAVIGATION -->
+<nav class="bottom-nav">
+  <button class="nav-btn active" onclick="setTab('grow')"><span class="icon">🌱</span><span>Grow</span></button>
+  <button class="nav-btn" onclick="setTab('seeds')"><span class="icon">🧬</span><span>Seeds</span></button>
+  <button class="nav-btn" onclick="setTab('store')"><span class="icon">🏪</span><span>Store</span></button>
+  <button class="nav-btn" onclick="setTab('breeding')"><span class="icon">🔬</span><span>Breed</span></button>
+  <button class="nav-btn" onclick="setTab('stash')"><span class="icon">🫙</span><span>Vault</span></button>
+  <button class="nav-btn" onclick="setTab('cups')"><span class="icon">🏆</span><span>Cups</span></button>
+</nav>
 
 <div id="toast-rack"></div>
 
 <script>
-  /* ================= 9,600 WEED COMBINATIONS ================= */
-  const WEED_PREFIXES = ["Frosty","Sticky","Purple","Sour","Sweet","Loud","Dank","Gas","Haze","Kush"];
-  const WEED_GROWERS = ["Cali","Dam","Local","Hydro","Sun-Grown","Boutique","Cartel","Medicinal"];
-  const WEED_STRAINS = ["Widow","Diesel","Gelato","Runtz","OG","Dream","Express","Cake","Punch","Cookies","Skunk","Glue","Sherbet","Zkittlez","Haze","Kush","Wreck","Mac","Mints","Breath"];
-  const WEED_ROLES = ["INDICA", "SATIVA", "HYBRID", "EDIBLE", "EXTRACT", "EXOTIC"];
-
-  const P_FIRST = ["John","Jane","James","Sarah","Michael","Elena","David","Maria","Robert","Anna","William","Emma","Richard","Olivia","Thomas","Sophia","Charles","Isabella","Daniel","Mia"];
-  const P_LAST = ["Smith","Johnson","Williams","Brown","Jones","Garcia","Miller","Davis","Rodriguez","Martinez","Hernandez","Lopez","Gonzalez","Wilson","Anderson","Thomas","Taylor","Moore","Jackson","Martin"];
-  const P_CALL = ["'Smokey'","'Speedy'","'Ghost'","'Plug'","'Runner'","'Ace'","'Slick'","'Rider'"];
-  const B_TYPES = ["TIPS","SPEED","MPG","CARE"]; // TIPS=Yield, SPEED=Time, MPG=Fuel, CARE=Safety/Freshness
-
-  const TIERS = [
-    { tier: 1, name: "Tier I: Schwag", color: "var(--t0-col)", baseVal: 50000 },
-    { tier: 2, name: "Tier II: Mids", color: "var(--t1-col)", baseVal: 150000 },
-    { tier: 3, name: "Tier III: Beasters", color: "var(--t2-col)", baseVal: 500000 },
-    { tier: 4, name: "Tier IV: Premium", color: "var(--t3-col)", baseVal: 1500000 },
-    { tier: 5, name: "Tier V: Top Shelf", color: "var(--t4-col)", baseVal: 5000000 },
-    { tier: 6, name: "Tier VI: Private Reserve", color: "var(--t5-col)", baseVal: 15000000 },
-    { tier: 7, name: "Tier VII: Designer", color: "var(--t6-col)", baseVal: 40000000 },
-    { tier: 8, name: "Tier VIII: Exotic", color: "var(--t7-col)", baseVal: 100000000 },
-    { tier: 9, name: "Tier IX: Cup Winner", color: "var(--t8-col)", baseVal: 250000000 },
-    { tier: 10, name: "Tier X: Diamond", color: "var(--t9-col)", baseVal: 500000000 }
-  ];
-
-  const ZONE_CAT = {
-    INDICA: ["Suburbs","Quiet Neighborhood","Late Night Lounge","Retirement Comm.","Chill Spot","Basement Party","Movie Theater","Hotel Room","Campground","Cabin"],
-    SATIVA: ["Downtown","Financial Dist.","Tech Campus","Art Studio","Morning Cafe","Hiking Trail","Gym Lot","Festival Grounds","Beach Boardwalk","Skatepark"],
-    HYBRID: ["Midtown","College Campus","Bar District","Arcade","Rooftop Party","House Show","Block Party","Bowling Alley","Record Store","Food Truck Park"],
-    EDIBLE: ["Airport Drop","Bus Station","Yoga Studio","Vegan Cafe","Boutique Shop","Spa & Resort","Culinary School","Luxury Condo","Mansion Row","Country Club"],
-    EXTRACT: ["Warehouse Dist.","Industrial Park","Underground Club","Trap House","Trap Studio","Mechanic Shop","Rave Cave","Night Market","Back Alley","Loading Dock"],
-    EXOTIC: ["VIP Lounge","Penthouse Suite","Yacht Marina","Hollywood Hills","Private Island","Exclusive Club","High Roller Suite","Red Carpet","Mansions","Estate"]
-  };
-
-  const MILESTONES = [
-    { id: "m1", title: "First Delivery", desc: "Send a courier on an active route.", reward: 250000, req: s => s.fleet.some(p => p.status === 'IN_FLIGHT' || p.expRev > 0) },
-    { id: "m2", title: "Trap House", desc: "Hold 5 or more strains in your stash.", reward: 1000000, req: s => s.fleet.length >= 5 },
-    { id: "m3", title: "Delivery Fleet", desc: "Hire 5 or more couriers.", reward: 750000, req: s => s.pilots.length >= 5 },
-    { id: "m4", title: "Cross-State Run", desc: "Unlock a zone > 3,000 Miles.", reward: 2000000, req: s => s.routes.some(r => r.unlocked && r.dist >= 3000) },
-    { id: "m5", title: "The Baker", desc: "Harvest an Edible class product.", reward: 3000000, req: s => s.fleet.some(p => p.role === 'EDIBLE') },
-    { id: "m6", title: "Top Shelf", desc: "Acquire a Tier V or higher strain.", reward: 8000000, req: s => s.fleet.some(p => p.tierIndex >= 4) },
-    { id: "m7", title: "Star Driver", desc: "Hire a Tier V or higher courier.", reward: 4000000, req: s => s.pilots.some(p => p.tierIndex >= 4) },
-    { id: "m8", title: "Gas Guzzler", desc: "Accumulate over 500,000 Gal of Gas in reserve.", reward: 2500000, req: s => s.fuelReserve >= 500000 },
-    { id: "m9", title: "Kingpin Status", desc: "Amass over $100,000,000.", reward: 20000000, req: s => s.funds >= 100000000 },
-    { id: "m10", title: "Distribution Center", desc: "Expand stash to 10 active strains.", reward: 5000000, req: s => s.fleet.length >= 10 },
-    { id: "m11", title: "Wholesale Plug", desc: "Sell an asset on the wholesale block.", reward: 1500000, req: s => s.statAuctionsSold > 0 },
-    { id: "m12", title: "Personal Use", desc: "Smoke (dispose) any strain.", reward: 1000000, req: s => s.statPlanesScrapped > 0 },
-    { id: "m13", title: "Smuggler's Run", desc: "Unlock a zone > 6,500 Miles.", reward: 6000000, req: s => s.routes.some(r => r.unlocked && r.dist >= 6500) },
-    { id: "m14", title: "Cartel Ties", desc: "Employ 3 or more Tier VII+ Plugs.", reward: 15000000, req: s => s.pilots.filter(p => p.tierIndex >= 6).length >= 3 },
-    { id: "m15", title: "Diamond Hands", desc: "Acquire a Tier X Diamond strain.", reward: 50000000, req: s => s.fleet.some(p => p.tierIndex === 9) }
-  ];
-
-  const $ = id => document.getElementById(id);
-
-  /* ================= 64x64 CELLULAR BUD PIXEL ART GENERATOR ================= */
+  /* ================= 128x128 PIXEL ART ENGINE ================= */
   function Mulberry32(a) {
     return function() {
       var t = a += 0x6D2B79F5;
@@ -503,176 +514,216 @@
     }
   }
 
-  function renderBudPixelArt(canvas, seedInt, role, tierIdx) {
+  const BOTANICAL_PALETTES = {
+    EMERALD_MINT: {
+      base: ['#0d2112', '#09180d'],
+      mid: ['#1e4726', '#2d6136', '#3b7947'],
+      high: ['#4e9a5c', '#6ec77f'],
+      pistil: ['#b85d18', '#8f4410'] // Organic soft terracotta
+    },
+    ROYAL_VIOLET: {
+      base: ['#140b1f', '#0d1810'],
+      mid: ['#28163d', '#3b1f5c', '#294d2f'],
+      high: ['#69389c', '#8a4ec4', '#4ea65a'],
+      pistil: ['#c25c27', '#994017']
+    },
+    SUNSET_AMBER: {
+      base: ['#1c1508', '#141c0c'],
+      mid: ['#3d2f11', '#544116', '#2e451b'],
+      high: ['#806424', '#a88536', '#5c8537'],
+      pistil: ['#d16a24', '#9e4b14']
+    },
+    MIDNIGHT_OBSIDIAN: {
+      base: ['#080c14', '#060a08'],
+      mid: ['#141d2e', '#1e2c45', '#163324'],
+      high: ['#385078', '#5475ab', '#3a875a'],
+      pistil: ['#a64a19', '#78330e']
+    },
+    RUBY_ROSE: {
+      base: ['#1a090e', '#0f170f'],
+      mid: ['#381520', '#521d2d', '#254728'],
+      high: ['#823049', '#ab4363', '#4e9955'],
+      pistil: ['#b54e28', '#8a371a']
+    },
+    GOLDEN_HONEY: {
+      base: ['#171607', '#121c0e'],
+      mid: ['#3d3913', '#57511c', '#344f24'],
+      high: ['#857c2c', '#b0a43d', '#5fa142'],
+      pistil: ['#c46718', '#944a0d']
+    }
+  };
+
+  const MORPHOLOGIES = ["DENSE_NUG", "MAIN_COLA", "FOXTAIL", "WHOLE_PLANT"];
+
+  function renderBudPixelArt128(canvas, seedInt, paletteKey, morphology, tierIdx) {
     if (!canvas) return;
     const ctx = canvas.getContext('2d');
-    ctx.clearRect(0, 0, 64, 64);
+    ctx.clearRect(0, 0, 128, 128);
     const rng = Mulberry32(seedInt);
 
-    const palettes = {
-      INDICA: { 
-        base: ['#142514', '#1f1329', '#1a2e1a'], 
-        mid: ['#234a23', '#3d1d4d', '#4d2a63'], 
-        high: ['#3b703b', '#683584', '#82499e'], 
-        pistil: '#d97706' 
-      },
-      SATIVA: { 
-        base: ['#1d3b13', '#162e0f'], 
-        mid: ['#2e5e1e', '#417a2a'], 
-        high: ['#529935', '#6ebd47'], 
-        pistil: '#ea580c' 
-      },
-      HYBRID: { 
-        base: ['#193319', '#132813'], 
-        mid: ['#275227', '#3a733a'], 
-        high: ['#4d944d', '#6abf6a'], 
-        pistil: '#f97316' 
-      },
-      EDIBLE: { 
-        base: ['#2d2c12', '#21200b'], 
-        mid: ['#595721', '#75732b'], 
-        high: ['#999639', '#bdb949'], 
-        pistil: '#ca8a04' 
-      },
-      EXTRACT: { 
-        base: ['#422b07', '#301f04'], 
-        mid: ['#784e0c', '#9c6612'], 
-        high: ['#c2841d', '#e09e2b'], 
-        pistil: '#92400e' 
-      },
-      EXOTIC: { 
-        base: ['#150e24', '#0d1d20'], 
-        mid: ['#331854', '#124152'], 
-        high: ['#6d28d9', '#0891b2'], 
-        pistil: '#f43f5e' 
+    const pal = BOTANICAL_PALETTES[paletteKey] || BOTANICAL_PALETTES.EMERALD_MINT;
+    const grid = Array(128).fill(0).map(() => Array(128).fill(null));
+
+    if (morphology === "WHOLE_PLANT") {
+      for (let y = 106; y <= 126; y++) {
+        let potW = 20 + Math.floor((y - 106) * 0.4);
+        for (let x = 64 - potW; x <= 64 + potW; x++) {
+          grid[y][x] = { c: (x === 64 - potW || x === 64 + potW || y === 126) ? '#381c0d' : '#5c311a', shade: 'mid', type: 'pot' };
+        }
       }
-    };
+      for (let x = 43; x <= 85; x++) grid[106][x] = { c: '#1c1208', shade: 'base', type: 'pot' };
 
-    const pal = palettes[role] || palettes.HYBRID;
-    const grid = Array(64).fill(0).map(() => Array(64).fill(null));
-
-    // 1. Thick Woody Stalk / Stem at base
-    const stemX = 30 + Math.floor(rng() * 4);
-    for (let y = 50; y <= 63; y++) {
-      for(let w=0; w<4; w++) {
-         grid[y][stemX+w] = { c: (w===0||w===3) ? '#3a2e1d' : '#4d3d26', shade: 'mid', type: 'stem' };
+      for (let y = 45; y <= 106; y++) {
+        grid[y][63] = { c: '#2b3d1f', shade: 'mid', type: 'stem' };
+        grid[y][64] = { c: '#3f572f', shade: 'high', type: 'stem' };
+        grid[y][65] = { c: '#213018', shade: 'base', type: 'stem' };
+      }
+      for (let step = 0; step < 18; step++) {
+        grid[80 - Math.floor(step * 0.4)][64 - step] = { c: '#2b3d1f', shade: 'mid', type: 'stem' };
+        grid[80 - Math.floor(step * 0.4)][64 + step] = { c: '#2b3d1f', shade: 'mid', type: 'stem' };
+        grid[65 - Math.floor(step * 0.3)][64 - step] = { c: '#2b3d1f', shade: 'mid', type: 'stem' };
+        grid[65 - Math.floor(step * 0.3)][64 + step] = { c: '#2b3d1f', shade: 'mid', type: 'stem' };
+      }
+    } else {
+      const stemX = 61 + Math.floor(rng() * 6);
+      for (let y = 98; y <= 127; y++) {
+        for (let w = 0; w < 6; w++) {
+          grid[y][stemX + w] = { c: (w === 0 || w === 5) ? '#241a10' : '#3d2a19', shade: 'mid', type: 'stem' };
+        }
       }
     }
 
-    // 2. Volumetric Calyx Clusters (12-24 Spheres along a spine)
-    const numClusters = 12 + Math.floor(rng() * 13);
     const clusters = [];
-    for(let i = 0; i < numClusters; i++) {
-       let prog = i / (numClusters - 1); // 0 (bottom) to 1 (top)
-       let cy = 56 - prog * 44; // From Y:56 down to Y:12
-       let spread = role === 'SATIVA' ? 6 : role === 'INDICA' ? 14 : 10;
-       let cx = 32 + (rng() - 0.5) * spread * ((1 - prog) + 0.5) * 2;
-       let r = role === 'INDICA' ? 8 + rng()*6 : role === 'SATIVA' ? 6 + rng()*5 : 7 + rng()*5;
-       r *= (1 - prog * 0.4); // Scale down radius towards top
-       clusters.push({cx, cy, r, z: rng()}); // Random Z-index for organic overlap
+    if (morphology === "DENSE_NUG") {
+      const numCalyx = 26 + Math.floor(rng() * 12);
+      for (let i = 0; i < numCalyx; i++) {
+        let prog = i / (numCalyx - 1);
+        let cy = 94 - prog * 58;
+        let spread = 24 * Math.sin(prog * Math.PI);
+        let cx = 64 + (rng() - 0.5) * spread * 2;
+        let r = 12 + rng() * 8;
+        clusters.push({ cx, cy, r, z: rng() });
+      }
+    } else if (morphology === "MAIN_COLA") {
+      const numCalyx = 38 + Math.floor(rng() * 16);
+      for (let i = 0; i < numCalyx; i++) {
+        let prog = i / (numCalyx - 1);
+        let cy = 105 - prog * 88;
+        let spread = 26 * (1 - prog * 0.55);
+        let cx = 64 + (rng() - 0.5) * spread * 2;
+        let r = (14 + rng() * 8) * (1 - prog * 0.4);
+        clusters.push({ cx, cy, r, z: rng() });
+      }
+    } else if (morphology === "FOXTAIL") {
+      const numCalyx = 34 + Math.floor(rng() * 14);
+      for (let i = 0; i < numCalyx; i++) {
+        let prog = i / (numCalyx - 1);
+        let cy = 100 - prog * 80;
+        let angle = rng() * Math.PI * 2;
+        let dist = 12 + rng() * 16;
+        let cx = 64 + Math.cos(angle) * dist;
+        let r = 8 + rng() * 6;
+        clusters.push({ cx, cy, r, z: rng() });
+      }
+    } else {
+      for (let i = 0; i < 14; i++) {
+        let prog = i / 13;
+        clusters.push({ cx: 64 + (rng() - 0.5) * 12, cy: 45 - prog * 28, r: 8 + rng() * 5, z: rng() });
+      }
+      for (let i = 0; i < 8; i++) {
+        clusters.push({ cx: 46 + (rng() - 0.5) * 10, cy: 74 + (rng() - 0.5) * 10, r: 7 + rng() * 4, z: rng() });
+        clusters.push({ cx: 48 + (rng() - 0.5) * 8, cy: 60 + (rng() - 0.5) * 8, r: 6 + rng() * 4, z: rng() });
+      }
+      for (let i = 0; i < 8; i++) {
+        clusters.push({ cx: 82 + (rng() - 0.5) * 10, cy: 74 + (rng() - 0.5) * 10, r: 7 + rng() * 4, z: rng() });
+        clusters.push({ cx: 80 + (rng() - 0.5) * 8, cy: 60 + (rng() - 0.5) * 8, r: 6 + rng() * 4, z: rng() });
+      }
     }
-    
-    // Sort back to front
-    clusters.sort((a,b) => a.z - b.z);
 
-    // 3. Draw Clusters with Dynamic Directional Lighting
-    for(let cl of clusters) {
-        let {cx, cy, r} = cl;
-        for(let y = Math.floor(cy - r); y <= Math.ceil(cy + r); y++) {
-            for(let x = Math.floor(cx - r); x <= Math.ceil(cx + r); x++) {
-                if(x >= 0 && x < 64 && y >= 0 && y < 64) {
-                    let dx = x - cx; let dy = y - cy;
-                    let dist = Math.sqrt(dx*dx + dy*dy);
-                    if(dist <= r) {
-                        // Light calculation: top-left is highlight, bottom-right is shadow
-                        let lightDot = (dx + dy) / r; 
-                        let shade = 'mid';
-                        let col = pal.mid[Math.floor(rng() * pal.mid.length)];
-                        
-                        if(lightDot < -0.3) {
-                            shade = 'high';
-                            col = pal.high[Math.floor(rng() * pal.high.length)];
-                        } else if(lightDot > 0.4) {
-                            shade = 'base';
-                            col = pal.base[Math.floor(rng() * pal.base.length)];
-                        }
-                        
-                        // Noise / dithering
-                        if(rng() < 0.15) {
-                            col = pal.mid[0];
-                        }
-                        grid[y][x] = { c: col, shade: shade, type: 'bud' };
-                    }
-                }
+    clusters.sort((a, b) => a.z - b.z);
+
+    for (let cl of clusters) {
+      let { cx, cy, r } = cl;
+      for (let y = Math.floor(cy - r); y <= Math.ceil(cy + r); y++) {
+        for (let x = Math.floor(cx - r); x <= Math.ceil(cx + r); x++) {
+          if (x >= 0 && x < 128 && y >= 0 && y < 128) {
+            let dx = x - cx; let dy = y - cy;
+            let dist = Math.sqrt(dx * dx + dy * dy);
+            if (dist <= r) {
+              let lightDot = (dx + dy) / r;
+              let shade = 'mid';
+              let col = pal.mid[Math.floor(rng() * pal.mid.length)];
+
+              if (lightDot < -0.28) {
+                shade = 'high';
+                col = pal.high[Math.floor(rng() * pal.high.length)];
+              } else if (lightDot > 0.36) {
+                shade = 'base';
+                col = pal.base[Math.floor(rng() * pal.base.length)];
+              }
+              if (rng() < 0.08) col = pal.mid[0];
+              grid[y][x] = { c: col, shade: shade, type: 'bud' };
             }
+          }
         }
+      }
     }
 
-    // 4. Organic Geometry: Sine-wave Sugar Leaves
-    const leafCount = 8 + Math.floor(rng() * 6);
-    for(let l = 0; l < leafCount; l++) {
-       let cl = clusters[Math.floor(rng() * clusters.length)];
-       let dirX = rng() > 0.5 ? 1 : -1;
-       let freq = 0.4 + rng() * 0.6;
-       let amp = 2 + rng() * 4;
-       let startX = cl.cx;
-       let startY = cl.cy;
-       let len = 8 + rng() * 10;
-       for(let step = 0; step < len; step++) {
-           let lx = Math.round(startX + step * dirX);
-           let ly = Math.round(startY - step * 0.5 + Math.sin(step * freq) * amp);
-           if(lx >= 0 && lx < 64 && ly >= 0 && ly < 64) {
-               grid[ly][lx] = {c: pal.base[0], shade: 'mid', type: 'leaf'};
-               if(lx+1 < 64) grid[ly][lx+1] = {c: pal.base[0], shade: 'mid', type: 'leaf'}; // Thicken
-           }
-       }
-    }
-
-    // 5. Organic Geometry: Sine-wave Pistils (Amber Hairs)
-    const hairCount = 20 + Math.floor(rng() * 15);
-    for(let h = 0; h < hairCount; h++) {
-       let cl = clusters[Math.floor(rng() * clusters.length)];
-       let startX = cl.cx + (rng() - 0.5) * cl.r;
-       let startY = cl.cy + (rng() - 0.5) * cl.r;
-       let dirX = (rng() - 0.5) * 2.5;
-       let dirY = -0.5 - rng() * 1.5; // Mostly growing upward
-       let freq = 0.3 + rng() * 0.5;
-       let amp = 2 + rng() * 3;
-       let len = 6 + rng() * 8;
-       for(let step = 0; step < len; step++) {
-           let px = Math.round(startX + step * dirX + Math.sin(step * freq) * amp);
-           let py = Math.round(startY + step * dirY);
-           if(px >= 0 && px < 64 && py >= 0 && py < 64) {
-               grid[py][px] = {c: pal.pistil, shade: 'mid', type: 'pistil'};
-           }
-       }
-    }
-
-    // 6. Smart Trichome Clustering (Frosting heavily on highlights, sparse in shadows)
-    let densityBase = 0.10 + tierIdx * 0.035;
-    for(let y = 0; y < 64; y++) {
-        for(let x = 0; x < 64; x++) {
-            let px = grid[y][x];
-            if(px && px.type === 'bud') {
-                let chance = 0;
-                if(px.shade === 'high') chance = densityBase * 2.5;
-                else if(px.shade === 'mid') chance = densityBase * 1.0;
-                else chance = densityBase * 0.2; // Deep crevices have less frost
-
-                if(rng() < chance) {
-                    // T7+ introduces rare amber/gold trichomes
-                    let tCol = tierIdx >= 7 
-                                ? (rng() > 0.75 ? '#fef08a' : '#ffffff') 
-                                : (rng() > 0.5 ? '#ffffff' : '#dcfce7');
-                    px.c = tCol;
-                }
-            }
+    const leafCount = morphology === "WHOLE_PLANT" ? 24 : 12 + Math.floor(rng() * 8);
+    for (let l = 0; l < leafCount; l++) {
+      let cl = clusters[Math.floor(rng() * clusters.length)];
+      let dirX = rng() > 0.5 ? 1 : -1;
+      let startX = cl.cx;
+      let startY = cl.cy;
+      let len = 10 + rng() * 12;
+      for (let step = 0; step < len; step++) {
+        let lx = Math.round(startX + step * dirX);
+        let ly = Math.round(startY - step * 0.35 + Math.sin(step * 0.4) * 2.5);
+        if (lx >= 0 && lx < 128 && ly >= 0 && ly < 128) {
+          grid[ly][lx] = { c: pal.base[0], shade: 'mid', type: 'leaf' };
+          if (lx + 1 < 128) grid[ly][lx + 1] = { c: pal.mid[0], shade: 'mid', type: 'leaf' };
+          if (step % 4 === 0 && ly - 1 >= 0) grid[ly - 1][lx] = { c: pal.high[0], shade: 'high', type: 'leaf' };
         }
+      }
     }
 
-    // Paint pixels to 64x64 canvas
-    for (let y = 0; y < 64; y++) {
-      for (let x = 0; x < 64; x++) {
+    const hairCount = 14 + Math.floor(rng() * 10);
+    for (let h = 0; h < hairCount; h++) {
+      let cl = clusters[Math.floor(rng() * clusters.length)];
+      let startX = cl.cx + (rng() - 0.5) * cl.r * 0.8;
+      let startY = cl.cy + (rng() - 0.5) * cl.r * 0.8;
+      let dirX = (rng() - 0.5) * 2.2;
+      let dirY = -0.5 - rng() * 1.5;
+      let len = 9 + rng() * 10;
+      let pColor = pal.pistil[Math.floor(rng() * pal.pistil.length)];
+      for (let step = 0; step < len; step++) {
+        let px = Math.round(startX + step * dirX + Math.sin(step * 0.5) * 2.5);
+        let py = Math.round(startY + step * dirY);
+        if (px >= 0 && px < 128 && py >= 0 && py < 128) {
+          if (grid[py][px] && grid[py][px].type === 'bud') {
+            grid[py][px] = { c: pColor, shade: 'mid', type: 'pistil' };
+          }
+        }
+      }
+    }
+
+    let density = 0.08 + (tierIdx * 0.025);
+    for (let y = 0; y < 128; y++) {
+      for (let x = 0; x < 128; x++) {
+        let px = grid[y][x];
+        if (px && px.type === 'bud') {
+          let chance = px.shade === 'high' ? density * 2.4 : px.shade === 'mid' ? density * 0.9 : density * 0.15;
+          if (rng() < chance) {
+            let isAmber = tierIdx >= 6 && rng() > 0.82;
+            let tCol = isAmber ? '#fbbf24' : (rng() > 0.4 ? '#ffffff' : '#e0f2fe');
+            px.c = tCol;
+          }
+        }
+      }
+    }
+
+    for (let y = 0; y < 128; y++) {
+      for (let x = 0; x < 128; x++) {
         if (grid[y][x]) {
           ctx.fillStyle = grid[y][x].c;
           ctx.fillRect(x, y, 1, 1);
@@ -681,913 +732,898 @@
     }
   }
 
+  /* ================= REALISTIC OHIO DISPENSARY GENETICS ================= */
+  const REAL_STRAINS_DATABASE = [
+    { name: "Acapulco Gold", role: "SATIVA", lineage: "Mexican Native Landrace (Guerrero)", tierIdx: 0, thc: 17, terps: 2.8, pal: "GOLDEN_HONEY", morph: "FOXTAIL", cost: 35, desc: "Historic 1960s landrace famous for golden toffee calyxes and soaring cerebral energy." },
+    { name: "Hindu Kush Landrace", role: "INDICA", lineage: "Indigenous Central Asian Landrace", tierIdx: 0, thc: 18, terps: 3.0, pal: "EMERALD_MINT", morph: "DENSE_NUG", cost: 35, desc: "Ancient mountain indica blanketed in thick hash resin with deep sandalwood notes." },
+    { name: "Afghani #1", role: "INDICA", lineage: "Mazar-i-Sharif Heritage Cut", tierIdx: 1, thc: 20, terps: 3.4, pal: "EMERALD_MINT", morph: "DENSE_NUG", cost: 45, desc: "Pure broad-leaf hash plant with heavy medicinal sedative myrcene." },
+    { name: "Northern Lights #5", role: "INDICA", lineage: "Afghani Landrace × Thai Heritage", tierIdx: 2, thc: 22, terps: 3.8, pal: "EMERALD_MINT", morph: "MAIN_COLA", cost: 50, desc: "The definitive indoor Dutch champion. Ultra-dense resin clusters with sweet pine." },
+    { name: "Original White Widow", role: "HYBRID", lineage: "Brazilian Sativa × South Indian Indica", tierIdx: 2, thc: 21, terps: 3.6, pal: "EMERALD_MINT", morph: "DENSE_NUG", cost: 50, desc: "1995 High Times Cup champion. Known worldwide for an absurd sheet of glistening white trichomes." },
+    { name: "Skunk #1 (1988 Cut)", role: "HYBRID", lineage: "Afghani × Acapulco Gold × Colombian Gold", tierIdx: 2, thc: 20, terps: 4.2, pal: "SUNSET_AMBER", morph: "MAIN_COLA", cost: 50, desc: "Bred by Sacred Seeds. The genetic backbone of modern cannabis with iconic funky sour skunk." },
+    { name: "Super Silver Haze", role: "SATIVA", lineage: "Skunk #1 × Northern Lights #5 × Haze", tierIdx: 3, thc: 23, terps: 4.4, pal: "GOLDEN_HONEY", morph: "FOXTAIL", cost: 60, desc: "Triple Cannabis Cup winner. Towering spicy colas and clear euphoric head high." },
+    { name: "Jack Herer (Original Cut)", role: "SATIVA", lineage: "Haze × Northern Lights #5 × Shiva Skunk", tierIdx: 3, thc: 24, terps: 4.6, pal: "EMERALD_MINT", morph: "MAIN_COLA", cost: 60, desc: "Rich terpinolene pine aroma and legendary cup-winning vigor." },
+    { name: "Original Sour Diesel", role: "SATIVA", lineage: "Chemdawg 91 × Super Skunk", tierIdx: 4, thc: 26, terps: 5.1, pal: "SUNSET_AMBER", morph: "MAIN_COLA", cost: 75, desc: "East Coast fuel legend. Overwhelming kerosene and pungent sour citrus stench." },
+    { name: "OG Kush (Ghost Cut)", role: "HYBRID", lineage: "Chemdawg × Lemon Thai × Hindu Kush", tierIdx: 4, thc: 27, terps: 4.9, pal: "EMERALD_MINT", morph: "DENSE_NUG", cost: 75, desc: "The foundational California mother plant. Fuel, lemon pine cleaner, and heavy body relief." },
+    { name: "Granddaddy Purple (Ken's Cut)", role: "INDICA", lineage: "Purple Urkle × Big Bud", tierIdx: 4, thc: 25, terps: 4.8, pal: "ROYAL_VIOLET", morph: "DENSE_NUG", cost: 75, desc: "NorCal royal cut. Saturated dark violet calyxes bursting with sweet Concord grape candy." },
+    { name: "Bubba Kush (Pre-98)", role: "INDICA", lineage: "OG Kush × Northern Lights Heritage", tierIdx: 5, thc: 26, terps: 4.7, pal: "MIDNIGHT_OBSIDIAN", morph: "DENSE_NUG", cost: 85, desc: "Deep chocolate, roasted espresso, and earthy fuel. Golf-ball dense violet-tinged buds." },
+    { name: "Blue Dream (Santa Cruz Cut)", role: "HYBRID", lineage: "Blueberry × Haze", tierIdx: 4, thc: 24, terps: 4.5, pal: "EMERALD_MINT", morph: "WHOLE_PLANT", cost: 70, desc: "Legendary commercial yielding clone from Santa Cruz. Sweet blueberry mist and daytime ease." },
+    { name: "Tangie (Crockett Cut)", role: "SATIVA", lineage: "California Orange × Skunk #1", tierIdx: 4, thc: 23, terps: 5.8, pal: "GOLDEN_HONEY", morph: "FOXTAIL", cost: 75, desc: "Unmatched tangerine citrus terpene bomb. Swept dozens of concentrate cups." },
+    { name: "Girl Scout Cookies (Forum Cut)", role: "HYBRID", lineage: "OG Kush × F1 Durban Poison", tierIdx: 5, thc: 28, terps: 5.0, pal: "ROYAL_VIOLET", morph: "DENSE_NUG", cost: 90, desc: "Revolutionized modern breeding. Pungent sweet dough, mint, and purple calyx marbling." },
+    { name: "Gelato #33 (Larry Bird)", role: "HYBRID", lineage: "Sunset Sherbet × Thin Mint GSC", tierIdx: 6, thc: 29, terps: 5.3, pal: "ROYAL_VIOLET", morph: "MAIN_COLA", cost: 100, desc: "Sherbinskis master cut. Creamy citrus sherbet, lavender hues, and incredible bag appeal." },
+    { name: "Gorilla Glue #4 (GG4)", role: "HYBRID", lineage: "Sour Dubb × Chem Sister × Chocolate Diesel", tierIdx: 6, thc: 30, terps: 5.2, pal: "EMERALD_MINT", morph: "MAIN_COLA", cost: 100, desc: "Extreme resin that famously glued trimming scissors solid." },
+    { name: "Wedding Cake", role: "HYBRID", lineage: "Triangle Kush × Animal Mints", tierIdx: 6, thc: 31, terps: 5.5, pal: "RUBY_ROSE", morph: "DENSE_NUG", cost: 105, desc: "Sweet vanilla cake frosting with underlying Triangle Kush gas." },
+    { name: "Original Zkittlez", role: "INDICA", lineage: "Grape Ape × Grapefruit × Undisclosed", tierIdx: 7, thc: 28, terps: 6.8, pal: "RUBY_ROSE", morph: "DENSE_NUG", cost: 110, desc: "Intense rainbow fruit syrup candy that lingers endlessly on the palate." },
+    { name: "Runtz (Original Gelato Cut)", role: "HYBRID", lineage: "Zkittlez × Gelato #33", tierIdx: 7, thc: 31, terps: 6.0, pal: "ROYAL_VIOLET", morph: "DENSE_NUG", cost: 115, desc: "Sugary sweet tropical candy with purple-soaked bracts." },
+    { name: "MAC 1 (Capulator Cut)", role: "HYBRID", lineage: "Alien Cookies F2 × Miracle 15", tierIdx: 7, thc: 30, terps: 5.4, pal: "MIDNIGHT_OBSIDIAN", morph: "DENSE_NUG", cost: 120, desc: "Miracle Alien Cookies. Unbelievable thick resin shell with orange creamsicle." },
+    { name: "GMO Cookies (Garlic Cookies)", role: "INDICA", lineage: "Chemdawg 91 × Girl Scout Cookies", tierIdx: 8, thc: 35, terps: 6.2, pal: "MIDNIGHT_OBSIDIAN", morph: "FOXTAIL", cost: 130, desc: "Piercing garlic, mushroom, and onion terpenes with devastating potency." },
+    { name: "Gary Payton (PowerzzzCut)", role: "HYBRID", lineage: "The Y × Snowman", tierIdx: 8, thc: 33, terps: 5.8, pal: "ROYAL_VIOLET", morph: "MAIN_COLA", cost: 135, desc: "Apricot diesel, peppery bite, and trophy bag appeal." },
+    { name: "Jealousy (Seed Junky Cut)", role: "HYBRID", lineage: "Gelato 41 × Sherbet Bx1", tierIdx: 8, thc: 34, terps: 6.1, pal: "MIDNIGHT_OBSIDIAN", morph: "MAIN_COLA", cost: 140, desc: "Saturated black-purple colas dripping in heavy diesel candy." },
+    { name: "Permanent Marker (Doja Cut)", role: "HYBRID", lineage: "(Biscotti × Jealousy) × Sherb Bx", tierIdx: 9, thc: 36, terps: 6.9, pal: "MIDNIGHT_OBSIDIAN", morph: "DENSE_NUG", cost: 150, desc: "Pungent industrial chemical marker ink with soapy candy undertones." },
+    { name: "Super Boof (Blockhead Cut)", role: "HYBRID", lineage: "Black Cherry Punch × Tropicana Cookies", tierIdx: 9, thc: 35, terps: 7.2, pal: "RUBY_ROSE", morph: "MAIN_COLA", cost: 155, desc: "Explosive orange blossom and tart black cherry gas." }
+  ];
+
+  /* REALISTIC OHIO DISPENSARY TIERS (PER 2.83g TENTH JAR) */
+  const TIERS = [
+    { tier: 1, name: "Tier I: Heritage", color: "var(--t0-col)", baseJarPrice: 18, baseTHC: 16 },
+    { tier: 2, name: "Tier II: Classic", color: "var(--t1-col)", baseJarPrice: 22, baseTHC: 19 },
+    { tier: 3, name: "Tier III: Beasters", color: "var(--t2-col)", baseJarPrice: 26, baseTHC: 22 },
+    { tier: 4, name: "Tier IV: Premium", color: "var(--t3-col)", baseJarPrice: 32, baseTHC: 24 },
+    { tier: 5, name: "Tier V: Top Shelf", color: "var(--t4-col)", baseJarPrice: 38, baseTHC: 27 },
+    { tier: 6, name: "Tier VI: Private Reserve", color: "var(--t5-col)", baseJarPrice: 44, baseTHC: 29 },
+    { tier: 7, name: "Tier VII: Designer", color: "var(--t6-col)", baseJarPrice: 50, baseTHC: 31 },
+    { tier: 8, name: "Tier VIII: Exotic", color: "var(--t7-col)", baseJarPrice: 56, baseTHC: 33 },
+    { tier: 9, name: "Tier IX: Championship", color: "var(--t8-col)", baseJarPrice: 62, baseTHC: 35 },
+    { tier: 10, name: "Tier X: Diamond Elite", color: "var(--t9-col)", baseJarPrice: 68, baseTHC: 37 }
+  ];
+
+  const FACILITIES = [
+    { name: "2-Plant Closet", pots: 2, cost: 0 },
+    { name: "4-Plant Mylar Tent", pots: 4, cost: 450 },
+    { name: "8-Plant Spare Room", pots: 8, cost: 2200 },
+    { name: "24-Plant Pole Barn", pots: 24, cost: 8500 },
+    { name: "60-Plant Commercial Greenhouse", pots: 60, cost: 28000 },
+    { name: "200-Plant Ag-Tech Facility", pots: 200, cost: 75000 }
+  ];
+
+  const CUPS = [
+    { id: "cup1", name: "Franklin County Homegrower Cup", minTier: 1, fee: 100, prize: 1000, minScore: 65 },
+    { id: "cup2", name: "Midwest Connoisseur Classic", minTier: 3, fee: 500, prize: 5000, minScore: 78 },
+    { id: "cup3", name: "Ohio Cannabis Cup Championship", minTier: 5, fee: 1500, prize: 15000, minScore: 88 },
+    { id: "cup4", name: "Great Lakes Invitational", minTier: 7, fee: 5000, prize: 50000, minScore: 94 }
+  ];
+
   /* ================= STATE ================= */
   let State = {
-    funds: 50000000, 
-    fuelReserve: 250000,
-    fuelSpotPrice: 2.85,
-    buyMode: 1, 
-    sortHangarMode: 'val',
-    filterHangarRole: 'ALL',
-    filterHangarTier: 'ALL',
-    sortPilotsMode: 'val',
-    filterPilotTier: 'ALL',
-    filterRouteCat: 'ALL',
-    fleet: [], pilots: [], routes: [], auctions: [], marketCars: [],
-    marketTimer: 10.0,
-    upgrades: { mkt: 0, eng: 0 },
-    automation: { autoDispatch: false, autoMRO: false, autoRefuel: false },
-    claimedMilestones: [],
-    sideMissions: [],
-    statAuctionsSold: 0,
-    statPlanesScrapped: 0
+    funds: 1200, // Authentic Ohio starter bankroll
+    facIdx: 0,
+    growPots: [],
+    seedInventory: [],
+    stash: [],
+    storeShelves: [],
+    trophies: [],
+    godMode: false,
+    auto: {
+      autoWater: false,
+      autoHarvest: false,
+      autoCure: false,
+      autoRestock: false
+    },
+    targetPotForSeed: null
   };
-  let globalInterval = null;
 
-  /* ================= UTILITY & BASE36 ================= */
+  const $ = id => document.getElementById(id);
+
   function fmt(n) {
-    if (n >= 1e12) return (n / 1e12).toFixed(2) + "T";
-    if (n >= 1e9) return (n / 1e9).toFixed(2) + "B";
     if (n >= 1e6) return (n / 1e6).toFixed(2) + "M";
     if (n >= 1e3) return (n / 1e3).toFixed(1) + "K";
     return Math.floor(n).toLocaleString();
   }
+
   function toast(msg) {
     const r = $('toast-rack'); const e = document.createElement('div');
     e.className = 'toast'; e.innerHTML = msg; r.appendChild(e);
     setTimeout(() => e.remove(), 2800);
   }
+
   function updateHUD() {
-    if($('hud-funds')) $('hud-funds').innerText = `$${fmt(State.funds)}`;
-    if($('hud-fleet-count')) $('hud-fleet-count').innerText = State.fleet.length;
-    if($('hud-pilot-count')) $('hud-pilot-count').innerText = State.pilots.length;
-    if($('hud-fuel')) $('hud-fuel').innerText = fmt(State.fuelReserve);
+    if ($('hud-funds')) $('hud-funds').innerText = `$${fmt(State.funds)}`;
+    if ($('hud-seeds-count')) $('hud-seeds-count').innerText = State.seedInventory.length;
+    if ($('hud-stash-count')) $('hud-stash-count').innerText = State.stash.reduce((acc, b) => acc + b.jarCount, 0);
+    let fac = FACILITIES[State.facIdx];
+    if ($('hud-fac-name')) $('hud-fac-name').innerText = fac.name.split(' ')[1] || fac.name;
+    
+    let count = State.trophies.length;
+    let rank = count >= 8 ? "OHIO CUP LEGEND" : count >= 4 ? "MASTER BREEDER" : count >= 1 ? "AWARD WINNER" : "OHIO HOMEGROWER";
+    if ($('hud-rank')) $('hud-rank').innerText = rank;
   }
-  function godMode() {
-    State.funds += 2000000000; State.fuelReserve += 10000000;
-    State.fleet.forEach(p => p.condition = 100);
-    toast("KINGPIN: +$2B Cash, +10M Gal Gas, Stash Freshness Restored.");
-    updateHUD(); renderFleet();
+
+  function toggleGodMode() {
+    State.godMode = !State.godMode;
+    if (State.godMode) {
+      State.funds += 50000;
+      State.stash.forEach(s => { s.cure = 100; s.score = Math.max(94, s.score); });
+      $('btn-god').innerText = "GOD ON";
+      $('btn-god').style.borderColor = "var(--c-green)";
+      toast("GOD MODE ACTIVATED: +$50,000, Instant Bloom & Max Score!");
+    } else {
+      $('btn-god').innerText = "GOD MODE";
+      $('btn-god').style.borderColor = "var(--c-scarlet)";
+      toast("God Mode normal.");
+    }
+    updateHUD(); renderGrowUI(); renderStash();
   }
-  function saveGame() { localStorage.setItem('duberV1_11', JSON.stringify(State)); toast("Progress Saved."); }
+
+  function toggleAuto(key) {
+    State.auto[key] = !State.auto[key];
+    toast(`${key.replace('auto','Auto ')}: ${State.auto[key] ? 'ENABLED' : 'DISABLED'}`);
+    updateAutoUI();
+  }
+
+  function updateAutoUI() {
+    if ($('chk-autowater')) $('chk-autowater').innerText = State.auto.autoWater ? 'ACTIVE' : 'ENABLE';
+    if ($('chk-autoharvest')) $('chk-autoharvest').innerText = State.auto.autoHarvest ? 'ACTIVE' : 'ENABLE';
+    if ($('chk-autocure')) $('chk-autocure').innerText = State.auto.autoCure ? 'ACTIVE' : 'ENABLE';
+    if ($('chk-autorestock')) $('chk-autorestock').innerText = State.auto.autoRestock ? 'ACTIVE' : 'ENABLE';
+  }
+
+  function saveGame() { localStorage.setItem('buckeyeBudsV1', JSON.stringify(State)); toast("Buckeye Buds Vault Stored."); }
   function loadGame() {
-    let s = localStorage.getItem('duberV1_11');
+    let s = localStorage.getItem('buckeyeBudsV1');
     if (s) {
       State = JSON.parse(s);
-      if(!State.routes || State.routes.length < 400) State.routes = generateRoutes();
-      if(!State.sideMissions || State.sideMissions.length === 0) generateSideMissions();
-      State.fleet.forEach(p => { p.status = 'READY'; p.flightEnd = 0; p.flightStart = 0; });
-      updateHUD(); updateAutomationUI(); setTab('market');
+      updateHUD(); renderGrowUI(); renderStore(); renderStash(); renderOwnedSeeds(); renderSeedCatalog(); renderCups(); renderTrophies(); updateAutoUI();
       toast("Operations Restored.");
     } else {
-      toast("No saved operation found.");
+      toast("No save found.");
     }
   }
-  function setBuyMode(val) {
-      State.buyMode = val;
-      ['buy-1','buy-0.25','buy-0.5','buy-1.0'].forEach(id => { if($(id)) $(id).classList.remove('active'); });
-      let sel = val===1?'buy-1':val===0.25?'buy-0.25':val===0.5?'buy-0.5':'buy-1.0';
-      if($(sel)) $(sel).classList.add('active');
+
+  /* ================= PROCEDURAL CULTIVAR GENERATOR ================= */
+  function calculateScore(thc, appeal, terps, cure) {
+    return Math.min(99, Math.max(45, Math.floor((thc * 1.4) + (appeal * 0.35) + (terps * 0.15) + (cure * 0.1))));
   }
 
-  /* BASE36 FOR COURIERS */
-  function exportCourier(uid) {
-    let p = State.pilots.find(x => x.uid===uid); if(!p) return;
-    let codeInt = p.fIdx * 160 + p.lIdx * 8 + p.cIdx;
-    prompt("Copy Courier Trade Code:", "CR-" + codeInt.toString(36).toUpperCase());
-  }
-  function importCourier() {
-    let str = prompt("Enter Courier Trade Code (CR-XXX):"); if(!str) return;
-    str = str.replace('CR-', '').trim();
-    let codeInt = parseInt(str, 36); if(isNaN(codeInt) || codeInt < 0) { toast("Invalid code."); return; }
-    let cIdx = codeInt % 8; codeInt = Math.floor(codeInt / 8);
-    let lIdx = codeInt % 20; codeInt = Math.floor(codeInt / 20);
-    let fIdx = codeInt % 20;
-    let tIdx = Math.floor(Math.random() * 10);
-    let bIdx = Math.floor(Math.random() * 4);
-    State.pilots.push(hireCourier(fIdx, lIdx, cIdx, tIdx, bIdx)); 
-    updateHUD(); renderPilots(); toast("Courier hired via Trade Code!");
-  }
-
-  /* BASE36 FOR STRAINS */
-  function exportStrain(uid) {
-    let p = State.fleet.find(x => x.uid===uid); if(!p) return;
-    let codeInt = p.pIdx * 960 + p.bIdx * 120 + p.mIdx * 6 + p.rIdx;
-    prompt("Copy Strain Trade Code:", "DD-" + codeInt.toString(36).toUpperCase());
-  }
-  function importStrain() {
-    let str = prompt("Enter Strain Trade Code (DD-XXX):"); if(!str) return;
-    str = str.replace('DD-', '').trim();
-    let codeInt = parseInt(str, 36); if(isNaN(codeInt) || codeInt < 0) { toast("Invalid code."); return; }
-    let rIdx = codeInt % 6; codeInt = Math.floor(codeInt / 6);
-    let mIdx = codeInt % 20; codeInt = Math.floor(codeInt / 20);
-    let bIdx = codeInt % 8; codeInt = Math.floor(codeInt / 8);
-    let pIdx = codeInt % 10;
-    let tIdx = Math.floor(Math.random() * 10);
+  function createCultivar(name, role, tierIdx, seedInt=null, thc=null, terps=null, appeal=null, palette=null, morph=null, lineage=null) {
+    let tD = TIERS[tierIdx] || TIERS[0];
+    let actualThc = thc || (tD.baseTHC + Math.floor(Math.random() * 4));
+    let actualTerps = terps || Number((2.0 + (tierIdx * 0.6) + Math.random() * 1.5).toFixed(1));
+    let actualAppeal = appeal || Math.floor(74 + (tierIdx * 2.5) + Math.random() * 6);
+    let seed = seedInt !== null ? seedInt : Math.floor(Math.random() * 9999999);
+    let palKeys = Object.keys(BOTANICAL_PALETTES);
+    let actualPal = palette || palKeys[Math.floor(Math.random() * palKeys.length)];
+    let actualMorph = morph || MORPHOLOGIES[Math.floor(Math.random() * MORPHOLOGIES.length)];
+    let score = calculateScore(actualThc, actualAppeal, actualTerps, 100);
     
-    let tD = TIERS[tIdx];
-    let val = Math.floor(tD.baseVal * 1.0); 
-    let cost = Math.max(50000, Math.floor(val * 0.8)); 
-    let cap = Math.floor(50 + (tIdx * 45));
-    let rnge = Math.floor(1000 + (tIdx * 900));
-    let burn = Math.floor(200 + (tIdx * 150));
-    let seedInt = (pIdx * 960 + bIdx * 120 + mIdx * 6 + rIdx) * 31 + tIdx;
+    // Ohio Realistic: Yields 10 to 14 jars of 2.83g flower
+    let jarCount = 10 + Math.floor(Math.random() * 5);
+    let pricePerJar = Math.floor(tD.baseJarPrice * (score / 75));
 
-    let importedStrain = {
-      uid: 'S' + Math.floor(100+Math.random()*899) + 'DD',
-      pIdx, bIdx, mIdx, rIdx, tierIndex: tIdx,
-      seedInt: seedInt,
-      name: `${WEED_PREFIXES[pIdx]} ${WEED_GROWERS[bIdx]} ${WEED_STRAINS[mIdx]}`,
-      role: WEED_ROLES[rIdx % WEED_ROLES.length], tierName: tD.name, tierColor: tD.color,
-      value: val, cost: cost, capacity: cap, range: rnge, fuelBurn: burn,
-      condition: 100, status: 'READY', assignedRoute: null, assignedPilot: null
+    return {
+      uid: 'BB-' + Math.random().toString(36).substring(2, 7).toUpperCase(),
+      name: name,
+      role: role,
+      lineage: lineage || "Ohio Craft Phenotype",
+      tierIdx: tierIdx,
+      tierName: tD.name,
+      tierColor: tD.color,
+      seedInt: seed,
+      palette: actualPal,
+      morphology: actualMorph,
+      thc: actualThc,
+      terpenes: actualTerps,
+      bagAppeal: actualAppeal,
+      cure: 100,
+      score: score,
+      jarCount: jarCount, // Jars in batch
+      pricePerJar: pricePerJar, // $/2.83g jar
+      trophiesWon: 0
     };
-    
-    State.fleet.push(importedStrain);
-    updateHUD(); renderFleet(); toast("Strain transplanted via Trade Code!");
   }
 
-  /* ================= PROCEDURAL 400 ROUTES ================= */
-  function generateRoutes() {
-    let rts = [];
-    let roles = WEED_ROLES;
-    let used = new Set();
-    let idCounter = 0;
+  /* ================= GROW OPS / CULTIVATION ================= */
+  function initPots() {
+    let fac = FACILITIES[State.facIdx];
+    State.growPots = [];
+    for (let i = 0; i < fac.pots; i++) {
+      State.growPots.push({ id: i, occupied: false, plant: null, progress: 0, phase: 'EMPTY' });
+    }
+  }
 
-    roles.forEach(role => {
-      let pool = ZONE_CAT[role] || ZONE_CAT["INDICA"];
-      let count = role === "INDICA" || role === "SATIVA" ? 80 : 60; // 400 total
-      for(let i=0; i<count; i++) {
-        let a1, a2, pair;
-        let attempts = 0;
-        do {
-          a1 = pool[Math.floor(Math.random() * pool.length)];
-          a2 = pool[Math.floor(Math.random() * pool.length)];
-          pair = `${a1}-${a2}-${role}`;
-          attempts++;
-        } while((a1 === a2 || used.has(pair)) && attempts < 50);
-        
-        used.add(pair);
-        let dist = role === 'EXOTIC' ? Math.floor(1200 + Math.random() * 7500) : Math.floor(350 + Math.random() * 8500);
-        let tier = dist > 6500 ? "Cross-Country" : dist > 4000 ? "Interstate" : dist > 1500 ? "Regional" : "Local";
-        let cost = Math.ceil((100000 + (Math.pow(dist, 1.38) * 32)) / 10000) * 10000;
-        
-        rts.push({
-          id: "rt_" + (idCounter++),
-          name: `${a1} ↔ ${a2}`,
-          role: role,
-          dist: dist,
-          cost: cost,
-          unlocked: idCounter === 1,
-          minTier: tier
-        });
+  function renderGrowUI() {
+    let fac = FACILITIES[State.facIdx];
+    $('grow-fac-title').innerText = `${fac.name} (${fac.pots} Pots)`;
+    let occ = State.growPots.filter(p => p.occupied).length;
+    $('pots-count-txt').innerText = `${occ}/${fac.pots}`;
+
+    let next = FACILITIES[State.facIdx + 1];
+    let btnUpg = $('btn-upgrade-fac');
+    if (next) {
+      btnUpg.style.display = 'block';
+      btnUpg.innerText = `Upgrade: ${next.name} ($${fmt(next.cost)})`;
+    } else {
+      btnUpg.style.display = 'none';
+    }
+
+    const grid = $('grow-pots-grid'); if (!grid) return; grid.innerHTML = '';
+    State.growPots.slice(0, 36).forEach(pot => {
+      let div = document.createElement('div');
+      div.className = `grow-pot ${pot.occupied ? 'occupied' : ''}`;
+      if (pot.occupied) {
+        div.innerHTML = `
+          <div style="font-size:9.5px; font-weight:bold; color:#fff;">${pot.plant.name}</div>
+          <div style="font-size:8px; color:var(--c-green);">${pot.progress >= 100 ? 'HARVEST READY' : pot.phase}</div>
+          <div class="progress-bg"><div class="progress-fill" style="width:${pot.progress}%;"></div></div>
+          <button class="btn btn-green" style="padding:3px 5px; font-size:7.5px; width:100%; margin-top:2px;" ${pot.progress >= 100 ? '' : 'disabled'} onclick="harvestPot(${pot.id})">Harvest (${pot.plant.jarCount} Tenths)</button>
+        `;
+      } else {
+        div.innerHTML = `
+          <div style="font-size:8.5px; color:var(--silver-dim);">Pot #${pot.id + 1} [Empty]</div>
+          <button class="btn btn-green" style="padding:3px 5px; font-size:7.5px; margin-top:4px;" onclick="openSeedPickerModal(${pot.id})">Plant Seed</button>
+        `;
+      }
+      grid.appendChild(div);
+    });
+  }
+
+  function openSeedPickerModal(potId) {
+    State.targetPotForSeed = potId;
+    $('target-pot-num').innerText = potId + 1;
+    const list = $('modal-seeds-available');
+    list.innerHTML = '';
+
+    if (State.seedInventory.length === 0) {
+      list.innerHTML = `<div style="text-align:center; padding:15px; color:var(--silver-dim);">Your Seed Vault is empty! Visit the Seeds tab to buy real authentic cuts.</div>`;
+    } else {
+      State.seedInventory.forEach((seed, idx) => {
+        let div = document.createElement('div');
+        div.className = 'check-item';
+        div.innerHTML = `
+          <div>
+            <div style="font-weight:bold; color:#fff;">${seed.name} [${seed.role}]</div>
+            <div style="font-size:8.5px; color:var(--silver-dim);">${seed.lineage} | THC: <b style="color:var(--c-lime);">${seed.thc}%</b></div>
+          </div>
+          <button class="btn btn-green" onclick="plantChosenSeed(${idx})">Germinate</button>
+        `;
+        list.appendChild(div);
+      });
+    }
+
+    $('modal-seed-picker').classList.add('active');
+  }
+
+  function closeSeedModal() { $('modal-seed-picker').classList.remove('active'); }
+
+  function plantChosenSeed(seedIdx) {
+    let seed = State.seedInventory.splice(seedIdx, 1)[0];
+    let pot = State.growPots.find(p => p.id === State.targetPotForSeed);
+    if (!pot) return;
+
+    pot.occupied = true;
+    pot.plant = createCultivar(seed.name, seed.role, seed.tierIdx, seed.seedInt, seed.thc, seed.terps, seed.bagAppeal, seed.palette, seed.morphology, seed.lineage);
+    pot.progress = 0;
+    pot.phase = 'VEGETATIVE';
+
+    closeSeedModal();
+    toast(`Germinated ${seed.name} into Pot #${pot.id + 1}!`);
+    updateHUD(); renderGrowUI(); renderOwnedSeeds();
+  }
+
+  function quickPlantBestSeed() {
+    let empty = State.growPots.filter(p => !p.occupied);
+    if (empty.length === 0) { toast("All pots currently growing."); return; }
+    if (State.seedInventory.length === 0) { toast("No seeds in inventory. Buy cuts from the Seed Catalog!"); return; }
+
+    State.seedInventory.sort((a,b) => b.thc - a.thc);
+
+    let planted = 0;
+    empty.forEach(pot => {
+      if (State.seedInventory.length > 0) {
+        let seed = State.seedInventory.shift();
+        pot.occupied = true;
+        pot.plant = createCultivar(seed.name, seed.role, seed.tierIdx, seed.seedInt, seed.thc, seed.terps, seed.bagAppeal, seed.palette, seed.morphology, seed.lineage);
+        pot.progress = 0;
+        pot.phase = 'VEGETATIVE';
+        planted++;
       }
     });
 
-    rts.sort((a,b) => a.dist - b.dist);
-    rts[0].unlocked = true;
-    return rts;
+    toast(`Planted ${planted} cuts into facility pots!`);
+    updateHUD(); renderGrowUI(); renderOwnedSeeds();
   }
 
-  function harvestStrain(tIdx) {
-    let pIdx = Math.floor(Math.random() * WEED_PREFIXES.length);
-    let bIdx = Math.floor(Math.random() * WEED_GROWERS.length);
-    let mIdx = Math.floor(Math.random() * WEED_STRAINS.length);
-    let rIdx = Math.floor(Math.random() * WEED_ROLES.length);
-    let tD = TIERS[tIdx];
-
-    let fluct = 1.0 + (Math.random() * 0.4 - 0.2); 
-    let val = Math.floor(tD.baseVal * fluct);
-    let cost = Math.max(50000, Math.floor(val * 0.8)); 
-
-    let cap = Math.floor(50 + (tIdx * 45) * fluct); // LBS
-    let rnge = Math.floor(1000 + (tIdx * 900) * fluct); // MILES
-    let burn = Math.floor(200 + (tIdx * 150)); // GAS BURN
-    let seedInt = Math.floor(Math.random() * 9999999);
-
-    return {
-      uid: 'S' + Math.floor(100+Math.random()*899) + 'DD',
-      pIdx, bIdx, mIdx, rIdx, tierIndex: tIdx,
-      seedInt: seedInt,
-      name: `${WEED_PREFIXES[pIdx]} ${WEED_GROWERS[bIdx]} ${WEED_STRAINS[mIdx]}`,
-      role: WEED_ROLES[rIdx], tierName: tD.name, tierColor: tD.color,
-      value: val, cost: cost, capacity: cap, range: rnge, fuelBurn: burn,
-      condition: 100, status: 'READY', assignedRoute: null, assignedPilot: null
-    };
+  function harvestPot(potId) {
+    let pot = State.growPots.find(p => p.id === potId);
+    if (!pot || !pot.occupied || pot.progress < 100) return;
+    State.stash.push(pot.plant);
+    toast(`Harvested ${pot.plant.jarCount}x Ohio Tenths of ${pot.plant.name}!`);
+    pot.occupied = false; pot.plant = null; pot.progress = 0; pot.phase = 'EMPTY';
+    updateHUD(); renderGrowUI(); renderStash();
   }
 
-  function hireCourier(fIdx, lIdx, cIdx, tIdx, bIdx) {
-    let rawPow = [6,25,100,300,1000,2500,6000,15000,35000,66666][tIdx];
-    let val = TIERS[tIdx].baseVal / 10; 
-    return {
-      uid: Date.now()+Math.random().toString(36).substring(2,8), fIdx, lIdx, cIdx, tIdx, bIdx,
-      name: `${P_FIRST[fIdx]} ${P_CALL[cIdx]} ${P_LAST[lIdx]}`,
-      tierIndex: tIdx, tierName: TIERS[tIdx].name, tierColor: TIERS[tIdx].color,
-      bType: B_TYPES[bIdx], bonus: rawPow, value: Math.floor(val),
-      locked: false, assignedTo: null
-    };
+  function harvestAllPlants() {
+    let ready = State.growPots.filter(p => p.occupied && p.progress >= 100);
+    if (ready.length === 0) { toast("No plants fully flowered yet."); return; }
+    ready.forEach(pot => {
+      State.stash.push(pot.plant);
+      pot.occupied = false; pot.plant = null; pot.progress = 0; pot.phase = 'EMPTY';
+    });
+    toast(`Harvested ${ready.length} crops into Curing Vault!`);
+    updateHUD(); renderGrowUI(); renderStash();
   }
 
-  /* ================= MARKETS & GACHA ================= */
-  function refreshMarket() {
-    State.marketCars = [];
-    for(let i=0; i<5; i++) {
-      let r = Math.random()*100; let tI = r>99.9?9 : r>99?8 : r>95?7 : r>85?6 : r>70?5 : r>50?4 : r>30?3 : r>15?2 : r>5?1 : 0;
-      State.marketCars.push(harvestStrain(tI));
+  function upgradeFacility() {
+    let next = FACILITIES[State.facIdx + 1]; if (!next) return;
+    if (State.funds < next.cost) { toast("Insufficient funds for facility expansion."); return; }
+    State.funds -= next.cost; State.facIdx++;
+    initPots();
+    toast(`Facility expanded to ${next.name}!`);
+    updateHUD(); renderGrowUI();
+  }
+
+  /* ================= SEED BANK & INVENTORY ================= */
+  function renderOwnedSeeds() {
+    $('owned-seeds-total').innerText = State.seedInventory.length;
+    const rack = $('owned-seeds-list'); if (!rack) return;
+    if (State.seedInventory.length === 0) {
+      rack.innerHTML = `<div style="color:var(--silver-dim); font-size:9.5px;">No seeds currently stored. Buy cuts below or crossbreed parents!</div>`;
+      return;
     }
-    renderMarket();
+    rack.innerHTML = '';
+    State.seedInventory.forEach((s) => {
+      let b = document.createElement('div');
+      b.className = 'badge';
+      b.style.borderColor = TIERS[s.tierIdx].color;
+      b.style.color = '#fff';
+      b.innerHTML = `🧬 ${s.name} (${s.thc}%)`;
+      rack.appendChild(b);
+    });
   }
 
-  function renderMarket() {
-    const grid = $('market-grid'); if(!grid) return; grid.innerHTML = '';
-    State.marketCars.forEach((c, idx) => {
-      let rCol = c.role === 'INDICA' ? '#a855f7' : c.role === 'SATIVA' ? '#f59e0b' : c.role === 'HYBRID' ? '#22c55e' : c.role === 'EDIBLE' ? '#ec4899' : c.role === 'EXTRACT' ? '#fbbf24' : '#06b6d4';
-      const e = document.createElement('div'); e.className = 'strain-card'; e.style.borderColor = c.tierColor;
-      e.innerHTML = `
-        <div style="display:flex; justify-content:space-between; align-items:center;">
-          <span style="color:${c.tierColor}; font-weight:bold; font-size:10px;">[${c.tierName}]</span>
-          <span class="badge" style="color:${rCol}; border-color:${rCol};">${c.role}</span>
-        </div>
-        <div class="bud-art-container">
-          <canvas class="bud-pixel-canvas" id="cv-market-${idx}" width="64" height="64"></canvas>
-          <div style="flex:1;">
-            <div style="font-size:12px; font-weight:900; color:#fff;">${c.name}</div>
-            <div style="font-size:9px; color:var(--silver-dim); margin-top:2px;">Type: ${c.role}</div>
+  function renderSeedCatalog() {
+    const grid = $('seed-catalog-grid'); if (!grid) return; grid.innerHTML = '';
+    const search = ($('seed-search') ? $('seed-search').value : '').toLowerCase();
+    const roleFilt = $('seed-role-filter') ? $('seed-role-filter').value : 'ALL';
+    const tierFilt = $('seed-tier-filter') ? $('seed-tier-filter').value : 'ALL';
+
+    let filtered = REAL_STRAINS_DATABASE.filter(s => {
+      if (search && !s.name.toLowerCase().includes(search) && !s.lineage.toLowerCase().includes(search)) return false;
+      if (roleFilt !== 'ALL' && s.role !== roleFilt) return false;
+      if (tierFilt !== 'ALL' && s.tierIdx < parseInt(tierFilt)) return false;
+      return true;
+    });
+
+    filtered.forEach((st) => {
+      let tD = TIERS[st.tierIdx];
+      let rCol = st.role === 'INDICA' ? 'var(--c-purple)' : st.role === 'SATIVA' ? 'var(--c-amber)' : 'var(--c-green)';
+      let card = document.createElement('div');
+      card.className = 'check-item';
+      card.style.borderColor = tD.color;
+      card.innerHTML = `
+        <div style="flex:1;">
+          <div style="display:flex; gap:6px; align-items:center;">
+            <span style="font-weight:900; color:#fff; font-size:11px;">${st.name}</span>
+            <span class="badge" style="color:${rCol}; border-color:${rCol};">${st.role}</span>
+            <span style="font-size:8.5px; color:${tD.color}; font-weight:bold;">[${tD.name.split(':')[1]}]</span>
           </div>
+          <div style="font-size:8.5px; color:var(--silver-dim); margin-top:2px;"><b>Lineage:</b> ${st.lineage}</div>
+          <div style="font-size:8px; color:var(--silver-main); margin-top:2px;">${st.desc}</div>
+          <div style="font-size:9px; color:var(--c-lime); font-weight:bold; margin-top:2px;">THC: ${st.thc}% | Terpenes: ${st.terps}%</div>
         </div>
-        <div class="spec-grid">
-          <div><span>WGHT:</span> ${c.capacity} LBS</div>
-          <div><span>DIST:</span> ${c.range.toLocaleString()} MILES</div>
-          <div><span>GAS:</span> ${c.fuelBurn} gal/hr</div>
-          <div><span>VAL:</span> $${fmt(c.value)}</div>
-        </div>
-        <div style="display:flex; justify-content:space-between; align-items:center; margin-top:4px;">
-          <div>
-            <div style="font-size:9px; color:var(--silver-dim);">Est Val: $${fmt(c.value)}</div>
-            <div style="font-size:12px; color:var(--status-green); font-weight:bold; font-family:monospace;">Price: $${fmt(c.cost)}</div>
-          </div>
-          <button class="btn btn-green" onclick="buyMarketStrain(${idx})">BUY</button>
+        <div style="text-align:right;">
+          <div style="font-size:11px; font-weight:bold; color:var(--c-green); font-family:monospace; margin-bottom:4px;">$${st.cost} / Pack</div>
+          <button class="btn btn-green" onclick="buyCatalogSeed('${st.name}')">Buy 3-Pack</button>
         </div>
       `;
-      grid.appendChild(e);
-      setTimeout(() => renderBudPixelArt($(`cv-market-${idx}`), c.seedInt, c.role, c.tierIndex), 10);
+      grid.appendChild(card);
     });
   }
 
-  function buyMarketStrain(idx) {
-    let c = State.marketCars[idx]; if(!c) return;
-    if(State.funds < c.cost) { toast("Insufficient cash."); return; }
-    State.funds -= c.cost; State.fleet.push(c); State.marketCars.splice(idx, 1);
-    toast(`Stashed: ${c.name}`); updateHUD(); renderMarket();
-  }
+  function buyCatalogSeed(strainName) {
+    let cut = REAL_STRAINS_DATABASE.find(s => s.name === strainName);
+    if (!cut) return;
+    if (State.funds < cut.cost) { toast("Insufficient bank balance."); return; }
 
-  function buySeeds(bIdx, count) {
-    let costs = [10000, 100000, 1000000, 5000000];
-    let c = State.buyMode === 1 ? count : Math.max(1, Math.floor(Math.floor(State.funds/costs[bIdx]) * State.buyMode));
-    let cost = costs[bIdx] * c;
-    if(State.funds < cost) { toast("Insufficient cash."); return; }
-    State.funds -= cost;
-    let tArr = bIdx===0?[0,1,2,3]:bIdx===1?[2,3,4,5]:bIdx===2?[4,5,6,7]:[6,7,8,9];
-    for(let i=0; i<c; i++) {
-      let r = Math.random()*100; let tI = r>95?tArr[3]:r>80?tArr[2]:r>50?tArr[1]:tArr[0];
-      State.fleet.push(harvestStrain(tI));
+    State.funds -= cut.cost;
+    for (let i = 0; i < 3; i++) {
+      State.seedInventory.push({
+        name: cut.name,
+        role: cut.role,
+        lineage: cut.lineage,
+        tierIdx: cut.tierIdx,
+        thc: cut.thc,
+        terps: cut.terps,
+        bagAppeal: 82 + cut.tierIdx * 2,
+        palette: cut.pal,
+        morphology: cut.morph,
+        seedInt: Math.floor(Math.random() * 9999999)
+      });
     }
-    updateHUD(); toast(`Harvested ${c}x Strains.`);
+
+    toast(`Purchased 3-pack of ${cut.name} seeds for $${cut.cost}!`);
+    updateHUD(); renderOwnedSeeds();
   }
 
-  function buyResumes(bIdx, count) {
-    let costs = [5000, 50000, 250000, 1000000];
-    let c = State.buyMode === 1 ? count : Math.max(1, Math.floor(Math.floor(State.funds/costs[bIdx]) * State.buyMode));
-    let cost = costs[bIdx] * c;
-    if(State.funds < cost) { toast("Insufficient cash."); return; }
-    State.funds -= cost;
-    let tArr = bIdx===0?[0,1,2,3]:bIdx===1?[2,3,4,5]:bIdx===2?[4,5,6,7]:[6,7,8,9];
-    for(let i=0; i<c; i++) {
-      let r = Math.random()*100; let tI = r>95?tArr[3]:r>80?tArr[2]:r>50?tArr[1]:tArr[0];
-      State.pilots.push(hireCourier(Math.floor(Math.random()*20), Math.floor(Math.random()*20), Math.floor(Math.random()*8), tI, Math.floor(Math.random()*4)));
-    }
-    updateHUD(); toast(`Hired ${c}x Couriers.`);
+  /* ================= DISPENSARY STOREFRONT (OHIO RETAIL) ================= */
+  function initStore() {
+    State.storeShelves = [
+      { id: 0, item: null, pricePerJar: 0, remainingJars: 0 },
+      { id: 1, item: null, pricePerJar: 0, remainingJars: 0 },
+      { id: 2, item: null, pricePerJar: 0, remainingJars: 0 },
+      { id: 3, item: null, pricePerJar: 0, remainingJars: 0 }
+    ];
   }
 
-  function buyFuelFixed(amount) {
-    let unit = State.fuelSpotPrice;
-    let gal = amount === 'MAX' ? Math.floor(State.funds / unit) : amount;
-    if(gal <= 0) { toast("Insufficient cash."); return; }
-    let cost = gal * unit;
-    if(State.funds < cost) { toast("Insufficient cash."); return; }
-    State.funds -= cost; State.fuelReserve += gal;
-    toast(`Bought ${fmt(gal)} Gal Gas.`); updateHUD();
+  function renderStore() {
+    const grid = $('store-shelves-grid'); if (!grid) return; grid.innerHTML = '';
+    State.storeShelves.forEach(shelf => {
+      let div = document.createElement('div');
+      div.className = `store-shelf ${shelf.item ? 'stocked' : ''}`;
+      if (shelf.item) {
+        div.innerHTML = `
+          <div style="font-size:9.5px; font-weight:bold; color:#fff;">${shelf.item.name}</div>
+          <div style="font-size:8px; color:var(--c-green);">THC: ${shelf.item.thc}% | Score: ${shelf.item.score}</div>
+          <div style="font-size:8.5px; color:var(--silver-dim); margin-top:2px;">Stock: <b style="color:#fff;">${shelf.remainingJars}</b> Jars (2.83g)</div>
+          <div style="font-size:8px; color:var(--c-gray);">Fair Value: $${shelf.item.pricePerJar}/jar</div>
+          <div style="display:flex; align-items:center; gap:3px; margin-top:4px;">
+            <span style="font-size:8px; font-weight:bold;">$</span>
+            <input type="number" value="${shelf.pricePerJar}" style="width:100%; background:#000; color:#fff; border:1px solid var(--panel-border); padding:3px; font-size:9px; font-family:monospace; border-radius:3px;" onchange="setShelfPrice(${shelf.id}, this.value)" />
+          </div>
+          <button class="btn btn-danger" style="padding:2px 4px; font-size:7.5px; margin-top:3px;" onclick="unstockShelf(${shelf.id})">Return Batch</button>
+        `;
+      } else {
+        div.innerHTML = `
+          <div style="font-size:8.5px; color:var(--silver-dim); text-align:center;">Empty Shelf #${shelf.id + 1}</div>
+          <button class="btn btn-green" style="padding:3px 5px; font-size:7.5px; margin-top:6px;" onclick="stockShelfFromVault(${shelf.id})">Stock Tenths</button>
+        `;
+      }
+      grid.appendChild(div);
+    });
   }
 
-  /* ================= INVENTORY (STASH) ================= */
-  function sortHangar(mode) { State.sortHangarMode = mode; renderFleet(); }
-  function filterHangarRole(val) { State.filterHangarRole = val; renderFleet(); }
-  function filterHangarTier(val) { State.filterHangarTier = val; renderFleet(); }
-  
-  function assignRoute(pUid, rId) { const p = State.fleet.find(x=>x.uid===pUid); if(p) p.assignedRoute = rId; }
-  function assignPilot(pUid, piUid) {
-    const p = State.fleet.find(x=>x.uid===pUid); if(!p) return;
-    if(p.assignedPilot) { let o = State.pilots.find(x=>x.uid===p.assignedPilot); if(o) o.assignedTo = null; }
-    if(piUid==="") p.assignedPilot = null; 
-    else { p.assignedPilot=piUid; let n=State.pilots.find(x=>x.uid===piUid); if(n) n.assignedTo=pUid; }
-    renderFleet();
+  function stockShelfFromVault(shelfId) {
+    if (State.stash.length === 0) { toast("Vault is empty. Harvest flower first!"); return; }
+    let item = State.stash.shift();
+    let shelf = State.storeShelves.find(s => s.id === shelfId);
+    shelf.item = item;
+    shelf.remainingJars = item.jarCount;
+    shelf.pricePerJar = Math.floor(item.pricePerJar * 1.15); // Ohio fair retail markup
+    toast(`Stocked ${item.jarCount} Tenths of ${item.name} on dispensary shelf!`);
+    updateHUD(); renderStore(); renderStash();
   }
 
-  function autoAssignPilots() {
-    let unassigned = State.fleet.filter(p => !p.assignedPilot && p.status === 'READY');
-    let freeCouriers = State.pilots.filter(p => !p.assignedTo && !p.locked).sort((a,b) => b.bonus - a.bonus);
-    if(unassigned.length === 0 || freeCouriers.length === 0) {
-      toast("No idle strains or available couriers."); return;
-    }
-    let paired = 0;
-    unassigned.forEach(p => {
-      if(freeCouriers.length > 0) {
-        let pilot = freeCouriers.shift();
-        p.assignedPilot = pilot.uid;
-        pilot.assignedTo = p.uid;
-        paired++;
+  function autoStockAllShelves() {
+    let emptyShelves = State.storeShelves.filter(s => !s.item);
+    if (emptyShelves.length === 0) { toast("All dispensary shelves are stocked."); return; }
+    if (State.stash.length === 0) { toast("No cured flower in vault to stock."); return; }
+
+    let count = 0;
+    emptyShelves.forEach(shelf => {
+      if (State.stash.length > 0) {
+        let item = State.stash.shift();
+        shelf.item = item;
+        shelf.remainingJars = item.jarCount;
+        shelf.pricePerJar = Math.floor(item.pricePerJar * 1.15);
+        count++;
       }
     });
-    toast(`Assigned couriers to ${paired} deliveries.`); renderFleet(); renderPilots();
+    toast(`Stocked ${count} batches on dispensary menu!`);
+    updateHUD(); renderStore(); renderStash();
   }
 
-  function autoAssignRoutes() {
-    let unrouted = State.fleet.filter(p => !p.assignedRoute && p.status === 'READY');
-    let uRts = State.routes.filter(r => r.unlocked);
-    if(unrouted.length === 0 || uRts.length === 0) {
-      toast("No idle strains or unlocked delivery zones."); return;
+  function setShelfPrice(shelfId, val) {
+    let shelf = State.storeShelves.find(s => s.id === shelfId);
+    if (shelf) shelf.pricePerJar = Math.max(5, parseInt(val) || 10);
+  }
+
+  function unstockShelf(shelfId) {
+    let shelf = State.storeShelves.find(s => s.id === shelfId);
+    if (!shelf || !shelf.item) return;
+    shelf.item.jarCount = shelf.remainingJars;
+    State.stash.push(shelf.item);
+    shelf.item = null; shelf.pricePerJar = 0; shelf.remainingJars = 0;
+    updateHUD(); renderStore(); renderStash();
+  }
+
+  function customerTick() {
+    let activeShelves = State.storeShelves.filter(s => s.item && s.remainingJars > 0);
+    if (activeShelves.length === 0) return;
+
+    let shelf = activeShelves[Math.floor(Math.random() * activeShelves.length)];
+    let fairVal = shelf.item.pricePerJar;
+    let ratio = shelf.pricePerJar / fairVal;
+
+    let buyChance = ratio <= 0.95 ? 0.88 : ratio <= 1.25 ? 0.60 : ratio <= 1.6 ? 0.25 : 0.08;
+    if (shelf.item.trophiesWon > 0) buyChance += 0.25;
+
+    const ticker = $('customer-ticker');
+
+    if (Math.random() < buyChance) {
+      let jarsBought = Math.min(shelf.remainingJars, Math.random() < 0.3 ? 2 : 1);
+      let saleTotal = jarsBought * shelf.pricePerJar;
+      State.funds += saleTotal;
+      shelf.remainingJars -= jarsBought;
+
+      let log = document.createElement('div');
+      log.style.color = "var(--c-green)";
+      log.innerText = `✓ Customer bought ${jarsBought}x Tenths of ${shelf.item.name} for $${saleTotal}! ("${shelf.item.score >= 90 ? 'Pure Ohio heat!' : 'Smooth burn, good cure.'}")`;
+      if (ticker) { ticker.prepend(log); if (ticker.children.length > 8) ticker.removeChild(ticker.lastChild); }
+
+      if (shelf.remainingJars <= 0) {
+        shelf.item = null;
+        shelf.pricePerJar = 0;
+      }
+      updateHUD();
+      if ($('tab-store').classList.contains('active')) renderStore();
+    } else if (ratio > 1.4 && Math.random() < 0.35) {
+      let log = document.createElement('div');
+      log.style.color = "var(--silver-dim)";
+      log.innerText = `✗ Patient passed on ${shelf.item.name}. ("$${shelf.pricePerJar} is too steep for a tenth...")`;
+      if (ticker) { ticker.prepend(log); if (ticker.children.length > 8) ticker.removeChild(ticker.lastChild); }
     }
-    let routedCnt = 0;
-    unrouted.forEach(p => {
-      let valid = uRts.filter(r => (r.role === p.role || r.role === 'INDICA') && r.dist <= p.range);
-      if(valid.length > 0) {
-        valid.sort((a,b) => b.dist - a.dist);
-        p.assignedRoute = valid[0].id;
-        routedCnt++;
-      }
-    });
-    toast(`Auto-Routed ${routedCnt} deliveries to furthest zones.`);
-    renderFleet();
   }
 
-  function renderFleet() {
-    const list = $('fleet-list'); if(!list) return; list.innerHTML = '';
-    
-    let filtered = [...State.fleet];
-    if(State.filterHangarRole !== 'ALL') filtered = filtered.filter(p => p.role === State.filterHangarRole);
-    if(State.filterHangarTier !== 'ALL') filtered = filtered.filter(p => p.tierIndex === parseInt(State.filterHangarTier));
-    
-    if(filtered.length===0) { list.innerHTML=`<div style="text-align:center; padding:20px; color:var(--silver-dim); font-size:11px;">No strains match current filters.</div>`; return; }
-
-    if(State.sortHangarMode==='val') filtered.sort((a,b)=>b.value-a.value);
-    if(State.sortHangarMode==='tier') filtered.sort((a,b)=>b.tierIndex-a.tierIndex);
-    if(State.sortHangarMode==='range') filtered.sort((a,b)=>b.range-a.range);
-
-    const uRts = State.routes.filter(r => r.unlocked);
-    
-    // CACHE DROPDOWNS
-    let routeOptionsCache = {};
-    WEED_ROLES.forEach(role => {
-        let opts = `<option value="">-- Assign Zone (${role}) --</option>`;
-        uRts.filter(r => r.role === role || r.role === 'INDICA').forEach(r => {
-            let yieldM = 1.0 + (State.upgrades.mkt*0.05);
-            let baseYield = r.dist * 165 * yieldM;
-            let fuelD = 1.0; 
-            let baseFuelCost = ((r.dist * 0.22) * (1 - Math.min(0.7, State.upgrades.eng*0.02)) / fuelD) * State.fuelSpotPrice;
-            let net = baseYield - baseFuelCost;
-            opts += `<option value="${r.id}">${r.name} [${r.role}] (${r.dist} MI) | ~$${fmt(net)} Net</option>`;
-        });
-        routeOptionsCache[role] = opts;
+  /* ================= BREEDING LAB ================= */
+  function updateBreedingSelects() {
+    const s1 = $('breed-mother'); const s2 = $('breed-father');
+    if (!s1 || !s2) return;
+    let opts = `<option value="">-- Choose Cultivar --</option>`;
+    State.stash.forEach(st => {
+      opts += `<option value="${st.uid}">${st.name} [Score: ${st.score} | THC: ${st.thc}%]</option>`;
     });
+    s1.innerHTML = opts; s2.innerHTML = opts;
+  }
 
-    let pilotOpts = `<option value="">-- Assign Courier --</option>`;
-    State.pilots.forEach(pl => { 
-        if(!pl.assignedTo) pilotOpts += `<option value="${pl.uid}">${pl.name} [${pl.bType}: +${fmt(pl.bonus)}%]</option>`; 
-    });
+  function previewBreeding() {
+    const u1 = $('breed-mother').value; const u2 = $('breed-father').value;
+    const p1 = State.stash.find(x => x.uid === u1); const p2 = State.stash.find(x => x.uid === u2);
+    
+    if (p1) $('preview-mother').innerText = `${p1.role} | THC: ${p1.thc}% | Terps: ${p1.terpenes}% | Form: ${p1.morphology}`;
+    if (p2) $('preview-father').innerText = `${p2.role} | THC: ${p2.thc}% | Terps: ${p2.terpenes}% | Form: ${p2.morphology}`;
 
-    filtered.forEach(p => {
-      let rCol = p.role === 'INDICA' ? '#a855f7' : p.role === 'SATIVA' ? '#f59e0b' : p.role === 'HYBRID' ? '#22c55e' : p.role === 'EDIBLE' ? '#ec4899' : p.role === 'EXTRACT' ? '#fbbf24' : '#06b6d4';
-      const c = document.createElement('div'); c.className = `strain-card ${p.status==='IN_FLIGHT'?'in-flight':p.condition<50?'damaged':''}`; c.style.borderColor = p.tierColor;
-      
-      let pOpts = routeOptionsCache[p.role];
-      if(p.assignedRoute) pOpts = pOpts.replace(`value="${p.assignedRoute}"`, `value="${p.assignedRoute}" selected`);
-      let rtSel = `<select ${p.status==='IN_FLIGHT'?'disabled':''} onchange="assignRoute('${p.uid}', this.value)">${pOpts}</select>`;
+    const rBox = $('breed-result-box');
+    if (p1 && p2 && p1.uid !== p2.uid) {
+      rBox.style.display = 'block';
+      let hybridName = `${p1.name.split(' ')[0]} × ${p2.name.split(' ').slice(-1)[0]}`;
+      let estScore = Math.floor((p1.score + p2.score) / 2) + 3;
+      $('breed-cross-name').innerText = hybridName;
+      $('breed-est-score').innerText = `EST SCORE: ${estScore}`;
+      $('breed-desc-txt').innerText = `Ohio hybrid vigor verified. Inheriting ${p1.palette} coloration and combined terpene profile.`;
+    } else {
+      rBox.style.display = 'none';
+    }
+  }
 
-      let pPilotOpts = pilotOpts;
-      if(p.assignedPilot) {
-          let pl = State.pilots.find(x=>x.uid === p.assignedPilot);
-          if(pl) pPilotOpts += `<option value="${pl.uid}" selected>${pl.name} [${pl.bType}: +${fmt(pl.bonus)}%]</option>`;
-      }
-      let piSel = `<select ${p.status==='IN_FLIGHT'?'disabled':''} onchange="assignPilot('${p.uid}', this.value)">${pPilotOpts}</select>`;
+  function executeCrossBreed() {
+    const u1 = $('breed-mother').value; const u2 = $('breed-father').value;
+    if (!u1 || !u2 || u1 === u2) { toast("Select two distinct parent cultivars from stash."); return; }
+    if (State.funds < 150) { toast("Breeding pollination setup requires $150."); return; }
 
-      c.innerHTML = `
+    const p1 = State.stash.find(x => x.uid === u1); const p2 = State.stash.find(x => x.uid === u2);
+    if (!p1 || !p2) return;
+
+    State.funds -= 150;
+    let nTier = Math.min(9, Math.max(p1.tierIdx, p2.tierIdx) + (Math.random() < 0.4 ? 1 : 0));
+    let nThc = Math.min(38, Math.floor((p1.thc + p2.thc) / 2 + (Math.random() * 3 + 1)));
+    let nTerps = Number((((p1.terpenes + p2.terpenes) / 2) + (Math.random() * 0.8)).toFixed(1));
+    let nAppeal = Math.min(99, Math.floor((p1.bagAppeal + p2.bagAppeal) / 2 + (Math.random() * 4)));
+    let crossName = `${p1.name.split(' ')[0]} × ${p2.name.split(' ').slice(-1)[0]}`;
+    let mixedSeed = (p1.seedInt + p2.seedInt) % 9999999;
+    let hybridRole = Math.random() < 0.5 ? p1.role : p2.role;
+    let hybridPal = Math.random() < 0.5 ? p1.palette : p2.palette;
+    let hybridMorph = Math.random() < 0.5 ? p1.morphology : p2.morphology;
+    let lineageDesc = `${p1.name} × ${p2.name}`;
+
+    for (let i = 0; i < 3; i++) {
+      State.seedInventory.push({
+        name: crossName,
+        role: hybridRole,
+        lineage: lineageDesc,
+        tierIdx: nTier,
+        thc: nThc,
+        terps: nTerps,
+        bagAppeal: nAppeal,
+        palette: hybridPal,
+        morphology: hybridMorph,
+        seedInt: mixedSeed + i
+      });
+    }
+
+    toast(`GENETICS STABILIZED: Generated 3x ${crossName} Seeds! Stored in Seed Vault.`);
+    updateHUD(); renderOwnedSeeds(); updateBreedingSelects();
+  }
+
+  /* ================= CURING VAULT & FULL DOSSIERS ================= */
+  let stashSortMode = 'score';
+  function sortStash(mode) { stashSortMode = mode; renderStash(); }
+
+  function renderStash() {
+    const list = $('stash-list'); if (!list) return; list.innerHTML = '';
+    if (State.stash.length === 0) {
+      list.innerHTML = `<div style="text-align:center; padding:20px; color:var(--silver-dim); font-size:10.5px;">Curing Vault empty. Harvest crops or plant seeds!</div>`;
+      return;
+    }
+
+    let arr = [...State.stash];
+    if (stashSortMode === 'score') arr.sort((a, b) => b.score - a.score);
+    if (stashSortMode === 'thc') arr.sort((a, b) => b.thc - a.thc);
+    if (stashSortMode === 'val') arr.sort((a, b) => (b.jarCount * b.pricePerJar) - (a.jarCount * a.pricePerJar));
+
+    arr.forEach(p => {
+      let rCol = p.role === 'INDICA' ? 'var(--c-purple)' : p.role === 'SATIVA' ? 'var(--c-amber)' : 'var(--c-green)';
+      let batchTotal = p.jarCount * p.pricePerJar;
+      let card = document.createElement('div');
+      card.className = `strain-card-full ${p.trophiesWon > 0 ? 'cup-winner' : ''}`;
+      card.style.borderColor = p.tierColor;
+      card.innerHTML = `
         <div style="display:flex; justify-content:space-between; align-items:center;">
           <div>
             <span style="color:${p.tierColor}; font-weight:bold; font-size:10px;">[${p.tierName}]</span>
-            <span style="font-size:12px; font-weight:900; color:#fff; margin-left:3px;">${p.name}</span>
-            <span style="font-size:9px; color:var(--silver-dim); font-family:monospace;">[${p.uid}]</span>
+            <span style="font-size:13px; font-weight:900; color:#fff; margin-left:4px;">${p.name}</span>
           </div>
-          <span class="badge" style="color:${rCol}; border-color:${rCol};">${p.role}</span>
-        </div>
-        
-        <div class="bud-art-container">
-          <canvas class="bud-pixel-canvas" id="cv-stash-${p.uid}" width="64" height="64"></canvas>
-          <div style="flex:1;">
-            <div style="font-size:10px; font-weight:bold; color:var(--silver-bright);">Strain Class: ${p.role}</div>
-            <div style="font-size:9px; color:var(--silver-dim);">Genetics: ${WEED_GROWERS[p.bIdx]} Harvest</div>
+          <div style="display:flex; gap:4px;">
+            <span class="score-pill">SCORE: ${p.score}</span>
+            <span class="badge" style="color:${rCol}; border-color:${rCol};">${p.role}</span>
           </div>
         </div>
 
-        <div class="spec-grid">
-          <div><span>WGHT:</span> ${p.capacity} LBS</div>
-          <div><span>DIST:</span> ${p.range.toLocaleString()} MILES</div>
-          <div><span>GAS:</span> ${p.fuelBurn} gal/hr</div>
-          <div><span>VAL:</span> $${fmt(p.value)}</div>
+        <div class="bud-showcase-box">
+          <canvas class="bud-pixel-canvas-lg" id="cv-stash-${p.uid}" width="128" height="128"></canvas>
+          <div style="flex:1; display:flex; flex-direction:column; gap:3px;">
+            <div style="font-size:11px; font-weight:bold; color:var(--silver-bright);">THC: <b style="color:var(--c-lime);">${p.thc}%</b> | Terps: <b style="color:var(--c-lime);">${p.terpenes}%</b></div>
+            <div style="font-size:9px; color:var(--silver-dim);"><b>Yield:</b> ${p.jarCount} Jars (2.83g Tenths)</div>
+            <div style="font-size:8.5px; color:var(--silver-dim);"><b>Lineage:</b> ${p.lineage}</div>
+            <div style="font-size:9px; color:var(--c-gold); font-weight:bold; margin-top:2px;">${p.trophiesWon > 0 ? `🏆 ${p.trophiesWon}x Cup Champion` : 'Unranked'}</div>
+            <button class="btn btn-gold" style="padding:4px 6px; font-size:8px; margin-top:3px;" onclick="openDossierModal('${p.uid}')">Open Full Dossier</button>
+          </div>
         </div>
 
-        <div style="display:flex; justify-content:space-between; font-size:8.5px; font-family:monospace; color:var(--silver-dim);">
-          <span>FRESHNESS: ${p.condition.toFixed(0)}%</span>
-          <span id="st-${p.uid}">STATUS: <strong style="color:#fff;">${p.status}</strong></span>
+        <div class="spec-grid-full">
+          <div><span>RETAIL VAL:</span> $${p.pricePerJar} / jar ($${batchTotal} batch)</div>
+          <div><span>CURE VITALITY:</span> ${p.cure}%</div>
         </div>
-        
-        <div style="display:flex; flex-direction:column; gap:3px;">${rtSel}${piSel}</div>
-        
-        ${p.status==='IN_FLIGHT'?`<div class="flight-bar-bg"><div id="bar-${p.uid}" class="flight-bar-fill"></div></div>`:''}
-        
-        <div style="display:flex; justify-content:space-between; margin-top:3px;">
-          <div style="display:flex; gap:3px;">
-            <button class="btn" style="padding:3px 5px; font-size:8px;" onclick="exportStrain('${p.uid}')">Trade</button>
-            <button class="btn btn-purple" style="padding:3px 5px; font-size:8px;" ${p.status==='IN_FLIGHT'?'disabled':''} onclick="initAuction('${p.uid}', 'plane')">Wholesale</button>
-            <button class="btn btn-danger" style="padding:3px 5px; font-size:8px;" ${p.status==='IN_FLIGHT'?'disabled':''} onclick="consumeStrain('${p.uid}')">Smoke</button>
-          </div>
-          <div style="display:flex; gap:3px;">
-            <button class="btn" style="padding:3px 6px; font-size:8px;" ${p.status==='IN_FLIGHT'?'disabled':''} onclick="maintainAirframe('${p.uid}')">Re-Cure</button>
-            <button class="btn btn-green" style="padding:4px 8px; font-size:8.5px;" ${p.status==='IN_FLIGHT'||!p.assignedRoute||!p.assignedPilot?'disabled':''} onclick="dispatchFlight('${p.uid}')">Deliver</button>
+
+        <div style="display:flex; justify-content:space-between; margin-top:2px;">
+          <button class="btn" style="padding:4px 7px; font-size:8px;" onclick="exportStrain('${p.uid}')">Trade Code</button>
+          <div style="display:flex; gap:4px;">
+            <button class="btn btn-green" style="padding:4px 9px; font-size:8.5px;" onclick="sellSingleBatch('${p.uid}')">Wholesale Batch ($${batchTotal})</button>
           </div>
         </div>
       `;
-      list.appendChild(c);
-      setTimeout(() => renderBudPixelArt($(`cv-stash-${p.uid}`), p.seedInt, p.role, p.tierIndex), 10);
+      list.appendChild(card);
+      setTimeout(() => renderBudPixelArt128($(`cv-stash-${p.uid}`), p.seedInt, p.palette, p.morphology, p.tierIdx), 10);
     });
   }
 
-  function consumeStrain(uid) {
-    let i = State.fleet.findIndex(x=>x.uid===uid); if(i===-1) return;
-    let val = Math.floor(State.fleet[i].value * 0.5); State.funds+=val;
-    if(State.fleet[i].assignedPilot) { let p=State.pilots.find(x=>x.uid===State.fleet[i].assignedPilot); if(p) p.assignedTo=null; }
-    State.fleet.splice(i,1); State.statPlanesScrapped++;
-    toast(`Smoked. Yielded $${fmt(val)}.`); updateHUD(); renderFleet();
+  function openDossierModal(uid) {
+    let p = State.stash.find(x => x.uid === uid); if (!p) return;
+    $('dossier-strain-name').innerText = p.name;
+    const cv = $('dossier-canvas');
+    renderBudPixelArt128(cv, p.seedInt, p.palette, p.morphology, p.tierIdx);
+
+    $('dossier-content').innerHTML = `
+      <div style="display:flex; justify-content:space-between; margin-bottom:6px;">
+        <span class="badge" style="color:var(--c-green); border-color:var(--c-green);">${p.role} PROFILE</span>
+        <span class="score-pill">OVERALL SCORE: ${p.score}/100</span>
+      </div>
+      <div><b>Pedigree Lineage:</b> ${p.lineage}</div>
+      <div><b>Cannabinoid Profile:</b> ${p.thc}% THC | 0.8% CBD | 1.1% CBG</div>
+      <div><b>Terpene Concentration:</b> ${p.terpenes}% Total Terpenes</div>
+      <div><b>Visual Phenotype:</b> ${p.morphology.replace('_',' ')} architecture with ${p.palette.replace('_',' ')} pigmentation</div>
+      <div><b>Bag Appeal:</b> ${p.bagAppeal}/100 crystalline resin coat</div>
+      <div><b>Ohio Retail Valuation:</b> $${p.pricePerJar} per 2.83g Tenth ($${p.jarCount * p.pricePerJar} full batch)</div>
+    `;
+
+    $('modal-dossier').classList.add('active');
   }
 
-  function quickSellStrains(maxT) {
-    let t = State.fleet.filter(s=>s.tierIndex<=maxT && s.status==='READY');
-    if(t.length===0){toast("No eligible strains in tier bracket.");return;}
-    let tot=0; t.forEach(s=>{
-      tot+=Math.floor(s.value*0.5);
-      if(s.assignedPilot) { let p=State.pilots.find(x=>x.uid===s.assignedPilot); if(p) p.assignedTo=null; }
-      State.statPlanesScrapped++;
-    });
-    State.fleet = State.fleet.filter(s=>s.tierIndex>maxT || s.status!=='READY');
-    State.funds+=tot; toast(`Smoked ${t.length} strains for $${fmt(tot)}.`); updateHUD(); renderFleet(); renderPilots();
+  function closeDossierModal() { $('modal-dossier').classList.remove('active'); }
+
+  function sellSingleBatch(uid) {
+    let idx = State.stash.findIndex(x => x.uid === uid); if (idx === -1) return;
+    let val = State.stash[idx].jarCount * State.stash[idx].pricePerJar;
+    State.funds += val;
+    State.stash.splice(idx, 1);
+    toast(`Wholesaled batch to dispensary for $${val}!`);
+    updateHUD(); renderStash();
   }
 
-  /* ================= COURIERS ROSTER ================= */
-  function sortPilots(mode) { State.sortPilotsMode = mode; renderPilots(); }
-  function filterPilotTier(val) { State.filterPilotTier = val; renderPilots(); }
+  function wholesaleDumpStash() {
+    if (State.stash.length === 0) { toast("No flower in stash."); return; }
+    let total = 0;
+    State.stash.forEach(s => total += (s.jarCount * s.pricePerJar));
+    State.funds += total;
+    let count = State.stash.length;
+    State.stash = [];
+    toast(`Wholesaled ${count} batches for $${total}!`);
+    updateHUD(); renderStash();
+  }
 
-  function renderPilots() {
-    const grid = $('pilots-grid'); if(!grid) return; grid.innerHTML = '';
+  function burpAllJars() {
+    State.stash.forEach(s => { s.cure = 100; s.bagAppeal = Math.min(99, s.bagAppeal + 1); });
+    toast("Burped all glass curing jars. Locked in freshness.");
+    renderStash();
+  }
+
+  function exportStrain(uid) {
+    let p = State.stash.find(x => x.uid === uid); if (!p) return;
+    prompt("Copy Strain Trade Code:", `BB1-${p.seedInt.toString(36).toUpperCase()}-${p.tierIdx}-${p.palette}-${p.morphology}`);
+  }
+
+  function importStrain() {
+    let str = prompt("Enter Trade Code (BB1-XXXX-TIER-PALETTE-MORPH):"); if (!str) return;
+    let parts = str.split('-');
+    if (parts.length < 5) { toast("Invalid code structure."); return; }
+    let seed = parseInt(parts[1], 36);
+    let tI = parseInt(parts[2]);
+    let pal = parts[3];
+    let morph = parts[4];
+    let imported = createCultivar(`Imported Buckeye Cut`, 'HYBRID', tI, seed, null, null, null, pal, morph);
+    State.stash.push(imported);
+    toast(`Phenotype imported: ${imported.name}!`);
+    updateHUD(); renderStash();
+  }
+
+  /* ================= PROCESSING & LAB ================= */
+  function processProduct(type) {
+    if (State.stash.length === 0) { toast("No cured flower in stash to process."); return; }
+    let flower = State.stash[0];
     
-    let filtered = [...State.pilots];
-    if(State.filterPilotTier !== 'ALL') filtered = filtered.filter(p => p.tierIndex === parseInt(State.filterPilotTier));
-
-    if(filtered.length===0) { grid.innerHTML = `<div style="text-align:center; padding: 20px; color: var(--silver-dim); font-size:11px;">No couriers match filter criteria.</div>`; return; }
-
-    if(State.sortPilotsMode==='val') filtered.sort((a,b)=>b.value-a.value);
-    if(State.sortPilotsMode==='tier') filtered.sort((a,b)=>b.tierIndex-a.tierIndex);
-    
-    filtered.forEach(p => {
-      const c = document.createElement('div'); c.className = 'strain-card'; c.style.borderColor = p.tierColor;
-      c.innerHTML = `
-        <div class="stat-block" style="display:flex; justify-content:space-between;">
-          <span style="color:${p.tierColor}; font-weight:bold; font-size:9.5px;">${p.tierName}</span>
-          <span style="color:var(--status-green); font-size:9.5px;">[${p.bType}] +${fmt(p.bonus)}%</span>
-        </div>
-        <div style="font-size:12px; font-weight:900; color:#fff;">${p.name} ${p.locked?'[🔒]':''}</div>
-        <div style="font-size:9px; color:var(--silver-dim);">${p.assignedTo ? `Assigned to: ${p.assignedTo}` : 'Standby / Unassigned'}</div>
-        <div style="display:flex; justify-content:space-between; align-items:center; margin-top:4px;">
-          <span class="stat-block" style="font-size:10px; color:var(--silver-bright); font-weight:bold;">VAL: $${fmt(p.value)}</span>
-          <div style="display:flex; flex-wrap:wrap; gap:3px; justify-content:flex-end;">
-            <button class="btn" style="padding:3px 5px; font-size:8px;" onclick="exportCourier('${p.uid}')">Trade</button>
-            <button class="btn" style="padding:3px 5px; font-size:8px;" onclick="togglePilotLock('${p.uid}')">${p.locked?'Unlock':'Lock'}</button>
-            ${!p.assignedTo&&!p.locked?`<button class="btn btn-purple" style="padding:3px 5px; font-size:8px;" onclick="initAuction('${p.uid}', 'pilot')">Wholesale</button><button class="btn btn-danger" style="padding:3px 5px; font-size:8px;" onclick="sellPilot('${p.uid}')">Fire</button>`:''}
-          </div>
-        </div>
-      `;
-      grid.appendChild(c);
-    });
-  }
-  function togglePilotLock(uid) { let p=State.pilots.find(x=>x.uid===uid); if(p){p.locked=!p.locked; renderPilots();} }
-  function sellPilot(uid) {
-    let idx = State.pilots.findIndex(s=>s.uid===uid);
-    if(idx>-1) { let v=Math.floor(State.pilots[idx].value*0.5); State.funds+=v; State.pilots.splice(idx,1); toast(`Fired. Severance recovered $${fmt(v)}.`); updateHUD(); renderPilots(); renderFleet(); }
-  }
-  function quickSellPilots(maxT) {
-    let ts = State.pilots.filter(s=>s.tierIndex<=maxT && !s.assignedTo && !s.locked);
-    if(ts.length===0){toast("No eligible couriers.");return;}
-    let tot=0; ts.forEach(s=>tot+=Math.floor(s.value*0.5));
-    State.pilots = State.pilots.filter(s=>s.tierIndex>maxT || s.assignedTo || s.locked);
-    State.funds+=tot; toast(`Fired ${ts.length} couriers. Recovered $${fmt(tot)}.`); updateHUD(); renderPilots();
-  }
-
-  /* ================= ROUTES ================= */
-  function filterRouteCategory(val) { State.filterRouteCat = val; renderRoutes(); }
-
-  function renderRoutes() {
-    const list = $('routes-list'); if(!list) return; list.innerHTML = '';
-    let filtered = State.filterRouteCat === 'ALL' ? State.routes : State.routes.filter(r => r.role === State.filterRouteCat);
-
-    filtered.forEach(r => {
-      let rCol = r.role === 'INDICA' ? '#a855f7' : r.role === 'SATIVA' ? '#f59e0b' : r.role === 'HYBRID' ? '#22c55e' : r.role === 'EDIBLE' ? '#ec4899' : r.role === 'EXTRACT' ? '#fbbf24' : '#06b6d4';
-      let yieldM = 1.0 + (State.upgrades.mkt*0.05);
-      let baseYield = r.dist * 165 * yieldM;
-      let fuelCost = ((r.dist * 0.22) * (1 - Math.min(0.7, State.upgrades.eng*0.02))) * State.fuelSpotPrice;
-      let netProfit = baseYield - fuelCost;
-
-      const row = document.createElement('div'); row.className = 'route-row';
-      row.innerHTML = `
-        <div style="flex:1;">
-          <div style="font-weight:900; color:#fff;">${r.name} <span class="badge" style="margin-left:4px; color:${rCol}; border-color:${rCol};">${r.role}</span></div>
-          <div style="font-size:9px; color:var(--silver-dim); font-family:monospace; margin-top:2px;">
-            ${r.dist.toLocaleString()} MILES // Area: ${r.minTier}
-          </div>
-          <div style="font-size:9px; color:var(--silver-dim); font-family:monospace; margin-top:2px;">
-            Revenue: $${fmt(baseYield)} | Gas: -$${fmt(fuelCost)}
-          </div>
-          <div style="font-size:10px; color:var(--status-green); font-weight:bold; font-family:monospace; margin-top:2px;">
-            Est. Net Profit: ~$${fmt(netProfit)}
-          </div>
-        </div>
-        <div>
-          ${r.unlocked?`<span style="color:var(--status-green); font-weight:bold; font-family:monospace;">ZONED ✓</span>`:`<button class="btn btn-green" onclick="unlockRoute('${r.id}')">Expand ($${fmt(r.cost)})</button>`}
-        </div>
-      `;
-      list.appendChild(row);
-    });
-  }
-  function unlockRoute(rId) { const r=State.routes.find(x=>x.id===rId); if(!r)return; if(State.funds<r.cost){toast("Insufficient Cash.");return;} State.funds-=r.cost; r.unlocked=true; updateHUD(); renderRoutes(); renderFleet(); }
-
-  /* ================= AUTOMATIONS & BURNER PHONE ================= */
-  function toggleAutoLoop() {
-    State.automation.autoDispatch = !State.automation.autoDispatch;
-    toast(`Endless Hustle: ${State.automation.autoDispatch ? 'ON' : 'OFF'}`);
-    updateAutomationUI();
-  }
-  function toggleAutoMRO() {
-    State.automation.autoMRO = !State.automation.autoMRO;
-    toast(`Auto Re-Cure: ${State.automation.autoMRO ? 'ON' : 'OFF'}`);
-    updateAutomationUI();
-  }
-  function toggleAutoRefuel() {
-    State.automation.autoRefuel = !State.automation.autoRefuel;
-    toast(`Auto Gas Runs: ${State.automation.autoRefuel ? 'ON' : 'OFF'}`);
-    updateAutomationUI();
-  }
-  function updateAutomationUI() {
-    if($('chk-autoloop'))$('chk-autoloop').innerText = State.automation.autoDispatch ? 'ACTIVE' : 'ENABLE';
-    if($('chk-automro'))$('chk-automro').innerText = State.automation.autoMRO ? 'ACTIVE' : 'ENABLE';
-    if($('chk-autorefuel'))$('chk-autorefuel').innerText = State.automation.autoRefuel ? 'ACTIVE' : 'ENABLE';
-    renderMilestones();
-    renderSideMissions();
-  }
-
-  function generateSideMissions() {
-    let unlocked = State.routes.filter(r => r.unlocked);
-    if(unlocked.length === 0) unlocked = State.routes; 
-    
-    State.sideMissions = [];
-    for(let i=0; i<3; i++) {
-        let rt = unlocked[Math.floor(Math.random() * unlocked.length)];
-        State.sideMissions.push({
-            id: "sm_" + Date.now() + i,
-            title: `Burner Text: ${rt.name}`,
-            desc: `Yo, need some ${rt.role} sent to ${rt.name} ASAP.`,
-            reqRoute: rt.id,
-            reqRole: rt.role,
-            readyToClaim: false,
-            rewardCash: Math.floor(rt.dist * 500) + 1000000,
-            rewardTier: Math.min(9, Math.floor(rt.dist / 1000))
-        });
+    if (type === 'ROSIN') {
+      if (flower.jarCount < 3) { toast("Requires at least 3 jars of flower to press Live Rosin!"); return; }
+      flower.jarCount -= 3;
+      if (flower.jarCount <= 0) State.stash.shift();
+      State.funds += 65;
+      toast(`Washed & pressed 1g Live Hash Rosin! Sold for $65.`);
+    } else if (type === 'CART') {
+      if (flower.jarCount < 2) { toast("Requires at least 2 jars of flower for a Luster Pod!"); return; }
+      flower.jarCount -= 2;
+      if (flower.jarCount <= 0) State.stash.shift();
+      State.funds += 45;
+      toast(`Extracted 0.84g Luster Pod! Sold for $45.`);
+    } else if (type === 'EDIBLE') {
+      flower.jarCount -= 1;
+      if (flower.jarCount <= 0) State.stash.shift();
+      State.funds += 40;
+      toast(`Infused 2x 110mg Gummy Packs! Sold for $40.`);
     }
+    updateHUD(); renderStash();
   }
 
-  function refreshSideMissions() {
-    generateSideMissions();
-    renderSideMissions();
-    toast("Burner Phone refreshed.");
-  }
-
-  function renderSideMissions() {
-    const list = $('side-missions-list'); if(!list) return; list.innerHTML = '';
-    State.sideMissions.forEach((m, idx) => {
-      let isReady = m.readyToClaim;
-      let rText = `+$${fmt(m.rewardCash)} & Free T${m.rewardTier+1} Seeds`;
+  /* ================= CANNABIS CUPS ================= */
+  function renderCups() {
+    const list = $('cups-grid'); if (!list) return; list.innerHTML = '';
+    CUPS.forEach(cup => {
       let div = document.createElement('div');
-      div.className = `check-item ${isReady ? 'done' : ''}`;
+      div.className = 'check-item';
       div.innerHTML = `
         <div>
-          <div style="font-weight:bold; color:#fff;">${m.title}</div>
-          <div style="font-size:9.5px; color:var(--silver-dim);">${m.desc}</div>
-          <div style="font-size:9.5px; color:var(--status-green); font-weight:bold; margin-top:2px;">Payout: ${rText}</div>
+          <div style="font-weight:900; color:var(--c-gold); font-size:11px;">🏆 ${cup.name}</div>
+          <div style="font-size:8.5px; color:var(--silver-dim); margin-top:2px;">Req Score: ${cup.minScore}+ | Tier ${cup.minTier+1}+</div>
+          <div style="font-size:9px; color:var(--c-green); font-weight:bold; margin-top:2px;">Prize: $${fmt(cup.prize)} + Trophy</div>
         </div>
-        <div>
-          <button class="btn btn-green" ${isReady ? '' : 'disabled'} onclick="claimSideMission(${idx})">COLLECT</button>
-        </div>
+        <button class="btn btn-gold" onclick="enterCup('${cup.id}')">Enter ($${cup.fee})</button>
       `;
       list.appendChild(div);
     });
   }
 
-  function claimSideMission(idx) {
-    let m = State.sideMissions[idx];
-    if(!m || !m.readyToClaim) return;
-    
-    State.funds += m.rewardCash;
-    let bonusStrain = harvestStrain(m.rewardTier); 
-    State.fleet.push(bonusStrain);
-    toast(`VIP Paid! +$${fmt(m.rewardCash)} & ${bonusStrain.name} grown!`);
+  function enterCup(cupId) {
+    let cup = CUPS.find(c => c.id === cupId); if (!cup) return;
+    if (State.funds < cup.fee) { toast("Insufficient funds for cup entry fee."); return; }
 
-    State.sideMissions.splice(idx, 1);
-    
-    let unlocked = State.routes.filter(r => r.unlocked);
-    if(unlocked.length === 0) unlocked = State.routes;
-    let rt = unlocked[Math.floor(Math.random() * unlocked.length)];
-    State.sideMissions.push({
-        id: "sm_" + Date.now(),
-        title: `Burner Text: ${rt.name}`,
-        desc: `Yo, need some ${rt.role} sent to ${rt.name} ASAP.`,
-        reqRoute: rt.id,
-        reqRole: rt.role,
-        readyToClaim: false,
-        rewardCash: Math.floor(rt.dist * 500) + 1000000,
-        rewardTier: Math.min(9, Math.floor(rt.dist / 1000))
-    });
+    let contenders = State.stash.filter(s => s.score >= cup.minScore && s.tierIdx >= cup.minTier);
+    if (contenders.length === 0) { toast(`No cultivar in stash meets required ${cup.minScore}+ score!`); return; }
 
-    updateHUD(); renderSideMissions();
-  }
+    State.funds -= cup.fee;
+    contenders.sort((a,b) => b.score - a.score);
+    let champ = contenders[0];
 
-  function renderMilestones() {
-    const list = $('milestone-list'); if(!list) return; list.innerHTML = '';
-    MILESTONES.forEach(m => {
-      let isClaimed = State.claimedMilestones.includes(m.id);
-      let canClaim = !isClaimed && m.req(State);
-      let div = document.createElement('div');
-      div.className = `check-item ${isClaimed ? 'done' : ''}`;
-      div.innerHTML = `
-        <div>
-          <div style="font-weight:bold; color:${isClaimed ? 'var(--status-green)' : '#fff'};">${isClaimed ? '✓ ' : ''}${m.title}</div>
-          <div style="font-size:9.5px; color:var(--silver-dim);">${m.desc}</div>
-          <div style="font-size:9.5px; color:var(--status-amber); font-weight:bold; margin-top:1px;">Reward: +$${fmt(m.reward)}</div>
-        </div>
-        <div>
-          ${isClaimed 
-            ? `<span style="color:var(--status-green); font-weight:bold; font-size:9px;">CLAIMED</span>` 
-            : `<button class="btn btn-green" ${canClaim ? '' : 'disabled'} onclick="claimMilestone('${m.id}')">CLAIM</button>`
-          }
-        </div>
-      `;
-      list.appendChild(div);
-    });
-  }
-
-  function claimMilestone(mId) {
-    let m = MILESTONES.find(x => x.id === mId);
-    if(!m || State.claimedMilestones.includes(mId) || !m.req(State)) return;
-    State.claimedMilestones.push(mId);
-    State.funds += m.reward;
-    toast(`Milestone Achieved: +$${fmt(m.reward)}`);
-    updateHUD(); renderMilestones();
-  }
-
-  /* ================= UPGRADES ================= */
-  function getUpgCost(type, lvl) { return type==='mkt' ? Math.floor(100000*Math.pow(1.5,lvl)) : Math.floor(150000*Math.pow(1.6,lvl)); }
-  function renderUpgrades() {
-    let mC = getUpgCost('mkt', State.upgrades.mkt); let eC = getUpgCost('eng', State.upgrades.eng);
-    if($('upg-mkt-lvl'))$('upg-mkt-lvl').innerText=State.upgrades.mkt; 
-    if($('upg-mkt-pct'))$('upg-mkt-pct').innerText=State.upgrades.mkt*5; 
-    if($('upg-mkt-cost'))$('upg-mkt-cost').innerText=fmt(mC);
-    
-    if($('upg-eng-lvl'))$('upg-eng-lvl').innerText=State.upgrades.eng; 
-    if($('upg-eng-pct'))$('upg-eng-pct').innerText=Math.min(70, State.upgrades.eng*2); 
-    if($('upg-eng-cost'))$('upg-eng-cost').innerText=fmt(eC);
-  }
-  function buyUpgrade(type) {
-    let cost = getUpgCost(type, State.upgrades[type]);
-    if(State.funds < cost) { toast("Insufficient Cash."); return; }
-    State.funds -= cost; State.upgrades[type]++;
-    updateHUD(); renderUpgrades(); toast("Operation expanded.");
-  }
-
-  /* ================= DELIVERY DISPATCH ================= */
-  function dispatchFlight(pUid) {
-    const p = State.fleet.find(x=>x.uid===pUid); if(!p||p.status==='IN_FLIGHT'||!p.assignedRoute||!p.assignedPilot)return;
-    const r = State.routes.find(x=>x.id===p.assignedRoute); const pl = State.pilots.find(x=>x.uid===p.assignedPilot); if(!r||!pl)return;
-    
-    if(p.condition < 45) {
-      if(State.automation.autoMRO && State.funds >= Math.floor((100-p.condition)*2500)) {
-        maintainAirframe(p.uid);
-      } else {
-        toast("[STALE] Freshness critical. Must Re-Cure."); return;
-      }
+    let chance = (champ.score - cup.minScore) * 6 + 45;
+    if (Math.random() * 100 < chance) {
+      State.funds += cup.prize;
+      champ.trophiesWon++;
+      champ.pricePerJar = Math.floor(champ.pricePerJar * 1.35); // 35% trophy price boost
+      State.trophies.push({ cup: cup.name, strain: champ.name });
+      toast(`CHAMPION! ${champ.name} won 1st Place! +$${fmt(cup.prize)}`);
+    } else {
+      toast(`Judges awarded 4th place to ${champ.name}. Just missed the podium.`);
     }
 
-    let yieldM = 1.0 + (State.upgrades.mkt*0.05); let speedD = 1.0; let fuelD = 1.0; let safeD = 1.0;
-    if(pl.bType==='TIPS') yieldM *= (1 + pl.bonus/100);
-    if(pl.bType==='SPEED') speedD = 1 + pl.bonus/100; 
-    if(pl.bType==='MPG') fuelD = 1 + pl.bonus/100;
-    if(pl.bType==='CARE') safeD = 1 + pl.bonus/100;
+    updateHUD(); renderTrophies(); renderStash();
+  }
 
-    let baseMs = Math.max(5000, Math.min(90000, (r.dist/8000)*90000));
-    let msTime = Math.max(1000, baseMs / speedD); 
-
-    let fBurn = Math.floor((r.dist * 0.22) * (1 - Math.min(0.7, State.upgrades.eng*0.02)) / fuelD);
-    
-    if(State.fuelReserve < fBurn) {
-      if(State.automation.autoRefuel && State.funds >= 100000 * State.fuelSpotPrice) {
-        State.funds -= 100000 * State.fuelSpotPrice;
-        State.fuelReserve += 100000;
-      } else {
-        toast("Insufficient Gas."); return;
-      }
+  function renderTrophies() {
+    $('trophy-count').innerText = State.trophies.length;
+    const rack = $('trophies-rack'); if (!rack) return;
+    if (State.trophies.length === 0) {
+      rack.innerHTML = `<span style="font-size:9.5px; color:var(--silver-dim);">No championships won yet. Enter competitions with 80+ score cultivars.</span>`;
+      return;
     }
-    State.fuelReserve -= fBurn;
-
-    let bRev = r.dist * 165 * yieldM;
-    
-    p.status='IN_FLIGHT'; p.flightStart=Date.now(); p.flightDuration=msTime; p.flightEnd=p.flightStart+msTime; p.expRev=bRev; p.wear=10/safeD;
-    
-    State.sideMissions.forEach(m => {
-        if(!m.readyToClaim && p.assignedRoute === m.reqRoute && p.role === m.reqRole) {
-            m.readyToClaim = true;
-            toast(`Client Text: ${m.title}`);
-            if($('tab-checklist').classList.contains('active')) renderSideMissions();
-        }
-    });
-
-    renderFleet(); updateHUD();
-  }
-  function dispatchAll() { State.fleet.filter(p=>p.status==='READY'&&p.assignedRoute&&p.assignedPilot).forEach(p=>dispatchFlight(p.uid)); }
-  function maintainAirframe(pUid) { const p=State.fleet.find(x=>x.uid===pUid); if(!p||p.status==='IN_FLIGHT')return; let c=Math.floor((100-p.condition)*2500); if(State.funds<c)return; State.funds-=c; p.condition=100; updateHUD(); renderFleet(); }
-  function maintainAll() { let c=0; State.fleet.filter(p=>p.condition<90&&p.status!=='IN_FLIGHT').forEach(p=>c+=Math.floor((100-p.condition)*2500)); if(c===0||State.funds<c)return; State.funds-=c; State.fleet.forEach(p=>p.condition=100); updateHUD(); renderFleet(); }
-
-  /* ================= 10-LANE WHOLESALE AUCTIONS ================= */
-  function initAuction(uid, type) {
-    if(State.auctions.length>=10){toast("Lanes full.");return;}
-    let item;
-    if(type==='plane') { let i=State.fleet.findIndex(x=>x.uid===uid); if(i===-1)return; item=State.fleet[i]; if(item.assignedPilot){ let px=State.pilots.find(x=>x.uid===item.assignedPilot); if(px)px.assignedTo=null; } State.fleet.splice(i,1); }
-    if(type==='pilot') { let i=State.pilots.findIndex(x=>x.uid===uid); if(i===-1)return; item=State.pilots[i]; State.pilots.splice(i,1); }
-    
-    State.auctions.push({ item:item, type:type, baseVal:item.value, timer:20.0, currentBid:Math.floor(item.value*0.9), log:[] });
-    updateHUD(); renderAuctions(); renderFleet(); renderPilots(); toast("Product moved to Wholesale.");
-  }
-  
-  function fillAuctions(type) {
-    let a=10-State.auctions.length; if(a<=0) { toast("Lanes full."); return; }
-    
-    let c = type==='planes' 
-      ? State.fleet.filter(p=>p.status==='READY'&&!p.assignedPilot).sort((x,y)=>x.value-y.value) 
-      : State.pilots.filter(p=>!p.assignedTo&&!p.locked).sort((x,y)=>x.value-y.value);
-        
-    if(c.length===0){toast("No eligible product available.");return;}
-    
-    let loaded = 0;
-    c.slice(0,a).forEach(item=>{ 
-      if(type==='planes'){ let i=State.fleet.findIndex(x=>x.uid===item.uid); State.fleet.splice(i,1); }
-      if(type==='pilots'){ let i=State.pilots.findIndex(x=>x.uid===item.uid); State.pilots.splice(i,1); }
-      State.auctions.push({item:item, type:type, baseVal:item.value, timer:20.0, currentBid:Math.floor(item.value*0.9), log:[]}); 
-      loaded++;
-    });
-    
-    updateHUD(); renderPilots(); renderFleet(); renderAuctions(); 
-    toast(`Loaded ${loaded} lots to Wholesale.`);
-  }
-
-  function renderAuctions() {
-    const b=$('auction-board'); if(!b)return; $('auction-count').innerText=State.auctions.length; b.innerHTML='';$('auction-idle').style.display = State.auctions.length===0 ? 'block' : 'none';
-    State.auctions.forEach((a) => {
-      let hLog = a.log.map(l=>`<div>${l}</div>`).join('');
-      let col = a.item.tierColor || '#fff';
-      let canvasHtml = a.type === 'plane' 
-        ? `<canvas class="bud-pixel-canvas" id="cv-auc-${a.item.uid}" width="64" height="64" style="width:40px; height:40px;"></canvas>` 
-        : '';
-      b.innerHTML+=`
-        <div class="auction-slot">
-          <div style="display:flex; justify-content:space-between; align-items:flex-end;">
-            <div style="display:flex; gap:8px; align-items:center;">
-              ${canvasHtml}
-              <div>
-                <div style="font-size:12px;font-weight:bold;color:${col};">${a.item.name}</div>
-                <div class="stat-block" style="font-size:9px;">VAL: $${fmt(a.baseVal)}</div>
-              </div>
-            </div>
-            <div style="text-align:right;">
-              <div id="auc-timer-${a.item.uid}" style="font-size:8.5px;color:var(--silver-dim);font-weight:bold;">TIME [${a.timer.toFixed(1)}s]</div>
-              <div id="auc-bid-${a.item.uid}" style="font-size:14px;font-weight:bold;color:var(--status-green);font-family:monospace;">$${fmt(a.currentBid)}</div>
-            </div>
-          </div>
-          <div class="auction-timer-bg"><div id="auc-bar-${a.item.uid}" class="auction-timer-bar" style="width:${(a.timer/20)*100}%;"></div></div>
-          <div class="auction-log">${hLog}</div>
-        </div>
-      `;
-      if (a.type === 'plane') {
-        setTimeout(() => renderBudPixelArt($(`cv-auc-${a.item.uid}`), a.item.seedInt, a.item.role, a.item.tierIndex), 10);
-      }
+    rack.innerHTML = '';
+    State.trophies.forEach(t => {
+      let b = document.createElement('div');
+      b.className = 'badge';
+      b.style.borderColor = 'var(--c-gold)';
+      b.style.color = 'var(--c-gold)';
+      b.innerHTML = `🏆 ${t.cup}: <i>${t.strain}</i>`;
+      rack.appendChild(b);
     });
   }
 
-  /* ================= GAME LOOP ================= */
-  const FACTIONS = ["Dispensary Chain","Rival Cartel","Local Trap Star","College Frat"];
+  /* ================= CORE GAME LOOP ================= */
+  let tickCounter = 0;
   function gameTick() {
-    let n = Date.now();
-    
-    // Market Timer
-    State.marketTimer -= 0.1;
-    let mT = $('market-timer'); if(mT) mT.innerText = Math.max(0, State.marketTimer).toFixed(1);
-    if(State.marketTimer <= 0) { State.marketTimer = 10.0; refreshMarket(); }
+    tickCounter++;
 
-    // Deliveries
-    State.fleet.forEach(p => {
-      if(p.status==='IN_FLIGHT') {
-        let pct = ((n-p.flightStart)/p.flightDuration)*100;
-        if(pct>=100) { 
-          p.status='READY'; State.funds+=p.expRev; p.condition=Math.max(10, p.condition-p.wear); updateHUD(); 
-          let st=$(`st-${p.uid}`); if(st) st.innerHTML=`STATUS: <strong style="color:#fff;">READY</strong>`; 
-          let b=$(`bar-${p.uid}`); if(b){b.style.width='0%'; b.parentElement.style.display='none';} 
-          
-          if(State.automation.autoDispatch && p.assignedRoute && p.assignedPilot) {
-            setTimeout(() => dispatchFlight(p.uid), 200);
-          } else {
-            renderFleet(); 
-          }
-        } 
-        else { let b=$(`bar-${p.uid}`); if(b) b.style.width=pct+'%'; }
+    State.growPots.forEach(pot => {
+      if (pot.occupied && pot.progress < 100) {
+        pot.progress += State.godMode ? 25 : 1.5;
+        if (pot.progress < 35) pot.phase = 'VEGETATIVE';
+        else if (pot.progress < 80) pot.phase = 'FLOWERING (BLOOM)';
+        else if (pot.progress < 100) pot.phase = 'RIPENING';
+        else {
+          pot.progress = 100;
+          pot.phase = 'READY';
+        }
       }
     });
 
-    // Auctions
-    if(State.auctions.length>0) {
-      for(let i=State.auctions.length-1; i>=0; i--) {
-        let a=State.auctions[i]; a.timer-=0.1; 
-        
-        let uiT = $(`auc-timer-${a.item.uid}`);
-        let uiB = $(`auc-bar-${a.item.uid}`);
-        let uiBid = $(`auc-bid-${a.item.uid}`);
-
-        if(a.timer>0 && Math.random()<0.10) {
-          let f=FACTIONS[Math.floor(Math.random()*FACTIONS.length)]; let m=1.05+(Math.random()*0.10);
-          if(Math.random()<0.015) { m=2.0+(Math.random()*18.0); a.log.push(`<span style="color:var(--status-amber);">[BID WAR] Spike!</span>`); }
-          let nB=Math.floor(a.currentBid*m); if(nB<=a.currentBid) nB=a.currentBid+1; a.currentBid=nB;
-          a.log.push(`<span style="color:var(--silver-bright);">[${f}] bids $${fmt(a.currentBid)}</span>`);
-          if(a.log.length>3) a.log.shift();
-          if(a.timer<=1.0){ a.timer=3.0; a.log.push(`<span style="color:var(--status-red);">[OVERTIME] Reset to 3s!</span>`); }
-          if(uiBid) uiBid.innerText = "$" + fmt(a.currentBid);
-          if($('tab-auction').classList.contains('active')) renderAuctions();
-        } else {
-          if(uiT) uiT.innerText = `TIME [${Math.max(0, a.timer).toFixed(1)}s]`;
-          if(uiB) { uiB.style.width = ((a.timer/20)*100) + '%'; uiB.style.background = a.timer <= 3 ? 'var(--status-red)' : 'var(--status-green)'; }
-        }
-
-        if(a.timer<=0){ 
-          State.funds+=a.currentBid; State.statAuctionsSold++;
-          toast(`SOLD for $${fmt(a.currentBid)}!`); 
-          State.auctions.splice(i,1); updateHUD(); 
-          if($('tab-auction').classList.contains('active')) renderAuctions();
-        }
-      }
+    if (State.auto.autoHarvest) {
+      let ready = State.growPots.filter(p => p.occupied && p.progress >= 100);
+      if (ready.length > 0) harvestAllPlants();
     }
+
+    if (State.auto.autoWater) {
+      let empty = State.growPots.filter(p => !p.occupied);
+      if (empty.length > 0 && State.seedInventory.length > 0) quickPlantBestSeed();
+    }
+
+    if (State.auto.autoCure && tickCounter % 50 === 0) burpAllJars();
+
+    if (State.auto.autoRestock && tickCounter % 20 === 0) {
+      let emptyShelves = State.storeShelves.filter(s => !s.item);
+      if (emptyShelves.length > 0 && State.stash.length > 0) autoStockAllShelves();
+    }
+
+    if (tickCounter % 15 === 0) customerTick();
+
+    if ($('tab-grow').classList.contains('active')) renderGrowUI();
   }
 
-  /* ================= INIT & NAVIGATION ================= */
+  /* ================= NAVIGATION & INITIALIZATION ================= */
   function setTab(tabId) {
-    document.querySelectorAll('.nav-btn').forEach(b => { b.classList.remove('active'); if(b.getAttribute('onclick').includes(tabId)) b.classList.add('active'); });
+    document.querySelectorAll('.nav-btn').forEach(b => {
+      b.classList.remove('active');
+      if (b.getAttribute('onclick').includes(tabId)) b.classList.add('active');
+    });
     document.querySelectorAll('.view-tab').forEach(t => t.classList.remove('active'));
-    const target = $('tab-'+tabId); if(target) target.classList.add('active');
+    const target = $('tab-' + tabId); if (target) target.classList.add('active');
 
-    if(tabId==='fleet') renderFleet();
-    if(tabId==='pilots') renderPilots();
-    if(tabId==='routes') renderRoutes();
-    if(tabId==='auction') renderAuctions();
-    if(tabId==='checklist') { renderMilestones(); renderSideMissions(); }
-    if(tabId==='upgrades') renderUpgrades();
+    if (tabId === 'grow') renderGrowUI();
+    if (tabId === 'seeds') { renderOwnedSeeds(); renderSeedCatalog(); }
+    if (tabId === 'store') renderStore();
+    if (tabId === 'breeding') { updateBreedingSelects(); previewBreeding(); }
+    if (tabId === 'stash') renderStash();
+    if (tabId === 'cups') { renderCups(); renderTrophies(); }
   }
 
-  function initUI() {
-    if(!State.routes || State.routes.length < 400) State.routes = generateRoutes();
-    if(!State.sideMissions || State.sideMissions.length === 0) generateSideMissions();
-    updateHUD(); refreshMarket(); updateAutomationUI(); renderUpgrades();
-    if(globalInterval) clearInterval(globalInterval); globalInterval = setInterval(gameTick, 100);
+  function initStarterPack() {
+    State.seedInventory = [
+      { name: "Northern Lights #5", role: "INDICA", lineage: "Afghani × Thai", tierIdx: 2, thc: 22, terps: 3.8, bagAppeal: 82, palette: "EMERALD_MINT", morphology: "MAIN_COLA", seedInt: 1420 },
+      { name: "Original Sour Diesel", role: "SATIVA", lineage: "Chemdawg 91 × Super Skunk", tierIdx: 4, thc: 26, terps: 5.1, bagAppeal: 86, palette: "SUNSET_AMBER", morphology: "MAIN_COLA", seedInt: 4200 },
+      { name: "OG Kush (Ghost Cut)", role: "HYBRID", lineage: "Chemdawg × Lemon Thai × Hindu Kush", tierIdx: 4, thc: 27, terps: 4.9, bagAppeal: 89, palette: "EMERALD_MINT", morphology: "DENSE_NUG", seedInt: 7100 }
+    ];
   }
-  initUI();
+
+  function init() {
+    initStarterPack();
+    initPots();
+    initStore();
+    updateHUD(); renderGrowUI(); renderOwnedSeeds(); renderSeedCatalog(); renderStore(); renderCups(); updateAutoUI();
+    setInterval(gameTick, 100);
+  }
+
+  window.addEventListener('DOMContentLoaded', init);
 </script>
 </body>
 </html>
