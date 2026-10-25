@@ -119,14 +119,20 @@
   .skill-node { background: #000; border: 1px solid var(--panel-border); border-radius: 5px; padding: 6px; display: flex; justify-content: space-between; align-items: center; gap: 6px; }
   .skill-node.unlocked { border-color: var(--c-green); background: #051205; }
   .skill-node.maxed { border-color: var(--c-gold); background: #121004; }
-  select, input[type="text"], input[type="number"] { background: #020502; color: #fff; border: 1px solid var(--silver-dark); padding: 5px; font-size: 9px; border-radius: 4px; outline: none; font-weight: bold; width: 100%; }
+  select, input[type="text"], input[type="number"], textarea { background: #020502; color: #fff; border: 1px solid var(--silver-dark); padding: 5px; font-size: 9px; border-radius: 4px; outline: none; font-weight: bold; width: 100%; }
   .check-item { display: flex; justify-content: space-between; align-items: center; background: #000; padding: 7px 9px; border: 1px solid var(--panel-border); border-radius: 5px; font-size: 9.5px; gap: 6px; }
   .modal-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.88); backdrop-filter: blur(8px); z-index: 100; display: none; align-items: center; justify-content: center; padding: 12px; }
   .modal-overlay.active { display: flex; }
-  .modal-card { background: #090f09; border: 1px solid var(--c-green); border-radius: 8px; width: 100%; max-width: 540px; max-height: 85vh; overflow-y: auto; padding: 14px; display: flex; flex-direction: column; gap: 8px; box-shadow: 0 10px 30px rgba(0,0,0,0.9); }
+  .modal-card { background: #090f09; border: 1px solid var(--c-green); border-radius: 8px; width: 100%; max-width: 580px; max-height: 88vh; overflow-y: auto; padding: 14px; display: flex; flex-direction: column; gap: 8px; box-shadow: 0 10px 30px rgba(0,0,0,0.9); }
   .ledger-box { background: #020502; border: 1px solid var(--c-gold); border-radius: 6px; padding: 10px; font-family: monospace; font-size: 9.5px; line-height: 1.5; color: var(--silver-bright); }
   .ledger-line { display: flex; justify-content: space-between; border-bottom: 1px dashed #1c2e1c; padding: 2px 0; }
   .ledger-fact-box { background: #000; border-left: 3px solid var(--c-green); padding: 8px 10px; font-size: 9px; font-style: italic; color: var(--silver-main); border-radius: 3px; margin-top: 4px; }
+  .handbook-toc { display: flex; gap: 4px; overflow-x: auto; padding-bottom: 4px; border-bottom: 1px solid var(--panel-border); margin-bottom: 6px; }
+  .handbook-toc button { flex-shrink: 0; font-size: 8px; }
+  .handbook-section { display: none; flex-direction: column; gap: 6px; font-size: 9.5px; line-height: 1.5; color: var(--silver-main); }
+  .handbook-section.active { display: flex; }
+  .handbook-section h3 { color: var(--c-gold); font-size: 11px; margin-top: 4px; text-transform: uppercase; }
+  .handbook-section b { color: #fff; }
   #toast-rack { position: fixed; bottom: 95px; left: 10px; right: 10px; display: flex; flex-direction: column; gap: 5px; z-index: 1000; pointer-events: none; }
   .toast { background: #000; border: 1px solid var(--silver-dark); border-left: 3px solid var(--c-green); color: #fff; padding: 7px 10px; font-size: 10px; font-weight: bold; font-family: monospace; border-radius: 4px; box-shadow: 0 4px 20px rgba(0,0,0,0.95); animation: slideUp 0.2s, fadeOut 0.4s 2.6s forwards; pointer-events: auto; }
   @keyframes slideUp { from { transform: translateY(15px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
@@ -171,8 +177,8 @@
     </div>
     <div style="display:flex; gap:3px;">
       <button class="btn btn-gold" onclick="advanceDayManual()">NEXT DAY</button>
-      <button class="btn" style="padding:3px 5px;" onclick="saveGame()">SAVE</button>
-      <button class="btn" style="padding:3px 5px;" onclick="loadGame()">LOAD</button>
+      <button class="btn btn-blue" onclick="openHandbookModal()">📖 MANUAL</button>
+      <button class="btn" style="padding:3px 5px;" onclick="openSaveModal()">SAVE/SYNC</button>
       <button class="btn btn-scarlet" id="btn-god" style="padding:3px 5px;" onclick="toggleGodMode()">GOD</button>
     </div>
   </div>
@@ -185,6 +191,7 @@
       <div class="hud-pill">ROSIN: <span id="hud-rosin-g" style="color:var(--c-gold);">0g</span></div>
       <div class="hud-pill">SEEDS: <span id="hud-seeds-count" style="color:var(--c-blue);">4</span></div>
       <div class="hud-pill">PACKS: <span id="hud-stash-count">0</span></div>
+      <div class="hud-pill">MOTHERS: <span id="hud-mother-count" style="color:var(--c-purple);">0/4</span></div>
       <div class="hud-pill">CANOPY: <span id="hud-fac-name" style="color:var(--c-amber);">2-Plant Closet</span></div>
     </div>
     <span class="badge-ohio" id="hud-rank">OHIO HOMEGROWER</span>
@@ -192,7 +199,7 @@
 </header>
 
 <main>
-  <!-- TAB 1: CRAFT CANOPY -->
+  <!-- TAB 1: CRAFT CANOPY & MOTHER TENT -->
   <div id="tab-grow" class="view-tab active">
     <div class="panel">
       <div class="panel-header">
@@ -215,6 +222,16 @@
       <div id="grow-pots-grid" class="grow-grid"></div>
     </div>
 
+    <!-- MOTHER PLANT & CLONE NURSERY SUITE -->
+    <div class="panel">
+      <div class="panel-header">
+        <span>Mother Plant &amp; Clone Nursery Tent</span>
+        <span class="badge" style="color:var(--c-purple); border-color:var(--c-purple);">PERMANENT GENETICS</span>
+      </div>
+      <p style="font-size:9.5px; color:var(--silver-dim);">Select high-scoring plants to keep as perpetual mothers. Take free, instant genetic clone cuttings anytime without buying seeds!</p>
+      <div id="mother-tents-grid" style="display:grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap:8px;"></div>
+    </div>
+
     <div class="panel">
       <div class="panel-header">Canopy Automation &amp; AgTech Suite</div>
       <div style="display:flex; flex-direction:column; gap:6px;">
@@ -227,7 +244,7 @@
           <button id="chk-autoharvest" class="btn" onclick="toggleAuto('autoHarvest')">ENABLE</button>
         </div>
         <div class="check-item">
-          <div><div style="font-weight:bold; color:#fff;">Automated High-Speed Packaging</div><div style="font-size:8px; color:var(--silver-dim);">Auto-jars harvested bulk into Ohio Tenths (2.83g) for retail shelves.</div></div>
+          <div><div style="font-weight:bold; color:#fff;">Automated High-Speed Smart Pack</div><div style="font-size:8px; color:var(--silver-dim);">Auto-fractions cured bulk into maximum margin retail formats.</div></div>
           <button id="chk-autopack" class="btn" onclick="toggleAuto('autoPack')">ENABLE</button>
         </div>
         <div class="check-item">
@@ -282,7 +299,16 @@
         </div>
         <button class="btn btn-gold" style="padding:9px; font-size:9.5px;" onclick="pressBulkToRosin()">Press &amp; Package Solventless Concentrate (Uses 25g Bulk)</button>
       </div>
-      <div class="panel-header" style="margin-top:6px;">Solventless Rosin Vault Inventory</div>
+      
+      <div class="control-bar" style="margin-top:6px;">
+        <span style="font-size:8.5px; color:var(--silver-dim);">SORT ROSIN VAULT:</span>
+        <button class="btn" onclick="sortRosinVault('score')">Score</button>
+        <button class="btn" onclick="sortRosinVault('thc')">THC</button>
+        <button class="btn" onclick="sortRosinVault('terps')">Terpenes</button>
+        <button class="btn" onclick="sortRosinVault('units')">Units</button>
+      </div>
+
+      <div class="panel-header" style="margin-top:4px;">Solventless Rosin Vault Inventory</div>
       <div id="rosin-vault-list" style="display:flex; flex-direction:column; gap:8px;"></div>
     </div>
   </div>
@@ -292,10 +318,17 @@
     <div class="panel">
       <div class="panel-header">
         <span>Personal Seed Vault (<span id="owned-seeds-total">0</span>)</span>
-        <button class="btn btn-green" onclick="setTab('grow')">Go To Canopy</button>
+        <div style="display:flex; gap:4px;">
+          <button class="btn" onclick="sortOwnedSeeds('thc')">THC</button>
+          <button class="btn" onclick="sortOwnedSeeds('tier')">Tier</button>
+          <button class="btn" onclick="sortOwnedSeeds('score')">Score</button>
+          <button class="btn" onclick="sortOwnedSeeds('name')">Name</button>
+          <button class="btn btn-green" onclick="setTab('grow')">Go To Canopy</button>
+        </div>
       </div>
       <div id="owned-seeds-dossiers" style="display:flex; flex-direction:column; gap:10px; min-height:40px;"></div>
     </div>
+    
     <div class="panel">
       <div class="panel-header">
         <span>Ohio Certified Seed Bank &amp; Breeder Stock (104 Strains)</span>
@@ -324,25 +357,41 @@
             <option value="9">T10: Diamond Elite</option>
           </select>
         </div>
+        <div class="control-group">
+          <button class="btn" onclick="sortSeedCatalog('priceAsc')">Price: Low</button>
+          <button class="btn" onclick="sortSeedCatalog('priceDesc')">Price: High</button>
+          <button class="btn" onclick="sortSeedCatalog('thc')">THC</button>
+        </div>
       </div>
       <div id="seed-catalog-grid" style="display:flex; flex-direction:column; gap:10px;"></div>
     </div>
   </div>
 
-  <!-- TAB 5: PACKAGING STATION -->
+  <!-- TAB 5: PACKAGING STATION WITH SMART PACK & EXPANDED PRE-ROLLS -->
   <div id="tab-packaging" class="view-tab">
     <div class="panel">
       <div class="panel-header">
-        <span>Packaging Station: Multi-Weight Ohio Formats</span>
-        <span style="font-size:9px; color:var(--c-green);">BULK CURED BATCHES</span>
+        <span>Packaging Station: Multi-Format Ohio Ratios</span>
+        <div style="display:flex; gap:4px;">
+          <span style="font-size:8.5px; color:var(--silver-dim); align-self:center;">SORT BULK:</span>
+          <button class="btn" onclick="sortBulkHarvests('weight')">Weight</button>
+          <button class="btn" onclick="sortBulkHarvests('thc')">THC</button>
+          <button class="btn" onclick="sortBulkHarvests('score')">Score</button>
+        </div>
       </div>
-      <p style="font-size:9.5px; color:var(--silver-dim);">Select batch packaging: [ 1x | 10x | 25x | MAX ] into Ohio Tenths, Half-Zips, Full Zips, or 1-Pound Wholesale Bales.</p>
+      <p style="font-size:9.5px; color:var(--silver-dim);">Select single-weight packaging or use <b>⚡ SMART PACK</b> to auto-fraction your bulk flower into an optimal profit/velocity balance across Tenths, Halves, Zips, and 1g / 5-Pack / 28-Pack Pre-Rolls!</p>
       <div id="packaging-bulk-list" style="display:flex; flex-direction:column; gap:10px;"></div>
     </div>
+    
     <div class="panel">
       <div class="panel-header">
         <span>Packaged Vault Inventory</span>
-        <button class="btn btn-green" onclick="setTab('store')">Go To Dispensary Menu</button>
+        <div style="display:flex; gap:4px;">
+          <button class="btn" onclick="sortPackagedVault('units')">Units</button>
+          <button class="btn" onclick="sortPackagedVault('val')">Retail $</button>
+          <button class="btn" onclick="sortPackagedVault('score')">Score</button>
+          <button class="btn btn-green" onclick="setTab('store')">Go To Menu</button>
+        </div>
       </div>
       <div id="packaged-vault-list" style="display:flex; flex-direction:column; gap:10px;"></div>
     </div>
@@ -371,7 +420,7 @@
         </div>
       </div>
       <div style="display:flex; justify-content:space-between; align-items:center; font-size:9.5px; color:var(--silver-dim);">
-        <span>Stock Tenths, Zips, Rosin Jars, Hash Holes, Glassware, and Buckeyes!</span>
+        <span>Stock Tenths, Zips, Pre-Roll Boxes, Rosin Jars, Glassware, and Buckeyes!</span>
         <span style="color:var(--c-gold);">PATRONS: <b id="store-visits">240</b>/hr</span>
       </div>
       <div id="store-shelves-grid" class="store-grid" style="margin-top:6px;"></div>
@@ -403,18 +452,25 @@
     </div>
 
     <div class="panel">
-      <div class="panel-header">Dispensary Register Feed</div>
+      <div class="panel-header">
+        <span>Dispensary Register &amp; Patron Feed</span>
+        <span style="font-size:8px; color:var(--silver-dim);">4 PATRON ARCHETYPES ACTIVE</span>
+      </div>
       <div id="customer-ticker" style="display:flex; flex-direction:column; gap:4px; max-height:140px; overflow-y:auto; font-size:9px; font-family:monospace; color:var(--silver-main);">
-        <div style="color:var(--silver-dim);">Dispensary doors unlocked. Adult-use patrons and medical patients browsing menu...</div>
+        <div style="color:var(--silver-dim);">Dispensary doors unlocked. Terp Chasers, Budget Rollers, Rosin Heads, and Medical Patients browsing menu...</div>
       </div>
     </div>
   </div>
 
-  <!-- TAB 8: BREEDING MATRIX -->
+  <!-- TAB 8: DEEP BREEDING MATRIX WITH CUSTOM NAMING -->
   <div id="tab-breeding" class="view-tab">
     <div class="panel">
-      <div class="panel-header">Genetic Pollination &amp; Breeding Matrix</div>
-      <p style="font-size:9.5px; color:var(--silver-dim);">Cross authentic genetics from your packaged vault. Stretches hybrid vigor, creates custom Ohio F1 seeds, and unlocks elite phenotypes.</p>
+      <div class="panel-header">
+        <span>Genetic Pollination &amp; Breeding Matrix</span>
+        <span class="badge" style="color:var(--c-scarlet); border-color:var(--c-scarlet);">FILIAL &amp; PHENO HUNTING</span>
+      </div>
+      <p style="font-size:9.5px; color:var(--silver-dim);">Cross authentic genetics from your vault. Generates stabilized filial generations (F1, F2, BX1), unlocks phenotype variation, and allows custom strain naming!</p>
+      
       <div style="display:grid; grid-template-columns: 1fr 1fr; gap:8px; margin-top:4px;">
         <div style="background:#000; border:1px solid var(--panel-border); padding:8px; border-radius:5px;">
           <div style="font-size:9px; font-weight:bold; color:var(--c-green); margin-bottom:4px;">MOTHER (Pistillate Plant)</div>
@@ -427,14 +483,25 @@
           <div id="preview-father" style="font-size:8.5px; color:var(--silver-dim); margin-top:4px; font-family:monospace;">Select father...</div>
         </div>
       </div>
+
+      <!-- CUSTOM STRAIN NAME & FILIAL LABELS -->
+      <div style="background:#000; border:1px solid var(--panel-border); padding:8px; border-radius:5px; margin-top:6px; display:flex; flex-direction:column; gap:4px;">
+        <div style="display:flex; justify-content:space-between; align-items:center;">
+          <span style="font-size:9px; font-weight:bold; color:var(--c-gold);">CUSTOM STRAIN REGISTRATION NAME:</span>
+          <span class="badge" id="breed-filial-badge" style="color:var(--c-cyan); border-color:var(--c-cyan);">GENERATION: F1</span>
+        </div>
+        <input type="text" id="breed-custom-name" placeholder="Enter custom name (e.g., Buckeye Lemon Diesel #4)..." style="font-size:10px; padding:6px;" />
+      </div>
+
       <div id="breed-result-box" style="background:#010401; border:1px dashed var(--c-gold); padding:9px; border-radius:5px; margin-top:6px; display:none;">
         <div style="display:flex; justify-content:space-between; align-items:center;">
           <span style="font-weight:900; color:#fff; font-size:12px;" id="breed-cross-name">Cross Preview</span>
           <span class="score-pill" id="breed-est-score">EST SCORE: 88</span>
         </div>
         <div style="font-size:9px; color:var(--silver-dim); margin-top:3px;" id="breed-desc-txt">Genetic forecast...</div>
+        <div id="breed-pheno-preview" style="font-size:8.5px; color:var(--c-lime); margin-top:4px; font-family:monospace;"></div>
       </div>
-      <button class="btn btn-scarlet" style="padding:10px; font-size:10px; margin-top:4px;" onclick="executeCrossBreed()">Pollinate &amp; Generate Seeds ($250 Lab Fee)</button>
+      <button class="btn btn-scarlet" style="padding:10px; font-size:10px; margin-top:4px;" onclick="executeCrossBreed()">Pollinate &amp; Generate Stabilized Seeds ($250 Lab Fee)</button>
     </div>
   </div>
 
@@ -470,6 +537,81 @@
 </main>
 
 <!-- MODALS -->
+<!-- 1. GROWER'S HANDBOOK / FIELD MANUAL MODAL -->
+<div id="modal-handbook" class="modal-overlay">
+  <div class="modal-card">
+    <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid var(--c-gold); padding-bottom:6px;">
+      <span style="font-weight:900; color:var(--c-gold); font-size:12.5px;">📖 THE OHIO CULTIVATOR &amp; EMPIRE HANDBOOK</span>
+      <button class="btn btn-danger" onclick="closeHandbookModal()">✕ Close</button>
+    </div>
+    <div class="handbook-toc">
+      <button class="btn btn-green" onclick="showHandbookSection('sec-law')">1. Ohio Law &amp; Issue 2</button>
+      <button class="btn" onclick="showHandbookSection('sec-agronomy')">2. Agronomy &amp; Yields</button>
+      <button class="btn" onclick="showHandbookSection('sec-breeding')">3. Advanced Breeding</button>
+      <button class="btn" onclick="showHandbookSection('sec-rosin')">4. Solventless Lab</button>
+      <button class="btn" onclick="showHandbookSection('sec-retail')">5. Dispensary &amp; Archetypes</button>
+    </div>
+    
+    <div id="sec-law" class="handbook-section active">
+      <h3>Ohio Issue 2 &amp; Commercial Framework</h3>
+      <p>In November 2023, Ohio voters approved <b>Issue 2</b>, establishing the adult-use recreational cannabis program alongside the existing medical system.</p>
+      <p><b>The Ohio Tenth (2.83g):</b> Under Ohio administrative code, flower is dispensed in metric tenths of an ounce (2.83 grams) rather than standard 3.5g eighths. In Buckeye Buds, packaging into 2.83g Tenths grants the highest dollar-per-gram retail return.</p>
+      <p><b>Homegrow &amp; Canopy Rights:</b> Homegrowers are legally permitted up to 6 plants per individual or 12 per household. Commercial cultivation requires Division of Cannabis Control (DCC) licensing, simulated through our 200 to 10,000-plant Industrial Warehouses.</p>
+    </div>
+
+    <div id="sec-agronomy" class="handbook-section">
+      <h3>Canopy Science: PPFD, VPD, CO₂ &amp; EC</h3>
+      <p><b>PPFD (Photosynthetic Photon Flux Density):</b> Measures usable photon emission. Upgraded canopies push past 1,000 µmol/m²/s, maximizing flower density.</p>
+      <p><b>VPD (Vapor Pressure Deficit):</b> The target sweet spot is <b>1.05 – 1.25 kPa</b> during flowering. Too dry stresses stomata; too humid invites botrytis.</p>
+      <p><b>Mothers &amp; Clones:</b> Storing high-score crops in your <b>Mother Tent</b> lets you take unlimited, instant 0-day vegetative cuttings without consuming seed stock.</p>
+    </div>
+
+    <div id="sec-breeding" class="handbook-section">
+      <h3>Breeding Matrix, Filial Generations &amp; Pheno Hunting</h3>
+      <p><b>F1 Hybrid Vigor:</b> Crossing two unrelated certified cuts produces an <b>F1 generation</b>, enjoying robust growth, high resin gland density, and +3 to +5 baseline score improvements.</p>
+      <p><b>F2 Segregation:</b> Crossing two sibling F1s unlocks wild genetic segregation. THC swings become much wider, with rare chances to roll 38%+ diamond chemotypes.</p>
+      <p><b>Backcrossing (BX1):</b> Pollinating an F1 or F2 offspring back to its original parent locks in desirable recessive traits such as rare terpinolene profiles or purple calyx anthocyanins.</p>
+      <p><b>Custom Names:</b> You can name your custom creations to organize your private seed vault.</p>
+    </div>
+
+    <div id="sec-rosin" class="handbook-section">
+      <h3>Solventless Ice-Water Hash &amp; Rosin Extraction</h3>
+      <p><b>Mechanical Separation:</b> Pure ice and water dislodge mature 73µ–120µ trichome heads from cured flower without butane, propane, or chemical solvents.</p>
+      <p><b>Pneumatic Heat Press:</b> Applying 180°F–200°F plate heat at 8–10 tons of pressure squashes trichome glands into aromatic Live Rosin Cold-Cure Badder.</p>
+      <p><b>Hash Holes &amp; Vapes:</b> Combining rosin with whole flower allows you to craft high-margin Hash Hole donuts and pure solventless vape pods.</p>
+    </div>
+
+    <div id="sec-retail" class="handbook-section">
+      <h3>Dispensary Velocity &amp; Customer Archetypes</h3>
+      <p><b>The 4 Patron Archetypes:</b></p>
+      <p>• <b>Terp Chasers:</b> Demand cultivars with 5.5%+ terpenes; pay top-dollar for Top Shelf &amp; Championship Tiers.</p>
+      <p>• <b>Budget Rollers:</b> Snap up single cones, 5-pack tins, and 28-pack baker boxes.</p>
+      <p>• <b>Rosin Heads:</b> Pay cash for cold-cure rosin jars, hash holes, and pure concentrates.</p>
+      <p>• <b>Medical Patients:</b> Prioritize certified Ohio Tenths and high-score indicas.</p>
+      <p><b>⚡ Smart Pack:</b> Click Smart Pack on any bulk batch to automatically parcel flower into an optimized product ratio, maximizing sell-through and profit.</p>
+    </div>
+  </div>
+</div>
+
+<!-- 2. SAVE BACKUP & IMPORT/EXPORT JSON MODAL -->
+<div id="modal-save-export" class="modal-overlay">
+  <div class="modal-card">
+    <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid var(--c-green); padding-bottom:6px;">
+      <span style="font-weight:900; color:#fff; font-size:12px;">EMPIRE SAVE &amp; CLOUD SYNC DESK</span>
+      <button class="btn btn-danger" onclick="closeSaveModal()">✕ Close</button>
+    </div>
+    <div style="font-size:9px; color:var(--silver-dim);">Copy your raw game state JSON below to move your empire between your phone and PC, or paste a saved code to restore.</div>
+    <textarea id="save-json-area" rows="6" style="resize:none; font-family:monospace; font-size:8px;"></textarea>
+    <div style="display:grid; grid-template-columns: 1fr 1fr; gap:6px;">
+      <button class="btn btn-green" onclick="exportSaveToTextarea()">Generate Export Code</button>
+      <button class="btn btn-gold" onclick="copySaveToClipboard()">Copy To Clipboard</button>
+      <button class="btn btn-blue" onclick="importSaveFromTextarea()">Import Pasted Code</button>
+      <button class="btn btn-danger" onclick="hardResetEmpire()">Hard Reset Game</button>
+    </div>
+  </div>
+</div>
+
+<!-- 3. DAILY LEDGER MODAL -->
 <div id="modal-ledger" class="modal-overlay">
   <div class="modal-card">
     <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid var(--c-gold); padding-bottom:6px;">
@@ -504,6 +646,7 @@
   </div>
 </div>
 
+<!-- 4. SEED PICKER MODAL -->
 <div id="modal-seed-picker" class="modal-overlay">
   <div class="modal-card">
     <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid var(--panel-border); padding-bottom:6px;">
@@ -514,6 +657,7 @@
   </div>
 </div>
 
+<!-- 5. DOSSIER MODAL -->
 <div id="modal-dossier" class="modal-overlay">
   <div class="modal-card">
     <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid var(--panel-border); padding-bottom:6px;">
@@ -545,7 +689,7 @@
 
 <div id="toast-rack"></div>
 
-<!-- CORE GRAPHICS PIPELINE & STATE CONTAINER -->
+<!-- ================= 128px PIXEL ART GRAPHICS GENERATOR ================= -->
 <script>
   function Mulberry32(a) {
     return function() {
@@ -756,6 +900,81 @@
         for (let x = Math.floor(64 - halfW); x <= Math.ceil(64 + halfW); x++) grid[y][x] = isFilter ? '#d1b894' : '#e0cfb8';
       }
       for (let y = 96; y <= 112; y += 4) { for (let x = 60; x <= 68; x++) grid[y][x] = '#8f7756'; }
+    } else if (category === "PREROLL_5PACK") {
+      // 5-PACK RETRO METALLIC TIN WITH 5 CONES
+      for (let y = 20; y <= 110; y++) {
+        for (let x = 24; x <= 104; x++) {
+          let edge = (y === 20 || y === 110 || x === 24 || x === 104);
+          grid[y][x] = edge ? '#334155' : '#0f172a';
+        }
+      }
+      for (let i = 0; i < 5; i++) {
+        let cx = 34 + i * 15;
+        for (let y = 30; y <= 100; y++) {
+          let w = y > 84 ? 2 : 3;
+          let col = y > 84 ? '#d1b894' : '#e2e8f0';
+          for (let x = cx - w; x <= cx + w; x++) grid[y][x] = col;
+        }
+      }
+      for (let x = 32; x <= 96; x++) { grid[70][x] = '#ba0c2f'; }
+    } else if (category === "PREROLL_28PACK") {
+      // 28-PACK PARTY/BAKER CARTON
+      for (let y = 18; y <= 112; y++) {
+        for (let x = 20; x <= 108; x++) {
+          let edge = (y === 18 || y === 112 || x === 20 || x === 108);
+          grid[y][x] = edge ? '#78350f' : '#1c1917';
+        }
+      }
+      for (let row = 0; row < 3; row++) {
+        let sy = 28 + row * 26;
+        for (let c = 0; c < 9; c++) {
+          let cx = 28 + c * 9;
+          for (let y = sy; y <= sy + 20; y++) {
+            grid[y][cx] = y > sy + 14 ? '#d1b894' : '#fef08a';
+          }
+        }
+      }
+      for (let y = 92; y <= 106; y++) {
+        for (let x = 32; x <= 96; x++) grid[y][x] = '#ba0c2f';
+      }
+    } else if (category === "MOTHER_PLANT") {
+      // PERPETUAL MOTHER PLANT IN CERAMIC PLANTER
+      for (let y = 98; y <= 124; y++) {
+        let pw = 28 + Math.floor((y - 98) * 0.4);
+        for (let x = 64 - pw; x <= 64 + pw; x++) grid[y][x] = (x === 64 - pw || x === 64 + pw || y === 124) ? '#381c0d' : '#854d0e';
+      }
+      for (let y = 50; y <= 98; y++) {
+        grid[y][63] = '#15803d'; grid[y][64] = '#16a34a'; grid[y][65] = '#14532d';
+      }
+      for (let i = 0; i < 48; i++) {
+        let prog = i / 47;
+        let cy = 84 - prog * 60;
+        let spread = 36 * Math.sin(prog * Math.PI);
+        let cx = 64 + (rng() - 0.5) * spread * 2;
+        let r = 8 + rng() * 6;
+        for (let y = Math.floor(cy - r); y <= Math.ceil(cy + r); y++) {
+          for (let x = Math.floor(cx - r); x <= Math.ceil(cx + r); x++) {
+            if (Math.hypot(x - cx, y - cy) <= r) grid[y][x] = pal.mid[Math.floor(rng() * pal.mid.length)];
+          }
+        }
+      }
+    } else if (category === "CLONE_CUTTING") {
+      // ROCKWOOL CUBE WITH ROOTED CUTTING
+      for (let y = 84; y <= 118; y++) {
+        for (let x = 44; x <= 84; x++) {
+          let edge = (y === 84 || y === 118 || x === 44 || x === 84);
+          grid[y][x] = edge ? '#4d7c0f' : '#65a30d';
+        }
+      }
+      for (let y = 40; y <= 84; y++) {
+        grid[y][64] = '#15803d';
+      }
+      for (let r = 0; r < 3; r++) {
+        let ly = 45 + r * 12;
+        for (let x = 64 - 16; x <= 64 + 16; x++) {
+          if (Math.abs(x - 64) > 3) grid[ly][x] = pal.high[Math.floor(rng() * pal.high.length)];
+        }
+      }
     } else if (category === "PIPE") {
       for (let y = 20; y <= 62; y++) {
         for (let x = 20; x <= 66; x++) {
@@ -852,139 +1071,171 @@
     e.className = 'toast'; e.innerHTML = msg; r.appendChild(e);
     setTimeout(() => e.remove(), 2800);
   }
-</script>
 
-<!-- ================= PART 2: DATABASE & CONSTANTS ================= -->
+  function openHandbookModal() { $('modal-handbook').classList.add('active'); }
+  function closeHandbookModal() { $('modal-handbook').classList.remove('active'); }
+  function showHandbookSection(secId) {
+    document.querySelectorAll('.handbook-section').forEach(s => s.classList.remove('active'));
+    let t = $(secId); if (t) t.classList.add('active');
+  }
+
+  function openSaveModal() {
+    $('modal-save-export').classList.add('active');
+    exportSaveToTextarea();
+  }
+  function closeSaveModal() { $('modal-save-export').classList.remove('active'); }
+</script>
+<!-- ================= PART 2: DATABASE & EMPIRE CONSTANTS ================= -->
 <script>
-  /* ================= 104 AUTHENTIC CERTIFIED STRAINS DATABASE ================= */
+  /* ================= 104 AUTHENTIC CLEAN-NAMED STRAINS DATABASE ================= */
+  /* Parenthetical tags removed from primary names to fix breeding cross labels */
   const REAL_STRAINS_DATABASE = [
     // 1-16: THE JACK HERER DYNASTY
-    { id: "s1", name: "Jack Herer (Original 1994 Cut)", role: "SATIVA", lineage: "Haze × Northern Lights #5 × Shiva Skunk", tierIdx: 5, thc: 24, terps: 5.6, pal: "EMERALD_MINT", morph: "MAIN_COLA", cost: 95, desc: "Bred by Sensi Seeds in honor of the Hemperor. Pure peppery pine terpinolene with electric clarity." },
-    { id: "s2", name: "Jack Flash", role: "SATIVA", lineage: "Jack Herer × Super Skunk × Haze", tierIdx: 5, thc: 25, terps: 5.4, pal: "LIME_DIESEL", morph: "MAIN_COLA", cost: 95, desc: "Commercial vigor variant of Jack. Pungent lemon zest haze, spicy cedar, and lightning-fast bloom." },
-    { id: "s3", name: "Cinderella 99 (C99)", role: "SATIVA", lineage: "Princess × P94 (Found in Sensi Jack Herer 2g bud)", tierIdx: 6, thc: 27, terps: 6.2, pal: "GOLDEN_HONEY", morph: "FOXTAIL", cost: 105, desc: "Mr. Soul / Brothers Grimm masterpiece. Soaring tropical pineapple haze with intense resin." },
-    { id: "s4", name: "Jack the Ripper (Subcool Cut)", role: "SATIVA", lineage: "Jack's Cleaner × Space Queen", tierIdx: 6, thc: 26, terps: 6.8, pal: "LIME_DIESEL", morph: "MAIN_COLA", cost: 110, desc: "Subcool TGA legend. Lethal sweet lemon-sol cleaner terpenes with naturally elevated THCV." },
-    { id: "s5", name: "Jack's Cleaner", role: "SATIVA", lineage: "Pluton × Lamb's Bread × Purple Haze × NL#1", tierIdx: 5, thc: 24, terps: 5.8, pal: "EMERALD_MINT", morph: "MAIN_COLA", cost: 95, desc: "Elusive mother of modern Jack crosses. Aggressive resin production and pungent citrus solvent." },
-    { id: "s6", name: "Super Jack", role: "SATIVA", lineage: "Jack Herer × Super Silver Haze", tierIdx: 6, thc: 28, terps: 5.5, pal: "GOLDEN_HONEY", morph: "FOXTAIL", cost: 110, desc: "Towering spicy sativa colas with sweet sandalwood and endless daytime euphoria." },
-    { id: "s7", name: "Sour Jack", role: "SATIVA", lineage: "Original Sour Diesel × Jack Herer", tierIdx: 7, thc: 30, terps: 6.0, pal: "SUNSET_AMBER", morph: "MAIN_COLA", cost: 120, desc: "Noxious petroleum diesel fumes meeting peppery pine terpenes. Explosive head rush." },
-    { id: "s8", name: "Apple Jack", role: "HYBRID", lineage: "Jack Herer × White Widow", tierIdx: 5, thc: 25, terps: 4.8, pal: "EMERALD_MINT", morph: "DENSE_NUG", cost: 90, desc: "Warm baked apples, spiced cider, and sweet frosted pine needles with relaxing body flow." },
-    { id: "s9", name: "Black Jack", role: "INDICA", lineage: "Black Domina × Jack Herer", tierIdx: 6, thc: 27, terps: 5.2, pal: "MIDNIGHT_OBSIDIAN", morph: "DENSE_NUG", cost: 100, desc: "Saturated obsidian calyxes with spicy anise, dark hash, and heavy physical muscle relief." },
-    { id: "s10", name: "Candy Jack", role: "SATIVA", lineage: "Jack Herer × Skunk #1", tierIdx: 6, thc: 26, terps: 5.9, pal: "LIME_DIESEL", morph: "MAIN_COLA", cost: 105, desc: "Spun lemon cotton candy and skunky pine sap. Swept multiple connoisseur tasting cups." },
-    { id: "s11", name: "Jack Frost", role: "HYBRID", lineage: "Jack Herer × White Widow × Northern Lights #5", tierIdx: 6, thc: 28, terps: 5.3, pal: "EMERALD_MINT", morph: "DENSE_NUG", cost: 105, desc: "Thick blizzard of white trichomes with crisp peppermint and fresh pine aroma." },
-    { id: "s12", name: "Cracker Jack", role: "SATIVA", lineage: "Green Crack × Jack Herer", tierIdx: 6, thc: 27, terps: 5.7, pal: "GOLDEN_HONEY", morph: "FOXTAIL", cost: 100, desc: "Tropical mango zest, razor-sharp mental focus, and energetic morning stimulation." },
-    { id: "s13", name: "Lemon Jack", role: "SATIVA", lineage: "Jack Herer × Lemon Kush", tierIdx: 5, thc: 25, terps: 5.8, pal: "LIME_DIESEL", morph: "MAIN_COLA", cost: 95, desc: "Tart lemon oil cleaner, peppery spice, and soaring cerebral elevation." },
-    { id: "s14", name: "Galactic Jack", role: "SATIVA", lineage: "Jack Herer × Space Queen", tierIdx: 7, thc: 29, terps: 6.4, pal: "ROYAL_VIOLET", morph: "MAIN_COLA", cost: 115, desc: "Exotic pink-grapefruit haze and sweet cherry gas with blinding trichome density." },
-    { id: "s15", name: "Critical Jack", role: "HYBRID", lineage: "Critical+ × Jack Herer", tierIdx: 5, thc: 24, terps: 4.9, pal: "EMERALD_MINT", morph: "MAIN_COLA", cost: 90, desc: "Commercial branch-snapping yields with rich floral pine and woodsy hash spice." },
-    { id: "s16", name: "Strawberry Jack", role: "SATIVA", lineage: "Strawberry Cough × Jack Herer", tierIdx: 6, thc: 26, terps: 5.5, pal: "RUBY_ROSE", morph: "MAIN_COLA", cost: 105, desc: "Sweet wild field strawberries wrapped in pungent peppery pine resin." },
+    { id: "s1", name: "Jack Herer", cutInfo: "Original 1994 Cut", role: "SATIVA", lineage: "Haze × Northern Lights #5 × Shiva Skunk", tierIdx: 5, thc: 24, terps: 5.6, pal: "EMERALD_MINT", morph: "MAIN_COLA", cost: 95, desc: "Bred by Sensi Seeds in honor of the Hemperor. Pure peppery pine terpinolene with electric clarity." },
+    { id: "s2", name: "Jack Flash", cutInfo: "Super Haze Pheno", role: "SATIVA", lineage: "Jack Herer × Super Skunk × Haze", tierIdx: 5, thc: 25, terps: 5.4, pal: "LIME_DIESEL", morph: "MAIN_COLA", cost: 95, desc: "Commercial vigor variant of Jack. Pungent lemon zest haze, spicy cedar, and lightning-fast bloom." },
+    { id: "s3", name: "Cinderella 99", cutInfo: "Brothers Grimm P94", role: "SATIVA", lineage: "Princess × P94", tierIdx: 6, thc: 27, terps: 6.2, pal: "GOLDEN_HONEY", morph: "FOXTAIL", cost: 105, desc: "Mr. Soul / Brothers Grimm masterpiece. Soaring tropical pineapple haze with intense resin." },
+    { id: "s4", name: "Jack the Ripper", cutInfo: "Subcool Lemon Pheno", role: "SATIVA", lineage: "Jack's Cleaner × Space Queen", tierIdx: 6, thc: 26, terps: 6.8, pal: "LIME_DIESEL", morph: "MAIN_COLA", cost: 110, desc: "Subcool TGA legend. Lethal sweet lemon-sol cleaner terpenes with naturally elevated THCV." },
+    { id: "s5", name: "Jack's Cleaner", cutInfo: "Pluton Mother Cut", role: "SATIVA", lineage: "Pluton × Lamb's Bread × Purple Haze × NL#1", tierIdx: 5, thc: 24, terps: 5.8, pal: "EMERALD_MINT", morph: "MAIN_COLA", cost: 95, desc: "Elusive mother of modern Jack crosses. Aggressive resin production and pungent citrus solvent." },
+    { id: "s6", name: "Super Jack", cutInfo: "Silver Pheno", role: "SATIVA", lineage: "Jack Herer × Super Silver Haze", tierIdx: 6, thc: 28, terps: 5.5, pal: "GOLDEN_HONEY", morph: "FOXTAIL", cost: 110, desc: "Towering spicy sativa colas with sweet sandalwood and endless daytime euphoria." },
+    { id: "s7", name: "Sour Jack", cutInfo: "Diesel Terp Cut", role: "SATIVA", lineage: "Original Sour Diesel × Jack Herer", tierIdx: 7, thc: 30, terps: 6.0, pal: "SUNSET_AMBER", morph: "MAIN_COLA", cost: 120, desc: "Noxious petroleum diesel fumes meeting peppery pine terpenes. Explosive head rush." },
+    { id: "s8", name: "Apple Jack", cutInfo: "Dutch Spiced Cut", role: "HYBRID", lineage: "Jack Herer × White Widow", tierIdx: 5, thc: 25, terps: 4.8, pal: "EMERALD_MINT", morph: "DENSE_NUG", cost: 90, desc: "Warm baked apples, spiced cider, and sweet frosted pine needles with relaxing body flow." },
+    { id: "s9", name: "Black Jack", cutInfo: "Domina Resin Cut", role: "INDICA", lineage: "Black Domina × Jack Herer", tierIdx: 6, thc: 27, terps: 5.2, pal: "MIDNIGHT_OBSIDIAN", morph: "DENSE_NUG", cost: 100, desc: "Saturated obsidian calyxes with spicy anise, dark hash, and heavy physical muscle relief." },
+    { id: "s10", name: "Candy Jack", cutInfo: "Skunk Confection Cut", role: "SATIVA", lineage: "Jack Herer × Skunk #1", tierIdx: 6, thc: 26, terps: 5.9, pal: "LIME_DIESEL", morph: "MAIN_COLA", cost: 105, desc: "Spun lemon cotton candy and skunky pine sap. Swept multiple connoisseur tasting cups." },
+    { id: "s11", name: "Jack Frost", cutInfo: "Blizzard White Pheno", role: "HYBRID", lineage: "Jack Herer × White Widow × Northern Lights #5", tierIdx: 6, thc: 28, terps: 5.3, pal: "EMERALD_MINT", morph: "DENSE_NUG", cost: 105, desc: "Thick blizzard of white trichomes with crisp peppermint and fresh pine aroma." },
+    { id: "s12", name: "Cracker Jack", cutInfo: "Focus Pheno", role: "SATIVA", lineage: "Green Crack × Jack Herer", tierIdx: 6, thc: 27, terps: 5.7, pal: "GOLDEN_HONEY", morph: "FOXTAIL", cost: 100, desc: "Tropical mango zest, razor-sharp mental focus, and energetic morning stimulation." },
+    { id: "s13", name: "Lemon Jack", cutInfo: "Kush Cleaner Cut", role: "SATIVA", lineage: "Jack Herer × Lemon Kush", tierIdx: 5, thc: 25, terps: 5.8, pal: "LIME_DIESEL", morph: "MAIN_COLA", cost: 95, desc: "Tart lemon oil cleaner, peppery spice, and soaring cerebral elevation." },
+    { id: "s14", name: "Galactic Jack", cutInfo: "Grapefruit Space Cut", role: "SATIVA", lineage: "Jack Herer × Space Queen", tierIdx: 7, thc: 29, terps: 6.4, pal: "ROYAL_VIOLET", morph: "MAIN_COLA", cost: 115, desc: "Exotic pink-grapefruit haze and sweet cherry gas with blinding trichome density." },
+    { id: "s15", name: "Critical Jack", cutInfo: "Heavy Yield Cut", role: "HYBRID", lineage: "Critical+ × Jack Herer", tierIdx: 5, thc: 24, terps: 4.9, pal: "EMERALD_MINT", morph: "MAIN_COLA", cost: 90, desc: "Commercial branch-snapping yields with rich floral pine and woodsy hash spice." },
+    { id: "s16", name: "Strawberry Jack", cutInfo: "Field Berry Cut", role: "SATIVA", lineage: "Strawberry Cough × Jack Herer", tierIdx: 6, thc: 26, terps: 5.5, pal: "RUBY_ROSE", morph: "MAIN_COLA", cost: 105, desc: "Sweet wild field strawberries wrapped in pungent peppery pine resin." },
 
     // 17-32: OHIO HEIRLOOMS & MIDWEST LEGENDS
-    { id: "s17", name: "Lemon G (Athens Cut)", role: "SATIVA", lineage: "Original Columbian Sativa Heirloom (Athens, OH)", tierIdx: 5, thc: 24, terps: 6.0, pal: "LIME_DIESEL", morph: "FOXTAIL", cost: 95, desc: "The holy grail of Ohio cannabis. Unrivaled sweet lemon pledge terp bomb from Athens, OH." },
-    { id: "s18", name: "Ohio Deathstar", role: "INDICA", lineage: "Sour Diesel × Sensi Star (Southwestern OH)", tierIdx: 6, thc: 29, terps: 5.8, pal: "MIDNIGHT_OBSIDIAN", morph: "DENSE_NUG", cost: 110, desc: "Legendary Ohio creation by Team Deathstar. Extreme fuel, skunk, and narcotic sedation." },
-    { id: "s19", name: "Dumpster (Columbus 1990s)", role: "INDICA", lineage: "Northern Lights #1 × G13 Clone (Columbus, OH)", tierIdx: 4, thc: 23, terps: 4.8, pal: "EMERALD_MINT", morph: "DENSE_NUG", cost: 80, desc: "Mythical Columbus heirloom rescued in 1994. Deep musky berry candy and heavy couchlock." },
-    { id: "s20", name: "Orange 43 (Ohio Connoisseur)", role: "SATIVA", lineage: "White Fire 43 × Orange", tierIdx: 7, thc: 32, terps: 6.4, pal: "GOLDEN_HONEY", morph: "MAIN_COLA", cost: 125, desc: "Ohio's #1 medical cult classic. Explosive terpinolene orange gas and soaring euphoria." },
-    { id: "s21", name: "Sherbhead (Ohio Craft Cut)", role: "HYBRID", lineage: "Sunset Sherbet × Loompa's Headband", tierIdx: 6, thc: 28, terps: 5.2, pal: "ROYAL_VIOLET", morph: "MAIN_COLA", cost: 105, desc: "Constant top seller across Ohio dispensaries. Creamy gas and frosted violet calyxes." },
-    { id: "s22", name: "Buckeye Purple", role: "INDICA", lineage: "Gorilla Grape × North American Indica", tierIdx: 5, thc: 26, terps: 5.0, pal: "ROYAL_VIOLET", morph: "DENSE_NUG", cost: 90, desc: "Ohio deep purple cut. Floral grapes, hash spice, and therapeutic pain relief." },
-    { id: "s23", name: "Dual OG (Galenas Cut)", role: "INDICA", lineage: "True OG × Banana OG", tierIdx: 7, thc: 33, terps: 5.5, pal: "MIDNIGHT_OBSIDIAN", morph: "DENSE_NUG", cost: 120, desc: "Ohio connoisseur organic favorite. Earthy gas, overripe banana peel, and heavy sedation." },
-    { id: "s24", name: "Ice Cream Cake (Klutch Cut)", role: "HYBRID", lineage: "Wedding Cake × Gelato #33", tierIdx: 7, thc: 31, terps: 5.8, pal: "ROYAL_VIOLET", morph: "MAIN_COLA", cost: 115, desc: "Sugary vanilla cake batter, dark purple marbling, and ultra-heavy resin." },
-    { id: "s25", name: "Ohio Clean Chem", role: "HYBRID", lineage: "Chemdawg D × Lemon G", tierIdx: 6, thc: 28, terps: 5.4, pal: "LIME_DIESEL", morph: "DENSE_NUG", cost: 100, desc: "Acrid lemon fuel and piercing chemical cleaner. Relentless potency." },
-    { id: "s26", name: "Buckeye Diesel", role: "SATIVA", lineage: "Ohio Deathstar × Sour Diesel", tierIdx: 6, thc: 29, terps: 5.6, pal: "SUNSET_AMBER", morph: "MAIN_COLA", cost: 110, desc: "Double diesel lineage bred for raw skunky fuel and pungent room-filling stench." },
-    { id: "s27", name: "Scioto Haze", role: "SATIVA", lineage: "Amnesia Haze × Jack Herer", tierIdx: 5, thc: 25, terps: 5.0, pal: "GOLDEN_HONEY", morph: "FOXTAIL", cost: 90, desc: "Central Ohio outdoor champion. Spicy cedar, citrus mist, and lucid energy." },
-    { id: "s28", name: "Dayton Kush", role: "INDICA", lineage: "Pre-98 Bubba × Afghani #1", tierIdx: 5, thc: 26, terps: 4.8, pal: "MIDNIGHT_OBSIDIAN", morph: "DENSE_NUG", cost: 85, desc: "Roasted coffee beans, bitter dark chocolate, and heavy physical tranquility." },
-    { id: "s29", name: "Hocking Hills OG", role: "HYBRID", lineage: "Ghost OG × Buckeye Purple", tierIdx: 6, thc: 28, terps: 5.3, pal: "ROYAL_VIOLET", morph: "DENSE_NUG", cost: 100, desc: "Pine cleaner infused with rich purple grape juice and earthy forest moss." },
-    { id: "s30", name: "Cleveland Diesel", role: "SATIVA", lineage: "East Coast Sour Diesel × Skunk #1", tierIdx: 6, thc: 27, terps: 5.1, pal: "SUNSET_AMBER", morph: "MAIN_COLA", cost: 95, desc: "Industrial rust-belt kerosene petrol with pungent sour skunk undertones." },
-    { id: "s31", name: "Akron Hashplant", role: "INDICA", lineage: "G13 × Northern Lights #1", tierIdx: 5, thc: 25, terps: 4.6, pal: "EMERALD_MINT", morph: "DENSE_NUG", cost: 85, desc: "Heavy rubber-city indica with dense frosty golf-ball colas." },
-    { id: "s32", name: "Toledo Gas", role: "HYBRID", lineage: "Motorbreath × Deathstar", tierIdx: 7, thc: 32, terps: 5.9, pal: "MIDNIGHT_OBSIDIAN", morph: "MAIN_COLA", cost: 125, desc: "Industrial petroleum and acrid road-kill skunk terpenes." },
+    { id: "s17", name: "Lemon G", cutInfo: "Athens 1990s Cut", role: "SATIVA", lineage: "Original Columbian Sativa Heirloom (Athens, OH)", tierIdx: 5, thc: 24, terps: 6.0, pal: "LIME_DIESEL", morph: "FOXTAIL", cost: 95, desc: "The holy grail of Ohio cannabis. Unrivaled sweet lemon pledge terp bomb from Athens, OH." },
+    { id: "s18", name: "Ohio Deathstar", cutInfo: "Team Deathstar Original", role: "INDICA", lineage: "Sour Diesel × Sensi Star (Southwestern OH)", tierIdx: 6, thc: 29, terps: 5.8, pal: "MIDNIGHT_OBSIDIAN", morph: "DENSE_NUG", cost: 110, desc: "Legendary Ohio creation by Team Deathstar. Extreme fuel, skunk, and narcotic sedation." },
+    { id: "s19", name: "Dumpster", cutInfo: "Columbus 1994 Heirloom", role: "INDICA", lineage: "Northern Lights #1 × G13 Clone (Columbus, OH)", tierIdx: 4, thc: 23, terps: 4.8, pal: "EMERALD_MINT", morph: "DENSE_NUG", cost: 80, desc: "Mythical Columbus heirloom rescued in 1994. Deep musky berry candy and heavy couchlock." },
+    { id: "s20", name: "Orange 43", cutInfo: "Ohio Connoisseur Selection", role: "SATIVA", lineage: "White Fire 43 × Orange", tierIdx: 7, thc: 32, terps: 6.4, pal: "GOLDEN_HONEY", morph: "MAIN_COLA", cost: 125, desc: "Ohio's #1 medical cult classic. Explosive terpinolene orange gas and soaring euphoria." },
+    { id: "s21", name: "Sherbhead", cutInfo: "Klutch Craft Selection", role: "HYBRID", lineage: "Sunset Sherbet × Loompa's Headband", tierIdx: 6, thc: 28, terps: 5.2, pal: "ROYAL_VIOLET", morph: "MAIN_COLA", cost: 105, desc: "Constant top seller across Ohio dispensaries. Creamy gas and frosted violet calyxes." },
+    { id: "s22", name: "Buckeye Purple", cutInfo: "Melvan Deep Violet Cut", role: "INDICA", lineage: "Gorilla Grape × North American Indica", tierIdx: 5, thc: 26, terps: 5.0, pal: "ROYAL_VIOLET", morph: "DENSE_NUG", cost: 90, desc: "Ohio deep purple cut. Floral grapes, hash spice, and therapeutic pain relief." },
+    { id: "s23", name: "Dual OG", cutInfo: "Galenas Soil-Grown Pheno", role: "INDICA", lineage: "True OG × Banana OG", tierIdx: 7, thc: 33, terps: 5.5, pal: "MIDNIGHT_OBSIDIAN", morph: "DENSE_NUG", cost: 120, desc: "Ohio connoisseur organic favorite. Earthy gas, overripe banana peel, and heavy sedation." },
+    { id: "s24", name: "Ice Cream Cake", cutInfo: "Ohio Vanilla Pheno", role: "HYBRID", lineage: "Wedding Cake × Gelato #33", tierIdx: 7, thc: 31, terps: 5.8, pal: "ROYAL_VIOLET", morph: "MAIN_COLA", cost: 115, desc: "Sugary vanilla cake batter, dark purple marbling, and ultra-heavy resin." },
+    { id: "s25", name: "Ohio Clean Chem", cutInfo: "Buckeye Chem Pheno", role: "HYBRID", lineage: "Chemdawg D × Lemon G", tierIdx: 6, thc: 28, terps: 5.4, pal: "LIME_DIESEL", morph: "DENSE_NUG", cost: 100, desc: "Acrid lemon fuel and piercing chemical cleaner. Relentless potency." },
+    { id: "s26", name: "Buckeye Diesel", cutInfo: "Dual Kerosene Cut", role: "SATIVA", lineage: "Ohio Deathstar × Sour Diesel", tierIdx: 6, thc: 29, terps: 5.6, pal: "SUNSET_AMBER", morph: "MAIN_COLA", cost: 110, desc: "Double diesel lineage bred for raw skunky fuel and pungent room-filling stench." },
+    { id: "s27", name: "Scioto Haze", cutInfo: "Valley River Cut", role: "SATIVA", lineage: "Amnesia Haze × Jack Herer", tierIdx: 5, thc: 25, terps: 5.0, pal: "GOLDEN_HONEY", morph: "FOXTAIL", cost: 90, desc: "Central Ohio outdoor champion. Spicy cedar, citrus mist, and lucid energy." },
+    { id: "s28", name: "Dayton Kush", cutInfo: "Gem City Roasted Cut", role: "INDICA", lineage: "Pre-98 Bubba × Afghani #1", tierIdx: 5, thc: 26, terps: 4.8, pal: "MIDNIGHT_OBSIDIAN", morph: "DENSE_NUG", cost: 85, desc: "Roasted coffee beans, bitter dark chocolate, and heavy physical tranquility." },
+    { id: "s29", name: "Hocking Hills OG", cutInfo: "Gorge Forest Pheno", role: "HYBRID", lineage: "Ghost OG × Buckeye Purple", tierIdx: 6, thc: 28, terps: 5.3, pal: "ROYAL_VIOLET", morph: "DENSE_NUG", cost: 100, desc: "Pine cleaner infused with rich purple grape juice and earthy forest moss." },
+    { id: "s30", name: "Cleveland Diesel", cutInfo: "Rust Belt Kerosene Cut", role: "SATIVA", lineage: "East Coast Sour Diesel × Skunk #1", tierIdx: 6, thc: 27, terps: 5.1, pal: "SUNSET_AMBER", morph: "MAIN_COLA", cost: 95, desc: "Industrial rust-belt kerosene petrol with pungent sour skunk undertones." },
+    { id: "s31", name: "Akron Hashplant", cutInfo: "Rubber City Pure Pheno", role: "INDICA", lineage: "G13 × Northern Lights #1", tierIdx: 5, thc: 25, terps: 4.6, pal: "EMERALD_MINT", morph: "DENSE_NUG", cost: 85, desc: "Heavy rubber-city indica with dense frosty golf-ball colas." },
+    { id: "s32", name: "Toledo Gas", cutInfo: "Great Lakes Petrol Cut", role: "HYBRID", lineage: "Motorbreath × Deathstar", tierIdx: 7, thc: 32, terps: 5.9, pal: "MIDNIGHT_OBSIDIAN", morph: "MAIN_COLA", cost: 125, desc: "Industrial petroleum and acrid road-kill skunk terpenes." },
 
     // 33-52: HERITAGE & LANDRACE CORNERSTONES
-    { id: "s33", name: "Acapulco Gold", role: "SATIVA", lineage: "Mexican Native Landrace (Guerrero)", tierIdx: 0, thc: 17, terps: 2.8, pal: "GOLDEN_HONEY", morph: "FOXTAIL", cost: 35, desc: "Historic 1960s landrace famous for golden toffee calyxes and soaring energy." },
-    { id: "s34", name: "Hindu Kush Landrace", role: "INDICA", lineage: "Indigenous Central Asian Landrace", tierIdx: 0, thc: 18, terps: 3.0, pal: "EMERALD_MINT", morph: "DENSE_NUG", cost: 35, desc: "Ancient mountain indica blanketed in thick hash resin with deep sandalwood notes." },
-    { id: "s35", name: "Afghani #1", role: "INDICA", lineage: "Mazar-i-Sharif Heritage Cut", tierIdx: 1, thc: 20, terps: 3.4, pal: "EMERALD_MINT", morph: "DENSE_NUG", cost: 45, desc: "Pure broad-leaf hash plant with heavy medicinal sedative myrcene." },
-    { id: "s36", name: "Durban Poison", role: "SATIVA", lineage: "South African Landrace", tierIdx: 1, thc: 21, terps: 4.0, pal: "LIME_DIESEL", morph: "MAIN_COLA", cost: 45, desc: "Energizing pure sativa with anise licorice and sweet spicy pine aromas." },
-    { id: "s37", name: "Northern Lights #5", role: "INDICA", lineage: "Afghani Landrace × Thai Heritage", tierIdx: 2, thc: 22, terps: 3.8, pal: "EMERALD_MINT", morph: "MAIN_COLA", cost: 50, desc: "Definitive Dutch indoor champion. Dense resin clusters with sweet pine." },
-    { id: "s38", name: "Original White Widow", role: "HYBRID", lineage: "Brazilian Sativa × South Indian Indica", tierIdx: 2, thc: 21, terps: 3.6, pal: "EMERALD_MINT", morph: "DENSE_NUG", cost: 50, desc: "1995 High Times Cup champion. Solid sheet of glistening white trichomes." },
-    { id: "s39", name: "DJ Short Blueberry", role: "INDICA", lineage: "Afghani × Thai × Purple Thai", tierIdx: 3, thc: 22, terps: 4.5, pal: "ROYAL_VIOLET", morph: "DENSE_NUG", cost: 65, desc: "Bred in 1979 by DJ Short. Iconic sweet blueberry muffin bouquet." },
-    { id: "s40", name: "Skunk #1 (1988 Cut)", role: "HYBRID", lineage: "Afghani × Acapulco Gold × Colombian Gold", tierIdx: 2, thc: 20, terps: 4.2, pal: "SUNSET_AMBER", morph: "MAIN_COLA", cost: 50, desc: "Sacred Seeds cornerstone. Foundational genetics of modern commercial cannabis." },
-    { id: "s41", name: "Super Silver Haze", role: "SATIVA", lineage: "Skunk #1 × Northern Lights #5 × Haze", tierIdx: 3, thc: 23, terps: 4.4, pal: "GOLDEN_HONEY", morph: "FOXTAIL", cost: 60, desc: "Triple Cannabis Cup winner. Towering spicy colas and clear euphoric head high." },
-    { id: "s42", name: "Panama Red", role: "SATIVA", lineage: "Central American Landrace (Panama)", tierIdx: 1, thc: 19, terps: 3.2, pal: "RUBY_ROSE", morph: "FOXTAIL", cost: 45, desc: "Legendary 1970s landrace. Crimson red pistils with earthy tea and herbal spice." },
-    { id: "s43", name: "Thai Landrace", role: "SATIVA", lineage: "Southeast Asian Jungle Heirloom", tierIdx: 1, thc: 20, terps: 3.8, pal: "EMERALD_MINT", morph: "FOXTAIL", cost: 45, desc: "Classic chocolate Thai aroma with soaring cerebral and long-lasting effects." },
-    { id: "s44", name: "Colombian Gold", role: "SATIVA", lineage: "Santa Marta Mountains Landrace", tierIdx: 1, thc: 19, terps: 3.5, pal: "GOLDEN_HONEY", morph: "FOXTAIL", cost: 45, desc: "Golden-amber cured calyxes with spicy lemon tea and bright morning optimism." },
-    { id: "s45", name: "Malawi Gold", role: "SATIVA", lineage: "East African Native Landrace", tierIdx: 2, thc: 21, terps: 3.9, pal: "GOLDEN_HONEY", morph: "MAIN_COLA", cost: 50, desc: "Dense resinous African colas with sweet woody aroma and powerful energy." },
-    { id: "s46", name: "Lamb's Bread", role: "SATIVA", lineage: "Jamaican Mountain Heirloom", tierIdx: 2, thc: 21, terps: 4.1, pal: "LIME_DIESEL", morph: "FOXTAIL", cost: 50, desc: "Famous Jamaican favorite. Sweet herbal cheese, damp soil, and spiritual ease." },
-    { id: "s47", name: "Mazar-i-Sharif", role: "INDICA", lineage: "Northern Afghanistan Heritage", tierIdx: 2, thc: 22, terps: 3.6, pal: "EMERALD_MINT", morph: "DENSE_NUG", cost: 50, desc: "Legendary central Asian hash plant dripping in heavy narcotic glandular heads." },
-    { id: "s48", name: "Bubble Gum (Indiana Cut)", role: "HYBRID", lineage: "Indiana 1990s Heirloom", tierIdx: 3, thc: 22, terps: 4.7, pal: "RUBY_ROSE", morph: "DENSE_NUG", cost: 65, desc: "Midwest original. Authentic pink hubba-bubba chewing gum sweetness." },
-    { id: "s49", name: "G13 Heritage", role: "INDICA", lineage: "Gov Research Legend (Mississippi)", tierIdx: 3, thc: 23, terps: 4.2, pal: "EMERALD_MINT", morph: "DENSE_NUG", cost: 65, desc: "Mythical government research cut. Deep earthy skunk and narcotic sedation." },
-    { id: "s50", name: "Master Kush", role: "INDICA", lineage: "Hindu Kush × Afghani Heritage", tierIdx: 3, thc: 23, terps: 4.0, pal: "MIDNIGHT_OBSIDIAN", morph: "DENSE_NUG", cost: 60, desc: "Vintage Amsterdam Dutch Passion cut. Charred vintage charas and pine." },
-    { id: "s51", name: "Original Haze (Brothers)", role: "SATIVA", lineage: "Colombian × Mexican × Thai × South Indian", tierIdx: 3, thc: 21, terps: 4.8, pal: "GOLDEN_HONEY", morph: "FOXTAIL", cost: 65, desc: "The foundational 1970s Santa Cruz sativa parent." },
-    { id: "s52", name: "Shiva Skunk", role: "INDICA", lineage: "Northern Lights #5 × Skunk #1", tierIdx: 3, thc: 22, terps: 4.1, pal: "EMERALD_MINT", morph: "DENSE_NUG", cost: 60, desc: "Heavy hash spice and sweet citrus with pungent skunk undertones." },
+    { id: "s33", name: "Acapulco Gold", cutInfo: "1965 Guerrero Native", role: "SATIVA", lineage: "Mexican Native Landrace (Guerrero)", tierIdx: 0, thc: 17, terps: 2.8, pal: "GOLDEN_HONEY", morph: "FOXTAIL", cost: 35, desc: "Historic 1960s landrace famous for golden toffee calyxes and soaring energy." },
+    { id: "s34", name: "Hindu Kush", cutInfo: "Central Asian Mountain", role: "INDICA", lineage: "Indigenous Central Asian Landrace", tierIdx: 0, thc: 18, terps: 3.0, pal: "EMERALD_MINT", morph: "DENSE_NUG", cost: 35, desc: "Ancient mountain indica blanketed in thick hash resin with deep sandalwood notes." },
+    { id: "s35", name: "Afghani #1", cutInfo: "Mazar Traditional Cut", role: "INDICA", lineage: "Mazar-i-Sharif Heritage Cut", tierIdx: 1, thc: 20, terps: 3.4, pal: "EMERALD_MINT", morph: "DENSE_NUG", cost: 45, desc: "Pure broad-leaf hash plant with heavy medicinal sedative myrcene." },
+    { id: "s36", name: "Durban Poison", cutInfo: "South African Port Cut", role: "SATIVA", lineage: "South African Landrace", tierIdx: 1, thc: 21, terps: 4.0, pal: "LIME_DIESEL", morph: "MAIN_COLA", cost: 45, desc: "Energizing pure sativa with anise licorice and sweet spicy pine aromas." },
+    { id: "s37", name: "Northern Lights #5", cutInfo: "Greg Payne Dutch Cut", role: "INDICA", lineage: "Afghani Landrace × Thai Heritage", tierIdx: 2, thc: 22, terps: 3.8, pal: "EMERALD_MINT", morph: "MAIN_COLA", cost: 50, desc: "Definitive Dutch indoor champion. Dense resin clusters with sweet pine." },
+    { id: "s38", name: "White Widow", cutInfo: "1995 Green House Champion", role: "HYBRID", lineage: "Brazilian Sativa × South Indian Indica", tierIdx: 2, thc: 21, terps: 3.6, pal: "EMERALD_MINT", morph: "DENSE_NUG", cost: 50, desc: "1995 High Times Cup champion. Solid sheet of glistening white trichomes." },
+    { id: "s39", name: "Blueberry", cutInfo: "DJ Short 1979 True Cut", role: "INDICA", lineage: "Afghani × Thai × Purple Thai", tierIdx: 3, thc: 22, terps: 4.5, pal: "ROYAL_VIOLET", morph: "DENSE_NUG", cost: 65, desc: "Bred in 1979 by DJ Short. Iconic sweet blueberry muffin bouquet." },
+    { id: "s40", name: "Skunk #1", cutInfo: "1988 Sacred Seeds Cut", role: "HYBRID", lineage: "Afghani × Acapulco Gold × Colombian Gold", tierIdx: 2, thc: 20, terps: 4.2, pal: "SUNSET_AMBER", morph: "MAIN_COLA", cost: 50, desc: "Sacred Seeds cornerstone. Foundational genetics of modern commercial cannabis." },
+    { id: "s41", name: "Super Silver Haze", cutInfo: "Greenhouse HTCC Triple Cut", role: "SATIVA", lineage: "Skunk #1 × Northern Lights #5 × Haze", tierIdx: 3, thc: 23, terps: 4.4, pal: "GOLDEN_HONEY", morph: "FOXTAIL", cost: 60, desc: "Triple Cannabis Cup winner. Towering spicy colas and clear euphoric head high." },
+    { id: "s42", name: "Panama Red", cutInfo: "Canal Zone 1974 Cut", role: "SATIVA", lineage: "Central American Landrace (Panama)", tierIdx: 1, thc: 19, terps: 3.2, pal: "RUBY_ROSE", morph: "FOXTAIL", cost: 45, desc: "Legendary 1970s landrace. Crimson red pistils with earthy tea and herbal spice." },
+    { id: "s43", name: "Thai Landrace", cutInfo: "Highland Chocolate Pheno", role: "SATIVA", lineage: "Southeast Asian Jungle Heirloom", tierIdx: 1, thc: 20, terps: 3.8, pal: "EMERALD_MINT", morph: "FOXTAIL", cost: 45, desc: "Classic chocolate Thai aroma with soaring cerebral and long-lasting effects." },
+    { id: "s44", name: "Colombian Gold", cutInfo: "Santa Marta Mountains", role: "SATIVA", lineage: "Santa Marta Mountains Landrace", tierIdx: 1, thc: 19, terps: 3.5, pal: "GOLDEN_HONEY", morph: "FOXTAIL", cost: 45, desc: "Golden-amber cured calyxes with spicy lemon tea and bright morning optimism." },
+    { id: "s45", name: "Malawi Gold", cutInfo: "Salima Native Pheno", role: "SATIVA", lineage: "East African Native Landrace", tierIdx: 2, thc: 21, terps: 3.9, pal: "GOLDEN_HONEY", morph: "MAIN_COLA", cost: 50, desc: "Dense resinous African colas with sweet woody aroma and powerful energy." },
+    { id: "s46", name: "Lamb's Bread", cutInfo: "Bob Marley Heritage", role: "SATIVA", lineage: "Jamaican Mountain Heirloom", tierIdx: 2, thc: 21, terps: 4.1, pal: "LIME_DIESEL", morph: "FOXTAIL", cost: 50, desc: "Famous Jamaican favorite. Sweet herbal cheese, damp soil, and spiritual ease." },
+    { id: "s47", name: "Mazar-i-Sharif", cutInfo: "Balkh Province Traditional", role: "INDICA", lineage: "Northern Afghanistan Heritage", tierIdx: 2, thc: 22, terps: 3.6, pal: "EMERALD_MINT", morph: "DENSE_NUG", cost: 50, desc: "Legendary central Asian hash plant dripping in heavy narcotic glandular heads." },
+    { id: "s48", name: "Bubble Gum", cutInfo: "Indiana 1993 Cut", role: "HYBRID", lineage: "Indiana 1990s Heirloom", tierIdx: 3, thc: 22, terps: 4.7, pal: "RUBY_ROSE", morph: "DENSE_NUG", cost: 65, desc: "Midwest original. Authentic pink hubba-bubba chewing gum sweetness." },
+    { id: "s49", name: "G13", cutInfo: "Mississippi Legend", role: "INDICA", lineage: "Gov Research Legend (Mississippi)", tierIdx: 3, thc: 23, terps: 4.2, pal: "EMERALD_MINT", morph: "DENSE_NUG", cost: 65, desc: "Mythical government research cut. Deep earthy skunk and narcotic sedation." },
+    { id: "s50", name: "Master Kush", cutInfo: "SoHum Amsterdam Cut", role: "INDICA", lineage: "Hindu Kush × Afghani Heritage", tierIdx: 3, thc: 23, terps: 4.0, pal: "MIDNIGHT_OBSIDIAN", morph: "DENSE_NUG", cost: 60, desc: "Vintage Amsterdam Dutch Passion cut. Charred vintage charas and pine." },
+    { id: "s51", name: "Original Haze", cutInfo: "Haze Brothers 1970s", role: "SATIVA", lineage: "Colombian × Mexican × Thai × South Indian", tierIdx: 3, thc: 21, terps: 4.8, pal: "GOLDEN_HONEY", morph: "FOXTAIL", cost: 65, desc: "The foundational 1970s Santa Cruz sativa parent." },
+    { id: "s52", name: "Shiva Skunk", cutInfo: "NL5 Skunk Pheno", role: "INDICA", lineage: "Northern Lights #5 × Skunk #1", tierIdx: 3, thc: 22, terps: 4.1, pal: "EMERALD_MINT", morph: "DENSE_NUG", cost: 60, desc: "Heavy hash spice and sweet citrus with pungent skunk undertones." },
 
     // 53-84: MODERN EXOTICS, GAS & HASH ROSIN WASHERS
-    { id: "s53", name: "Original Sour Diesel", role: "SATIVA", lineage: "Chemdawg 91 × Super Skunk", tierIdx: 4, thc: 26, terps: 5.1, pal: "SUNSET_AMBER", morph: "MAIN_COLA", cost: 75, desc: "East Coast fuel legend. Overwhelming kerosene and pungent sour citrus stench." },
-    { id: "s54", name: "OG Kush (Ghost Cut)", role: "HYBRID", lineage: "Chemdawg × Lemon Thai × Hindu Kush", tierIdx: 4, thc: 27, terps: 4.9, pal: "EMERALD_MINT", morph: "DENSE_NUG", cost: 75, desc: "Foundational California mother plant. Fuel, lemon pine cleaner, and heavy relief." },
-    { id: "s55", name: "Motorbreath #15", role: "INDICA", lineage: "Chemdawg D × SFV OG Kush", tierIdx: 7, thc: 33, terps: 5.7, pal: "MIDNIGHT_OBSIDIAN", morph: "DENSE_NUG", cost: 120, desc: "Noxious industrial diesel exhaust and garlic funk. Knockout sedative power." },
-    { id: "s56", name: "Granddaddy Purple (Ken's Cut)", role: "INDICA", lineage: "Purple Urkle × Big Bud", tierIdx: 4, thc: 25, terps: 4.8, pal: "ROYAL_VIOLET", morph: "DENSE_NUG", cost: 75, desc: "NorCal royal cut. Saturated dark violet calyxes bursting with sweet Concord grape." },
-    { id: "s57", name: "Bubba Kush (Pre-98)", role: "INDICA", lineage: "OG Kush × Northern Lights Heritage", tierIdx: 5, thc: 26, terps: 4.7, pal: "MIDNIGHT_OBSIDIAN", morph: "DENSE_NUG", cost: 85, desc: "Deep chocolate, roasted espresso, and earthy fuel. Golf-ball dense violet buds." },
-    { id: "s58", name: "Blue Dream (Santa Cruz Cut)", role: "HYBRID", lineage: "Blueberry × Haze", tierIdx: 4, thc: 24, terps: 4.5, pal: "EMERALD_MINT", morph: "WHOLE_PLANT", cost: 70, desc: "Commercial yielding clone from Santa Cruz. Sweet blueberry mist and daytime ease." },
-    { id: "s59", name: "Tangie (Crockett Cut)", role: "SATIVA", lineage: "California Orange × Skunk #1", tierIdx: 4, thc: 23, terps: 5.8, pal: "GOLDEN_HONEY", morph: "FOXTAIL", cost: 75, desc: "Unmatched tangerine citrus terpene bomb. Swept dozens of concentrate cups." },
-    { id: "s60", name: "Girl Scout Cookies (Forum Cut)", role: "HYBRID", lineage: "OG Kush × F1 Durban Poison", tierIdx: 5, thc: 28, terps: 5.0, pal: "ROYAL_VIOLET", morph: "DENSE_NUG", cost: 90, desc: "Revolutionized modern breeding. Pungent sweet dough, mint, and purple calyxes." },
-    { id: "s61", name: "Gelato #33 (Larry Bird)", role: "HYBRID", lineage: "Sunset Sherbet × Thin Mint GSC", tierIdx: 6, thc: 29, terps: 5.3, pal: "ROYAL_VIOLET", morph: "MAIN_COLA", cost: 100, desc: "Sherbinskis master cut. Creamy citrus sherbet, lavender hues, and bag appeal." },
-    { id: "s62", name: "Gorilla Glue #4 (GG4)", role: "HYBRID", lineage: "Sour Dubb × Chem Sister × Chocolate Diesel", tierIdx: 6, thc: 30, terps: 5.2, pal: "EMERALD_MINT", morph: "MAIN_COLA", cost: 100, desc: "Extreme resin that famously glued trimming scissors solid." },
-    { id: "s63", name: "Wedding Cake", role: "HYBRID", lineage: "Triangle Kush × Animal Mints", tierIdx: 6, thc: 31, terps: 5.5, pal: "RUBY_ROSE", morph: "DENSE_NUG", cost: 105, desc: "Sweet vanilla cake frosting with underlying Triangle Kush gas." },
-    { id: "s64", name: "Apple Fritter (Lumpy's Cut)", role: "HYBRID", lineage: "Sour Apple × Animal Cookies", tierIdx: 7, thc: 32, terps: 5.4, pal: "LIME_DIESEL", morph: "DENSE_NUG", cost: 115, desc: "Warm baked pastry, crisp Granny Smith apples, and profound relaxation." },
-    { id: "s65", name: "Original Zkittlez", role: "INDICA", lineage: "Grape Ape × Grapefruit × Undisclosed", tierIdx: 7, thc: 28, terps: 6.8, pal: "RUBY_ROSE", morph: "DENSE_NUG", cost: 110, desc: "Intense rainbow fruit syrup candy that lingers endlessly on the palate." },
-    { id: "s66", name: "Runtz (Original Gelato Cut)", role: "HYBRID", lineage: "Zkittlez × Gelato #33", tierIdx: 7, thc: 31, terps: 6.0, pal: "ROYAL_VIOLET", morph: "DENSE_NUG", cost: 115, desc: "Sugary sweet tropical candy with purple-soaked bracts." },
-    { id: "s67", name: "MAC 1 (Capulator Cut)", role: "HYBRID", lineage: "Alien Cookies F2 × Miracle 15", tierIdx: 7, thc: 30, terps: 5.4, pal: "MIDNIGHT_OBSIDIAN", morph: "DENSE_NUG", cost: 120, desc: "Miracle Alien Cookies. Unbelievable thick resin shell with orange creamsicle." },
-    { id: "s68", name: "GMO Cookies (Garlic Cookies)", role: "INDICA", lineage: "Chemdawg 91 × Girl Scout Cookies", tierIdx: 8, thc: 35, terps: 6.2, pal: "MIDNIGHT_OBSIDIAN", morph: "FOXTAIL", cost: 130, desc: "Piercing garlic, mushroom, and onion terpenes with devastating potency." },
-    { id: "s69", name: "Gary Payton (PowerzzzCut)", role: "HYBRID", lineage: "The Y × Snowman", tierIdx: 8, thc: 33, terps: 5.8, pal: "ROYAL_VIOLET", morph: "MAIN_COLA", cost: 135, desc: "Apricot diesel, peppery bite, and trophy bag appeal." },
-    { id: "s70", name: "Moonbow #112", role: "HYBRID", lineage: "Zkittlez × Do-Si-Dos", tierIdx: 8, thc: 32, terps: 6.7, pal: "RUBY_ROSE", morph: "DENSE_NUG", cost: 140, desc: "Archive Seed masterpiece. Intense lime-skittles gas bathed in purple trichomes." },
-    { id: "s71", name: "Jealousy (Seed Junky Cut)", role: "HYBRID", lineage: "Gelato 41 × Sherbet Bx1", tierIdx: 8, thc: 34, terps: 6.1, pal: "MIDNIGHT_OBSIDIAN", morph: "MAIN_COLA", cost: 140, desc: "Saturated black-purple colas dripping in heavy diesel candy." },
-    { id: "s72", name: "Permanent Marker (Doja Cut)", role: "HYBRID", lineage: "(Biscotti × Jealousy) × Sherb Bx", tierIdx: 9, thc: 36, terps: 6.9, pal: "MIDNIGHT_OBSIDIAN", morph: "DENSE_NUG", cost: 150, desc: "Pungent industrial chemical marker ink with soapy candy undertones." },
-    { id: "s73", name: "Super Boof (Blockhead Cut)", role: "HYBRID", lineage: "Black Cherry Punch × Tropicana Cookies", tierIdx: 9, thc: 35, terps: 7.2, pal: "RUBY_ROSE", morph: "MAIN_COLA", cost: 155, desc: "Explosive orange blossom and tart black cherry gas." },
-    { id: "s74", name: "RS-11 (Rainbow Sherbert #11)", role: "HYBRID", lineage: "Pink Guava × OZ Kush", tierIdx: 9, thc: 34, terps: 7.0, pal: "ROYAL_VIOLET", morph: "MAIN_COLA", cost: 160, desc: "Deep tropical guava syrup and sour sherbet petrol. Supreme bag appeal." },
-    { id: "s75", name: "Animal Mints", role: "HYBRID", lineage: "Animal Cookies × SinMint Cookies", tierIdx: 7, thc: 32, terps: 5.3, pal: "EMERALD_MINT", morph: "DENSE_NUG", cost: 115, desc: "Sweet mint biscuit dough and heavy narcotic Kush gas." },
-    { id: "s76", name: "Biscotti", role: "INDICA", lineage: "Gelato 25 × Motorbreath", tierIdx: 7, thc: 30, terps: 5.5, pal: "MIDNIGHT_OBSIDIAN", morph: "DENSE_NUG", cost: 120, desc: "Rich sweet snickerdoodle cookies infused with pungent motor oil." },
-    { id: "s77", name: "Kush Mints", role: "HYBRID", lineage: "Bubba Kush × Animal Mints", tierIdx: 7, thc: 31, terps: 5.8, pal: "EMERALD_MINT", morph: "MAIN_COLA", cost: 120, desc: "Bubba coffee fuel mixed with icy spearmint cookies." },
-    { id: "s78", name: "Chem 91 Skunk VA", role: "HYBRID", lineage: "Original Deer Creek 1991 Cut", tierIdx: 6, thc: 29, terps: 5.6, pal: "LIME_DIESEL", morph: "MAIN_COLA", cost: 110, desc: "Legendary mother plant of modern diesel. Pungent raw chemical fuel." },
-    { id: "s79", name: "Sunset Sherbet", role: "HYBRID", lineage: "Girl Scout Cookies × Pink Panties", tierIdx: 6, thc: 27, terps: 5.2, pal: "ROYAL_VIOLET", morph: "MAIN_COLA", cost: 100, desc: "Sweet berry candy, creamy citrus, and intoxicating euphoric calm." },
-    { id: "s80", name: "Papaya (Hash Cut)", role: "INDICA", lineage: "Jack Herer × Skunk #1 Heritage", tierIdx: 7, thc: 28, terps: 7.5, pal: "GOLDEN_HONEY", morph: "DENSE_NUG", cost: 125, desc: "The ultimate solventless hash washing cultivar. Intense ripe tropical papaya." },
-    { id: "s81", name: "Rainbow Belts 2.0", role: "HYBRID", lineage: "Zkittlez × Moonbow", tierIdx: 8, thc: 32, terps: 6.9, pal: "RUBY_ROSE", morph: "DENSE_NUG", cost: 140, desc: "Archive Seed favorite. Tart candy belts dusted in sugary fuel crystals." },
-    { id: "s82", name: "White Truffle", role: "INDICA", lineage: "GG4 × Peanut Butter Breath", tierIdx: 8, thc: 33, terps: 5.8, pal: "MIDNIGHT_OBSIDIAN", morph: "DENSE_NUG", cost: 140, desc: "Saturated near-black calyxes covered in silver resin with savory earthy garlic." },
-    { id: "s83", name: "Zoap", role: "HYBRID", lineage: "Rainbow Sherbet × Pink Guava", tierIdx: 9, thc: 34, terps: 6.6, pal: "RUBY_ROSE", morph: "MAIN_COLA", cost: 150, desc: "Perfumed floral soap, sweet pink guava, and devastating modern potency." },
-    { id: "s84", name: "Pure Michigan", role: "INDICA", lineage: "Oreoz × Mendo Breath F2", tierIdx: 8, thc: 33, terps: 5.7, pal: "MIDNIGHT_OBSIDIAN", morph: "DENSE_NUG", cost: 135, desc: "Great Lakes monster. Dark purple frost smelling of vanilla gas and fresh roasted nuts." },
+    { id: "s53", name: "Sour Diesel", cutInfo: "Weasel 1993 AJ Cut", role: "SATIVA", lineage: "Chemdawg 91 × Super Skunk", tierIdx: 4, thc: 26, terps: 5.1, pal: "SUNSET_AMBER", morph: "MAIN_COLA", cost: 75, desc: "East Coast fuel legend. Overwhelming kerosene and pungent sour citrus stench." },
+    { id: "s54", name: "OG Kush", cutInfo: "Ghost Cut Original", role: "HYBRID", lineage: "Chemdawg × Lemon Thai × Hindu Kush", tierIdx: 4, thc: 27, terps: 4.9, pal: "EMERALD_MINT", morph: "DENSE_NUG", cost: 75, desc: "Foundational California mother plant. Fuel, lemon pine cleaner, and heavy relief." },
+    { id: "s55", name: "Motorbreath 15", cutInfo: "Jimmy Nitz Cut", role: "INDICA", lineage: "Chemdawg D × SFV OG Kush", tierIdx: 7, thc: 33, terps: 5.7, pal: "MIDNIGHT_OBSIDIAN", morph: "DENSE_NUG", cost: 120, desc: "Noxious industrial diesel exhaust and garlic funk. Knockout sedative power." },
+    { id: "s56", name: "Granddaddy Purple", cutInfo: "Ken Estes NorCal Cut", role: "INDICA", lineage: "Purple Urkle × Big Bud", tierIdx: 4, thc: 25, terps: 4.8, pal: "ROYAL_VIOLET", morph: "DENSE_NUG", cost: 75, desc: "NorCal royal cut. Saturated dark violet calyxes bursting with sweet Concord grape." },
+    { id: "s57", name: "Bubba Kush", cutInfo: "Pre-98 Silver Reserve", role: "INDICA", lineage: "OG Kush × Northern Lights Heritage", tierIdx: 5, thc: 26, terps: 4.7, pal: "MIDNIGHT_OBSIDIAN", morph: "DENSE_NUG", cost: 85, desc: "Deep chocolate, roasted espresso, and earthy fuel. Golf-ball dense violet buds." },
+    { id: "s58", name: "Blue Dream", cutInfo: "Santa Cruz Commercial Cut", role: "HYBRID", lineage: "Blueberry × Haze", tierIdx: 4, thc: 24, terps: 4.5, pal: "EMERALD_MINT", morph: "WHOLE_PLANT", cost: 70, desc: "Commercial yielding clone from Santa Cruz. Sweet blueberry mist and daytime ease." },
+    { id: "s59", name: "Tangie", cutInfo: "Crockett Reserve Cut", role: "SATIVA", lineage: "California Orange × Skunk #1", tierIdx: 4, thc: 23, terps: 5.8, pal: "GOLDEN_HONEY", morph: "FOXTAIL", cost: 75, desc: "Unmatched tangerine citrus terpene bomb. Swept dozens of concentrate cups." },
+    { id: "s60", name: "Girl Scout Cookies", cutInfo: "Forum Cut Clone", role: "HYBRID", lineage: "OG Kush × F1 Durban Poison", tierIdx: 5, thc: 28, terps: 5.0, pal: "ROYAL_VIOLET", morph: "DENSE_NUG", cost: 90, desc: "Revolutionized modern breeding. Pungent sweet dough, mint, and purple calyxes." },
+    { id: "s61", name: "Gelato 33", cutInfo: "Larry Bird Cut", role: "HYBRID", lineage: "Sunset Sherbet × Thin Mint GSC", tierIdx: 6, thc: 29, terps: 5.3, pal: "ROYAL_VIOLET", morph: "MAIN_COLA", cost: 100, desc: "Sherbinskis master cut. Creamy citrus sherbet, lavender hues, and bag appeal." },
+    { id: "s62", name: "Gorilla Glue 4", cutInfo: "Josey Whales Original", role: "HYBRID", lineage: "Sour Dubb × Chem Sister × Chocolate Diesel", tierIdx: 6, thc: 30, terps: 5.2, pal: "EMERALD_MINT", morph: "MAIN_COLA", cost: 100, desc: "Extreme resin that famously glued trimming scissors solid." },
+    { id: "s63", name: "Wedding Cake", cutInfo: "JBeezy Pink Cookies", role: "HYBRID", lineage: "Triangle Kush × Animal Mints", tierIdx: 6, thc: 31, terps: 5.5, pal: "RUBY_ROSE", morph: "DENSE_NUG", cost: 105, desc: "Sweet vanilla cake frosting with underlying Triangle Kush gas." },
+    { id: "s64", name: "Apple Fritter", cutInfo: "Lumpy's Cut", role: "HYBRID", lineage: "Sour Apple × Animal Cookies", tierIdx: 7, thc: 32, terps: 5.4, pal: "LIME_DIESEL", morph: "DENSE_NUG", cost: 115, desc: "Warm baked pastry, crisp Granny Smith apples, and profound relaxation." },
+    { id: "s65", name: "Zkittlez", cutInfo: "Terp Hogz Original", role: "INDICA", lineage: "Grape Ape × Grapefruit × Undisclosed", tierIdx: 7, thc: 28, terps: 6.8, pal: "RUBY_ROSE", morph: "DENSE_NUG", cost: 110, desc: "Intense rainbow fruit syrup candy that lingers endlessly on the palate." },
+    { id: "s66", name: "Runtz", cutInfo: "Yung LB Gelato Pheno", role: "HYBRID", lineage: "Zkittlez × Gelato #33", tierIdx: 7, thc: 31, terps: 6.0, pal: "ROYAL_VIOLET", morph: "DENSE_NUG", cost: 115, desc: "Sugary sweet tropical candy with purple-soaked bracts." },
+    { id: "s67", name: "MAC 1", cutInfo: "Capulator's Cut", role: "HYBRID", lineage: "Alien Cookies F2 × Miracle 15", tierIdx: 7, thc: 30, terps: 5.4, pal: "MIDNIGHT_OBSIDIAN", morph: "DENSE_NUG", cost: 120, desc: "Miracle Alien Cookies. Unbelievable thick resin shell with orange creamsicle." },
+    { id: "s68", name: "GMO Cookies", cutInfo: "Skunkmasterflex Cut", role: "INDICA", lineage: "Chemdawg 91 × Girl Scout Cookies", tierIdx: 8, thc: 35, terps: 6.2, pal: "MIDNIGHT_OBSIDIAN", morph: "FOXTAIL", cost: 130, desc: "Piercing garlic, mushroom, and onion terpenes with devastating potency." },
+    { id: "s69", name: "Gary Payton", cutInfo: "PowerzzzCut 20", role: "HYBRID", lineage: "The Y × Snowman", tierIdx: 8, thc: 33, terps: 5.8, pal: "ROYAL_VIOLET", morph: "MAIN_COLA", cost: 135, desc: "Apricot diesel, peppery bite, and trophy bag appeal." },
+    { id: "s70", name: "Moonbow 112", cutInfo: "Archive Seed Cut", role: "HYBRID", lineage: "Zkittlez × Do-Si-Dos", tierIdx: 8, thc: 32, terps: 6.7, pal: "RUBY_ROSE", morph: "DENSE_NUG", cost: 140, desc: "Archive Seed masterpiece. Intense lime-skittles gas bathed in purple trichomes." },
+    { id: "s71", name: "Jealousy", cutInfo: "Seed Junky J-1 Cut", role: "HYBRID", lineage: "Gelato 41 × Sherbet Bx1", tierIdx: 8, thc: 34, terps: 6.1, pal: "MIDNIGHT_OBSIDIAN", morph: "MAIN_COLA", cost: 140, desc: "Saturated black-purple colas dripping in heavy diesel candy." },
+    { id: "s72", name: "Permanent Marker", cutInfo: "Doja Master Cut", role: "HYBRID", lineage: "(Biscotti × Jealousy) × Sherb Bx", tierIdx: 9, thc: 36, terps: 6.9, pal: "MIDNIGHT_OBSIDIAN", morph: "DENSE_NUG", cost: 150, desc: "Pungent industrial chemical marker ink with soapy candy undertones." },
+    { id: "s73", name: "Super Boof", cutInfo: "Blockhead Cut", role: "HYBRID", lineage: "Black Cherry Punch × Tropicana Cookies", tierIdx: 9, thc: 35, terps: 7.2, pal: "RUBY_ROSE", morph: "MAIN_COLA", cost: 155, desc: "Explosive orange blossom and tart black cherry gas." },
+    { id: "s74", name: "RS-11", cutInfo: "DEO Farms Pink Guava Cut", role: "HYBRID", lineage: "Pink Guava × OZ Kush", tierIdx: 9, thc: 34, terps: 7.0, pal: "ROYAL_VIOLET", morph: "MAIN_COLA", cost: 160, desc: "Deep tropical guava syrup and sour sherbet petrol. Supreme bag appeal." },
+    { id: "s75", name: "Animal Mints", cutInfo: "Seed Junky Animal Cut", role: "HYBRID", lineage: "Animal Cookies × SinMint Cookies", tierIdx: 7, thc: 32, terps: 5.3, pal: "EMERALD_MINT", morph: "DENSE_NUG", cost: 115, desc: "Sweet mint biscuit dough and heavy narcotic Kush gas." },
+    { id: "s76", name: "Biscotti", cutInfo: "Gelato 25 Cross", role: "INDICA", lineage: "Gelato 25 × Motorbreath", tierIdx: 7, thc: 30, terps: 5.5, pal: "MIDNIGHT_OBSIDIAN", morph: "DENSE_NUG", cost: 120, desc: "Rich sweet snickerdoodle cookies infused with pungent motor oil." },
+    { id: "s77", name: "Kush Mints", cutInfo: "Rabbi Bubba Cut", role: "HYBRID", lineage: "Bubba Kush × Animal Mints", tierIdx: 7, thc: 31, terps: 5.8, pal: "EMERALD_MINT", morph: "MAIN_COLA", cost: 120, desc: "Bubba coffee fuel mixed with icy spearmint cookies." },
+    { id: "s78", name: "Chem 91", cutInfo: "Skunk VA Deer Creek", role: "HYBRID", lineage: "Original Deer Creek 1991 Cut", tierIdx: 6, thc: 29, terps: 5.6, pal: "LIME_DIESEL", morph: "MAIN_COLA", cost: 110, desc: "Legendary mother plant of modern diesel. Pungent raw chemical fuel." },
+    { id: "s79", name: "Sunset Sherbet", cutInfo: "Mr. Sherbinski Original", role: "HYBRID", lineage: "Girl Scout Cookies × Pink Panties", tierIdx: 6, thc: 27, terps: 5.2, pal: "ROYAL_VIOLET", morph: "MAIN_COLA", cost: 100, desc: "Sweet berry candy, creamy citrus, and intoxicating euphoric calm." },
+    { id: "s80", name: "Papaya", cutInfo: "Nirvana Hash Cut", role: "INDICA", lineage: "Jack Herer × Skunk #1 Heritage", tierIdx: 7, thc: 28, terps: 7.5, pal: "GOLDEN_HONEY", morph: "DENSE_NUG", cost: 125, desc: "The ultimate solventless hash washing cultivar. Intense ripe tropical papaya." },
+    { id: "s81", name: "Rainbow Belts 2.0", cutInfo: "Archive Candy Pheno", role: "HYBRID", lineage: "Zkittlez × Moonbow", tierIdx: 8, thc: 32, terps: 6.9, pal: "RUBY_ROSE", morph: "DENSE_NUG", cost: 140, desc: "Archive Seed favorite. Tart candy belts dusted in sugary fuel crystals." },
+    { id: "s82", name: "White Truffle", cutInfo: "Beleaf Black Pheno", role: "INDICA", lineage: "GG4 × Peanut Butter Breath", tierIdx: 8, thc: 33, terps: 5.8, pal: "MIDNIGHT_OBSIDIAN", morph: "DENSE_NUG", cost: 140, desc: "Saturated near-black calyxes covered in silver resin with savory earthy garlic." },
+    { id: "s83", name: "Zoap", cutInfo: "DEO Wizard Trees Cut", role: "HYBRID", lineage: "Rainbow Sherbet × Pink Guava", tierIdx: 9, thc: 34, terps: 6.6, pal: "RUBY_ROSE", morph: "MAIN_COLA", cost: 150, desc: "Perfumed floral soap, sweet pink guava, and devastating modern potency." },
+    { id: "s84", name: "Pure Michigan", cutInfo: "ThugPug Great Lakes", role: "INDICA", lineage: "Oreoz × Mendo Breath F2", tierIdx: 8, thc: 33, terps: 5.7, pal: "MIDNIGHT_OBSIDIAN", morph: "DENSE_NUG", cost: 135, desc: "Great Lakes monster. Dark purple frost smelling of vanilla gas and fresh roasted nuts." },
 
     // 85-104: TIER X DIAMOND ELITE & RARE BREEDER CUTS
-    { id: "s85", name: "Donny Burger", role: "INDICA", lineage: "Han-Solo Burger × GMO", tierIdx: 9, thc: 36, terps: 6.8, pal: "MIDNIGHT_OBSIDIAN", morph: "FOXTAIL", cost: 165, desc: "Extreme savory chem garlic and gas. Huge solventless resin head returns." },
-    { id: "s86", name: "Sub-Zero", role: "HYBRID", lineage: "Oreoz × Super Boof", tierIdx: 9, thc: 37, terps: 7.4, pal: "ROYAL_VIOLET", morph: "MAIN_COLA", cost: 175, desc: "Glacier-thick trichome shell over deep violet cherry citrus calyxes." },
-    { id: "s87", name: "Cap Junky", role: "HYBRID", lineage: "Alien Cookies × Kush Mints #11", tierIdx: 9, thc: 36, terps: 6.5, pal: "EMERALD_MINT", morph: "DENSE_NUG", cost: 170, desc: "Bred by Capulator and Seed Junky. Ferocious punch of mint, gasoline, and pepper." },
-    { id: "s88", name: "Z-Cube", role: "HYBRID", lineage: "Zkittlez × (Zkittlez × Eddy OG)", tierIdx: 9, thc: 33, terps: 7.6, pal: "RUBY_ROSE", morph: "DENSE_NUG", cost: 180, desc: "Backcrossed Zkittlez perfection. Unadulterated candied fruit terpenes." },
-    { id: "s89", name: "Tallymon (Hash Pheno)", role: "INDICA", lineage: "Banana OG × Do-Si-Dos × Papaya", tierIdx: 8, thc: 31, terps: 7.8, pal: "GOLDEN_HONEY", morph: "DENSE_NUG", cost: 145, desc: "Tropical fruit smoothies, ripe plantains, and dripping solventless hash glands." },
-    { id: "s90", name: "Grape Pie", role: "INDICA", lineage: "Cherry Pie × Grape Stomper", tierIdx: 7, thc: 29, terps: 6.2, pal: "ROYAL_VIOLET", morph: "DENSE_NUG", cost: 120, desc: "Cannarado Genetics staple. Warm purple grape pie crust and sweet vanilla." },
-    { id: "s91", name: "Grease Monkey", role: "HYBRID", lineage: "GG4 × Cookies & Cream", tierIdx: 7, thc: 31, terps: 5.6, pal: "EMERALD_MINT", morph: "MAIN_COLA", cost: 120, desc: "Exotic Genetix legend. Heavy diesel grease and sweet vanilla cookie dough." },
-    { id: "s92", name: "Chem Chillz", role: "INDICA", lineage: "GMO × Chillz", tierIdx: 8, thc: 34, terps: 6.3, pal: "MIDNIGHT_OBSIDIAN", morph: "FOXTAIL", cost: 140, desc: "Freezing cold menthol gas mixed with potent garlic and earthy skunk." },
-    { id: "s93", name: "Cereal Milk", role: "HYBRID", lineage: "Y Life × Snowman", tierIdx: 7, thc: 30, terps: 5.7, pal: "GOLDEN_HONEY", morph: "DENSE_NUG", cost: 125, desc: "Sweet sugary morning cereal milk with sweet fruity undertones." },
-    { id: "s94", name: "Gushers", role: "HYBRID", lineage: "Gelato #41 × Triangle Kush", tierIdx: 7, thc: 30, terps: 5.8, pal: "ROYAL_VIOLET", morph: "MAIN_COLA", cost: 120, desc: "Bursting tropical candy and fuel with deep physical relaxation." },
-    { id: "s95", name: "Sherbanger #22", role: "HYBRID", lineage: "Sunset Sherbet × Headbanger", tierIdx: 8, thc: 33, terps: 6.8, pal: "ROYAL_VIOLET", morph: "MAIN_COLA", cost: 145, desc: "Boston Trees selection. Pure sour lime diesel fuel mixed with blueberry sherbet." },
-    { id: "s96", name: "Spritzer", role: "HYBRID", lineage: "Runtz × (Grape Pie × MAC)", tierIdx: 8, thc: 32, terps: 7.1, pal: "RUBY_ROSE", morph: "MAIN_COLA", cost: 140, desc: "Effervescent cherry soda, grape fizz, and crystalline resin calyxes." },
-    { id: "s97", name: "Pave (Compound Cut)", role: "HYBRID", lineage: "Paris OG × The Menthol", tierIdx: 9, thc: 35, terps: 6.4, pal: "MIDNIGHT_OBSIDIAN", morph: "DENSE_NUG", cost: 160, desc: "Compound Genetics stunner. Asphalt fuel, diamond frost, and spearmint." },
-    { id: "s98", name: "Tropicana Cookies", role: "SATIVA", lineage: "Tangie × Girl Scout Cookies", tierIdx: 7, thc: 28, terps: 7.2, pal: "ROYAL_VIOLET", morph: "FOXTAIL", cost: 125, desc: "Deep dark purple flowers with pure fresh squeezed blood orange juice bouquet." },
-    { id: "s99", name: "Papaya Bomb", role: "INDICA", lineage: "Papaya × THC Bomb", tierIdx: 8, thc: 33, terps: 7.7, pal: "GOLDEN_HONEY", morph: "DENSE_NUG", cost: 150, desc: "Massive tropical guava payload engineered specifically for cold-cure washing." },
-    { id: "s100", name: "Gary Satan", role: "HYBRID", lineage: "Gary Payton × Jealousy", tierIdx: 9, thc: 36, terps: 6.7, pal: "MIDNIGHT_OBSIDIAN", morph: "MAIN_COLA", cost: 165, desc: "Dark wicked calyxes smelling of industrial gas and exotic fruit rind." },
-    { id: "s101", name: "Zikwid (Diamond Pheno)", role: "HYBRID", lineage: "Zkittlez × Liquid Gold", tierIdx: 9, thc: 37, terps: 7.9, pal: "RUBY_ROSE", morph: "DENSE_NUG", cost: 185, desc: "Elite breeder cut. Saturates air in intense raspberry candy syrup and petrol." },
-    { id: "s102", name: "Buckeye Diamond Reserve", role: "HYBRID", lineage: "Ohio Deathstar × Permanent Marker × Lemon G", tierIdx: 9, thc: 38, terps: 8.2, pal: "ROYAL_VIOLET", morph: "MAIN_COLA", cost: 190, desc: "Ohio's state championship triple hybrid. Kerosene, lemon candy, and marker ink." },
-    { id: "s103", name: "Emerald City Cookies", role: "HYBRID", lineage: "Thin Mint GSC × Platinum OG", tierIdx: 8, thc: 33, terps: 5.9, pal: "EMERALD_MINT", morph: "DENSE_NUG", cost: 135, desc: "Emerald green jewel nugs caked in diamond trichomes with sweet mint." },
-    { id: "s104", name: "Solar Flare OG", role: "SATIVA", lineage: "Sour Diesel × Orange 43", tierIdx: 9, thc: 37, terps: 7.6, pal: "GOLDEN_HONEY", morph: "MAIN_COLA", cost: 175, desc: "Blinding solar terpinolene orange gas. Maximum daylight energy." }
+    { id: "s85", name: "Donny Burger", cutInfo: "Skunkhouse Savory Pheno", role: "INDICA", lineage: "Han-Solo Burger × GMO", tierIdx: 9, thc: 36, terps: 6.8, pal: "MIDNIGHT_OBSIDIAN", morph: "FOXTAIL", cost: 165, desc: "Extreme savory chem garlic and gas. Huge solventless resin head returns." },
+    { id: "s86", name: "Sub-Zero", cutInfo: "Glacier Resin Pheno", role: "HYBRID", lineage: "Oreoz × Super Boof", tierIdx: 9, thc: 37, terps: 7.4, pal: "ROYAL_VIOLET", morph: "MAIN_COLA", cost: 175, desc: "Glacier-thick trichome shell over deep violet cherry citrus calyxes." },
+    { id: "s87", name: "Cap Junky", cutInfo: "Capulator Seed Junky", role: "HYBRID", lineage: "Alien Cookies × Kush Mints #11", tierIdx: 9, thc: 36, terps: 6.5, pal: "EMERALD_MINT", morph: "DENSE_NUG", cost: 170, desc: "Bred by Capulator and Seed Junky. Ferocious punch of mint, gasoline, and pepper." },
+    { id: "s88", name: "Z-Cube", cutInfo: "Dying Breed Seeds Bx", role: "HYBRID", lineage: "Zkittlez × (Zkittlez × Eddy OG)", tierIdx: 9, thc: 33, terps: 7.6, pal: "RUBY_ROSE", morph: "DENSE_NUG", cost: 180, desc: "Backcrossed Zkittlez perfection. Unadulterated candied fruit terpenes." },
+    { id: "s89", name: "Tallymon", cutInfo: "Oni Seed Co Hash Pheno", role: "INDICA", lineage: "Banana OG × Do-Si-Dos × Papaya", tierIdx: 8, thc: 31, terps: 7.8, pal: "GOLDEN_HONEY", morph: "DENSE_NUG", cost: 145, desc: "Tropical fruit smoothies, ripe plantains, and dripping solventless hash glands." },
+    { id: "s90", name: "Grape Pie", cutInfo: "Cannarado Warm Crust", role: "INDICA", lineage: "Cherry Pie × Grape Stomper", tierIdx: 7, thc: 29, terps: 6.2, pal: "ROYAL_VIOLET", morph: "DENSE_NUG", cost: 120, desc: "Cannarado Genetics staple. Warm purple grape pie crust and sweet vanilla." },
+    { id: "s91", name: "Grease Monkey", cutInfo: "Exotic Genetix Cut", role: "HYBRID", lineage: "GG4 × Cookies & Cream", tierIdx: 7, thc: 31, terps: 5.6, pal: "EMERALD_MINT", morph: "MAIN_COLA", cost: 120, desc: "Exotic Genetix legend. Heavy diesel grease and sweet vanilla cookie dough." },
+    { id: "s92", name: "Chem Chillz", cutInfo: "Capulator Menthol Cut", role: "INDICA", lineage: "GMO × Chillz", tierIdx: 8, thc: 34, terps: 6.3, pal: "MIDNIGHT_OBSIDIAN", morph: "FOXTAIL", cost: 140, desc: "Freezing cold menthol gas mixed with potent garlic and earthy skunk." },
+    { id: "s93", name: "Cereal Milk", cutInfo: "Limited Reserve Cut", role: "HYBRID", lineage: "Y Life × Snowman", tierIdx: 7, thc: 30, terps: 5.7, pal: "GOLDEN_HONEY", morph: "DENSE_NUG", cost: 125, desc: "Sweet sugary morning cereal milk with sweet fruity undertones." },
+    { id: "s94", name: "Gushers", cutInfo: "Triangle Fruit Cut", role: "HYBRID", lineage: "Gelato #41 × Triangle Kush", tierIdx: 7, thc: 30, terps: 5.8, pal: "ROYAL_VIOLET", morph: "MAIN_COLA", cost: 120, desc: "Bursting tropical candy and fuel with deep physical relaxation." },
+    { id: "s95", name: "Sherbanger 22", cutInfo: "Boston Trees Selection", role: "HYBRID", lineage: "Sunset Sherbet × Headbanger", tierIdx: 8, thc: 33, terps: 6.8, pal: "ROYAL_VIOLET", morph: "MAIN_COLA", cost: 145, desc: "Boston Trees selection. Pure sour lime diesel fuel mixed with blueberry sherbet." },
+    { id: "s96", name: "Spritzer", cutInfo: "Cannarado Effervescent", role: "HYBRID", lineage: "Runtz × (Grape Pie × MAC)", tierIdx: 8, thc: 32, terps: 7.1, pal: "RUBY_ROSE", morph: "MAIN_COLA", cost: 140, desc: "Effervescent cherry soda, grape fizz, and crystalline resin calyxes." },
+    { id: "s97", name: "Pave", cutInfo: "Compound Diamond Cut", role: "HYBRID", lineage: "Paris OG × The Menthol", tierIdx: 9, thc: 35, terps: 6.4, pal: "MIDNIGHT_OBSIDIAN", morph: "DENSE_NUG", cost: 160, desc: "Compound Genetics stunner. Asphalt fuel, diamond frost, and spearmint." },
+    { id: "s98", name: "Tropicana Cookies", cutInfo: "Oni Blood Orange Cut", role: "SATIVA", lineage: "Tangie × Girl Scout Cookies", tierIdx: 7, thc: 28, terps: 7.2, pal: "ROYAL_VIOLET", morph: "FOXTAIL", cost: 125, desc: "Deep dark purple flowers with pure fresh squeezed blood orange juice bouquet." },
+    { id: "s99", name: "Papaya Bomb", cutInfo: "Hash Washer Pheno", role: "INDICA", lineage: "Papaya × THC Bomb", tierIdx: 8, thc: 33, terps: 7.7, pal: "GOLDEN_HONEY", morph: "DENSE_NUG", cost: 150, desc: "Massive tropical guava payload engineered specifically for cold-cure washing." },
+    { id: "s100", name: "Gary Satan", cutInfo: "Tiki Madman Elite", role: "HYBRID", lineage: "Gary Payton × Jealousy", tierIdx: 9, thc: 36, terps: 6.7, pal: "MIDNIGHT_OBSIDIAN", morph: "MAIN_COLA", cost: 165, desc: "Dark wicked calyxes smelling of industrial gas and exotic fruit rind." },
+    { id: "s101", name: "Zikwid", cutInfo: "Diamond Pheno 1", role: "HYBRID", lineage: "Zkittlez × Liquid Gold", tierIdx: 9, thc: 37, terps: 7.9, pal: "RUBY_ROSE", morph: "DENSE_NUG", cost: 185, desc: "Elite breeder cut. Saturates air in intense raspberry candy syrup and petrol." },
+    { id: "s102", name: "Buckeye Diamond Reserve", cutInfo: "Ohio Triple Crown Cut", role: "HYBRID", lineage: "Ohio Deathstar × Permanent Marker × Lemon G", tierIdx: 9, thc: 38, terps: 8.2, pal: "ROYAL_VIOLET", morph: "MAIN_COLA", cost: 190, desc: "Ohio's state championship triple hybrid. Kerosene, lemon candy, and marker ink." },
+    { id: "s103", name: "Emerald City Cookies", cutInfo: "Platinum Mint Pheno", role: "HYBRID", lineage: "Thin Mint GSC × Platinum OG", tierIdx: 8, thc: 33, terps: 5.9, pal: "EMERALD_MINT", morph: "DENSE_NUG", cost: 135, desc: "Emerald green jewel nugs caked in diamond trichomes with sweet mint." },
+    { id: "s104", name: "Solar Flare OG", cutInfo: "Terpinolene Gas Pheno", role: "SATIVA", lineage: "Sour Diesel × Orange 43", tierIdx: 9, thc: 37, terps: 7.6, pal: "GOLDEN_HONEY", morph: "MAIN_COLA", cost: 175, desc: "Blinding solar terpinolene orange gas. Maximum daylight energy." }
   ];
 
-  /* PACKAGING FORMATS & MULTI-WEIGHT VAULT */
+  /* ================= PACKAGING FORMATS (EXPANDED PRE-ROLLS & OHIO RATIOS) ================= */
   const PACKAGING_WEIGHTS = {
-    PREROLL:   { id: "PREROLL",   name: "1.0g Craft Cone", grams: 1.0, basePricePerGram: 14.0, visualCat: "CONE" },
-    TENTH:     { id: "TENTH",     name: "2.83g Ohio Tenth Jar", grams: 2.83, basePricePerGram: 12.0, visualCat: "JAR" },
-    FIFTH:     { id: "FIFTH",     name: "5.66g Ohio Fifth Jar", grams: 5.66, basePricePerGram: 10.5, visualCat: "JAR" },
-    HALF:      { id: "HALF",      name: "14.15g Ohio Half-Zip", grams: 14.15, basePricePerGram: 9.0, visualCat: "BAG" },
-    OUNCE:     { id: "OUNCE",     name: "28.30g Full Zip Pouch", grams: 28.3, basePricePerGram: 7.8, visualCat: "BAG" },
-    QP_BRICK:  { id: "QP_BRICK",  name: "113.4g (QP) Wholesale Brick", grams: 113.4, basePricePerGram: 6.8, visualCat: "BRICK" },
-    POUND_BALE:{ id: "POUND_BALE",name: "453.6g (1-LB) Vault Bale", grams: 453.6, basePricePerGram: 6.0, visualCat: "BRICK" }
+    PREROLL_1G:  { id: "PREROLL_1G",  name: "1.0g Craft Cone", grams: 1.0, basePricePerGram: 16.0, visualCat: "CONE", desc: "Single raw cone packed with whole trimmed flower." },
+    PREROLL_5PK: { id: "PREROLL_5PK", name: "5-Pack Pocket Tin (5g)", grams: 5.0, basePricePerGram: 13.5, visualCat: "PREROLL_5PACK", desc: "Metallic pocket tin with 5 matched 1.0g cones." },
+    PREROLL_28PK:{ id: "PREROLL_28PK",name: "28-Pack Party Box (28g)", grams: 28.0, basePricePerGram: 10.0, visualCat: "PREROLL_28PACK", desc: "Bulk ounce carton of 28 craft 1g cones." },
+    TENTH:       { id: "TENTH",       name: "2.83g Ohio Tenth Jar", grams: 2.83, basePricePerGram: 13.0, visualCat: "JAR", desc: "Official Ohio medical metric unit jar." },
+    FIFTH:       { id: "FIFTH",       name: "5.66g Ohio Fifth Jar", grams: 5.66, basePricePerGram: 11.5, visualCat: "JAR", desc: "Double-tenth preserved craft jar." },
+    HALF:        { id: "HALF",        name: "14.15g Ohio Half-Zip", grams: 14.15, basePricePerGram: 9.5, visualCat: "BAG", desc: "Resealable nitrogen-flushed pouch." },
+    OUNCE:       { id: "OUNCE",       name: "28.30g Full Zip Pouch", grams: 28.30, basePricePerGram: 8.2, visualCat: "BAG", desc: "Full ounce connoisseur craft stash bag." },
+    QP_BRICK:    { id: "QP_BRICK",    name: "113.4g (QP) Wholesale Brick", grams: 113.4, basePricePerGram: 7.0, visualCat: "BRICK", desc: "Quarter-pound commercial cured brick." },
+    POUND_BALE:  { id: "POUND_BALE",  name: "453.6g (1-LB) Vault Bale", grams: 453.6, basePricePerGram: 6.2, visualCat: "BRICK", desc: "One-pound commercial distributor vacuum bale." }
   };
 
-  /* CANOPY PROGRESSION SCALED TO 500 CRAFT PLANTS */
+  /* SMART-PACK PROFIT ALLOCATION RATIOS (BALANCED RETAIL MARGIN & VELOCITY) */
+  const SMART_PACK_TIERS = [
+    { formatKey: "TENTH",       weightTargetPct: 0.35 }, // 35% of bulk into High-Margin Tenths ($13/g)
+    { formatKey: "PREROLL_1G",  weightTargetPct: 0.15 }, // 15% into High-Margin Cones ($16/g)
+    { formatKey: "PREROLL_5PK", weightTargetPct: 0.20 }, // 20% into Pocket Tins ($13.5/g)
+    { formatKey: "HALF",        weightTargetPct: 0.20 }, // 20% into Half-Zips ($9.5/g)
+    { formatKey: "PREROLL_28PK",weightTargetPct: 0.10 }  // 10% into Party Boxes ($10/g)
+  ];
+
+  /* 4 DISPENSARY PATRON ARCHETYPES */
+  const PATRON_ARCHETYPES = [
+    { id: "terp_chaser", name: "Terpene Purist", minTerps: 5.5, priceTolerance: 1.55, favCategories: ["JAR", "ROSIN_JAR"], tagColor: "var(--c-cyan)" },
+    { id: "budget_roller", name: "Budget Roller", minTerps: 0.0, priceTolerance: 1.05, favCategories: ["CONE", "PREROLL_5PACK", "PREROLL_28PACK"], tagColor: "var(--c-amber)" },
+    { id: "rosin_head", name: "Rosin Head", minTerps: 4.0, priceTolerance: 1.65, favCategories: ["ROSIN_JAR", "HASH_HOLE", "AIO_VAPE"], tagColor: "var(--c-gold)" },
+    { id: "med_patient", name: "Medical Patient", minTerps: 3.5, priceTolerance: 1.30, favCategories: ["JAR", "EDIBLE_BUCKEYE", "EDIBLE_GUMMY"], tagColor: "var(--c-scarlet)" }
+  ];
+
+  /* CANOPY PROGRESSION (CRAFT TENT TO ATRIUM) */
   const PERSONAL_FACILITIES = [
     { name: "2-Plant Closet", pots: 2, cost: 0, footTrafficBonus: 0 },
     { name: "4-Plant Mylar Tent", pots: 4, cost: 450, footTrafficBonus: 0 },
@@ -997,7 +1248,7 @@
     { name: "500-Plant Glass Atrium Complex", pots: 500, cost: 140000, footTrafficBonus: 120 }
   ];
 
-  /* COMMERCIAL WAREHOUSES SCALED TO 10,000 INDUSTRIAL PLANTS */
+  /* COMMERCIAL INDUSTRIAL COMPLEXES (200 TO 10,000 PLANTS) */
   const COMMERCIAL_WAREHOUSES = [
     { id: "W_200", name: "Franklin Co. Commercial Warehouse (200 Plants)", capacity: 200, cost: 75000, cycleTimeSec: 14, baseYieldG: 45000 },
     { id: "W_500", name: "Cuyahoga Industrial Cultivation Facility (500 Plants)", capacity: 500, cost: 160000, cycleTimeSec: 18, baseYieldG: 120000 },
@@ -1007,9 +1258,9 @@
     { id: "W_10000", name: "National Sovereign Bio-Canopy Titan (10,000 Plants)", capacity: 10000, cost: 4200000, cycleTimeSec: 35, baseYieldG: 3500000 }
   ];
 
-  /* STORE EXPANSIONS (6 TO 72 SLOTS) */
+  /* STORE DISPLAY EXPANSIONS (6 TO 72 SLOTS) */
   const STORE_EXPANSIONS = [
-    { slots: 6, cost: 0, title: "Standard Countertop" },
+    { slots: 6, cost: 0, title: "Standard Countertop (6 Slots)" },
     { slots: 12, cost: 1200, title: "Glass Display Case (12 Slots)" },
     { slots: 24, cost: 3500, title: "Boutique Dispensary Floor (24 Slots)" },
     { slots: 36, cost: 8000, title: "Flagship Ohio Retail Emporium (36 Slots)" },
@@ -1034,7 +1285,7 @@
     { id: "choc_bar", name: "Artisan Cacao Chocolate Bar (100mg)", visualCat: "EDIBLE_CHOC", bulkGramsReq: 10, retailPrice: 26, desc: "Belgian dark chocolate segmented into 10 embossed Buckeye Buds dosing squares." }
   ];
 
-  /* PARAPHERNALIA WHOLESALE CATALOG */
+  /* HEADSHOP PARAPHERNALIA WHOLESALE CATALOG */
   const PARAPHERNALIA_CATALOG = [
     { id: "pipe", name: "Borosilicate Glass Hand Pipe", visualCat: "PIPE", baseCost: 12, minCost: 8, maxCost: 18, baseRetail: 25, desc: "Hand-blown 3D spoon pipe with deep bowl cavity and dichroic glass swirl." },
     { id: "bong", name: "14-Inch Heavy Glass Beaker Bong", visualCat: "BONG", baseCost: 45, minCost: 32, maxCost: 65, baseRetail: 85, desc: "Heavy laboratory borosilicate beaker with ice pinch and removable downstem." },
@@ -1043,7 +1294,7 @@
     { id: "battery", name: "Variable Voltage 510 Vape Battery", visualCat: "BATTERY", baseCost: 8, minCost: 5, maxCost: 14, baseRetail: 20, desc: "Universal 510 thread stylus battery with preheat mode and LED ring button." }
   ];
 
-  /* REALISTIC CANNABIS FACTS DATABASE FOR DAILY LEDGER */
+  /* REALISTIC CULTIVATOR FACTS FOR DAILY REPORT */
   const CANNABIS_FACTS = [
     "Jack Herer was known as the 'Hemperor' after publishing his groundbreaking 1985 book, 'The Emperor Wears No Clothes,' detailing the industrial and medicinal versatility of cannabis [1].",
     "Jack Herer the strain was bred by Sensi Seeds in the Netherlands in the mid-1990s as an official tribute, uniting tropical Haze with Northern Lights #5 and Shiva Skunk [2].",
@@ -1151,7 +1402,7 @@
     }
   ];
 </script>
-<!-- ================= PART 3: SYSTEMS & ENGINE ================= -->
+<!-- ================= PART 3: SYSTEMS, MECHANICS & GAME ENGINE ================= -->
 <script>
   /* ================= GAME STATE INITIALIZATION ================= */
   let State = {
@@ -1161,7 +1412,7 @@
     skillPoints: 3,
     skills: {},
     day: 1,
-    dayTimeRemaining: 300, // 5-Minute (300s) Daily Timer
+    dayTimeRemaining: 300, // 5-Minute (300s) Daily Cycle
     dailyLedger: { revFlower: 0, revRosin: 0, revEdibles: 0, revGear: 0, revClinic: 0, revCaregiver: 0, expUtil: 0, expWh: 0, expStock: 0 },
     facIdx: 0,
     warehouseIdx: -1,
@@ -1171,13 +1422,14 @@
     doctorLicensed: false,
     registeredMedCards: 0,
     caregiverContracts: [
-      { id: "c1", name: "Veterans Compassion Care", targetGrams: 50, payout: 500, fulfilled: false },
-      { id: "c2", name: "Columbus Oncology Outreach", targetGrams: 100, payout: 1100, fulfilled: false },
-      { id: "c3", name: "Cleveland Children's Epilepsy Program", targetGrams: 200, payout: 2400, fulfilled: false }
+      { id: "c1", name: "Veterans Compassion Care", targetGrams: 50, payout: 550, fulfilled: false },
+      { id: "c2", name: "Columbus Oncology Outreach", targetGrams: 100, payout: 1200, fulfilled: false },
+      { id: "c3", name: "Cleveland Children's Epilepsy Program", targetGrams: 200, payout: 2600, fulfilled: false }
     ],
     paraphernaliaMarket: {},
     paraphernaliaInventory: {},
     growPots: [],
+    motherPlants: [], // Up to 4 perpetual mothers
     seedInventory: [],
     bulkHarvests: [],
     rosinVault: [],
@@ -1187,7 +1439,8 @@
     completedMissions: [],
     godMode: false,
     auto: { autoWater: false, autoHarvest: false, autoPack: false, autoRestock: false },
-    targetPotForSeed: null
+    targetPotForSeed: null,
+    catalogSortMode: 'default'
   };
 
   function getSkillRank(id) { return State.skills[id] || 0; }
@@ -1230,6 +1483,7 @@
     if ($('hud-rosin-g')) $('hud-rosin-g').innerText = `${totalRosin.toFixed(1)}g`;
     let totalPacks = State.packagedVault.reduce((a, b) => a + b.unitsRemaining, 0);
     if ($('hud-stash-count')) $('hud-stash-count').innerText = totalPacks;
+    if ($('hud-mother-count')) $('hud-mother-count').innerText = `${State.motherPlants.length}/4`;
     let fac = PERSONAL_FACILITIES[State.facIdx];
     if ($('hud-fac-name')) $('hud-fac-name').innerText = fac.name;
     let count = State.trophies.length;
@@ -1274,6 +1528,48 @@
     if ($('chk-autorestock')) $('chk-autorestock').innerText = State.auto.autoRestock ? 'ACTIVE' : 'ENABLE';
   }
 
+  /* ================= CLOUD SYNC & JSON IMPORT/EXPORT ================= */
+  function exportSaveToTextarea() {
+    let json = JSON.stringify(State);
+    if ($('save-json-area')) $('save-json-area').value = json;
+    localStorage.setItem('buckeyeBudsEmpire_V8', json);
+  }
+
+  function copySaveToClipboard() {
+    exportSaveToTextarea();
+    let area = $('save-json-area');
+    if (!area || !area.value) return;
+    navigator.clipboard.writeText(area.value).then(() => {
+      toast("Save JSON copied to clipboard! Keep it safe.");
+    }).catch(() => {
+      area.select();
+      document.execCommand('copy');
+      toast("Save JSON copied to clipboard!");
+    });
+  }
+
+  function importSaveFromTextarea() {
+    let area = $('save-json-area');
+    if (!area || !area.value.trim()) { toast("Paste a valid Buckeye Buds save JSON string."); return; }
+    try {
+      let parsed = JSON.parse(area.value.trim());
+      if (!parsed.funds || !parsed.growPots) throw new Error("Invalid structure");
+      State = parsed;
+      localStorage.setItem('buckeyeBudsEmpire_V8', JSON.stringify(State));
+      closeSaveModal();
+      refreshAllViews();
+      toast("Empire save restored successfully!");
+    } catch(err) {
+      toast("Import error: Corrupted or invalid JSON data.");
+    }
+  }
+
+  function hardResetEmpire() {
+    if (!confirm("Are you sure? This will wipe your empire, mothers, and vaults back to Day 1.")) return;
+    localStorage.removeItem('buckeyeBudsEmpire_V8');
+    location.reload();
+  }
+
   function saveGame() {
     localStorage.setItem('buckeyeBudsEmpire_V8', JSON.stringify(State));
     toast("Buckeye Buds Empire operations saved.");
@@ -1282,15 +1578,25 @@
   function loadGame() {
     let s = localStorage.getItem('buckeyeBudsEmpire_V8');
     if (s) {
-      State = JSON.parse(s);
-      updateHUD(); renderGrowUI(); renderWarehouseUI(); renderStore(); renderBulkHarvests(); renderPackagedVault(); renderOwnedSeeds(); renderSeedCatalog(); renderCups(); renderMissions(); renderSkills(); renderParaphernaliaMarket(); renderEdiblesKitchen(); renderClinicDesk(); renderHashLab(); renderDispensaryChain(); updateAutoUI();
-      toast("Buckeye Buds operations restored.");
+      try {
+        State = JSON.parse(s);
+        if (!State.motherPlants) State.motherPlants = [];
+        refreshAllViews();
+        toast("Buckeye Buds operations restored.");
+      } catch(e) { toast("Error reading save."); }
     } else {
       toast("No save found.");
     }
   }
 
-  /* ================= 5-MINUTE DAY ENGINE & LEDGER ================= */
+  function refreshAllViews() {
+    updateHUD(); renderGrowUI(); renderMotherTent(); renderWarehouseUI(); renderStore(); 
+    renderBulkHarvests(); renderPackagedVault(); renderOwnedSeeds(); renderSeedCatalog(); 
+    renderCups(); renderMissions(); renderSkills(); renderParaphernaliaMarket(); 
+    renderEdiblesKitchen(); renderClinicDesk(); renderHashLab(); renderDispensaryChain(); updateAutoUI();
+  }
+
+  /* ================= 5-MINUTE OPERATIONS LEDGER ================= */
   function advanceDayManual() {
     triggerDayEndLedger();
   }
@@ -1306,7 +1612,7 @@
     State.dailyLedger.expWh += whOverhead;
 
     if (State.doctorLicensed) {
-      let consultations = Math.floor(Math.random() * 6) + 2;
+      let consultations = Math.floor(Math.random() * 6) + 3;
       let clinicIncome = consultations * 150;
       State.funds += clinicIncome;
       State.dailyLedger.revClinic += clinicIncome;
@@ -1348,7 +1654,7 @@
     $('modal-ledger').classList.add('active');
 
     State.day++;
-    State.dayTimeRemaining = 300; // Reset to full 5-Minute day
+    State.dayTimeRemaining = 300; // Reset to 300 seconds
     State.dailyLedger = { revFlower: 0, revRosin: 0, revEdibles: 0, revGear: 0, revClinic: 0, revCaregiver: 0, expUtil: 0, expWh: 0, expStock: 0 };
     State.caregiverContracts.forEach(c => c.fulfilled = false);
 
@@ -1360,7 +1666,7 @@
     $('modal-ledger').classList.remove('active');
   }
 
-  /* ================= YIELD & CULTIVAR SYSTEM ================= */
+  /* ================= YIELD & CULTIVAR GENERATOR ================= */
   function calculateHarvestYield(plant) {
     let baseMin = 150 + (plant.tierIdx * 10);
     let baseMax = 260 + (plant.tierIdx * 18);
@@ -1384,7 +1690,7 @@
     return Math.min(99, Math.max(45, Math.floor((thc * 1.35) + (appeal * 0.35) + (terps * 0.20) + (cure * 0.1))));
   }
 
-  function createCultivar(name, role, tierIdx, seedInt=null, thc=null, terps=null, appeal=null, palette=null, morph=null, lineage=null) {
+  function createCultivar(name, role, tierIdx, seedInt=null, thc=null, terps=null, appeal=null, palette=null, morph=null, lineage=null, generation="F1", phenoTag=null) {
     let tD = TIERS[tierIdx] || TIERS[0];
     let thcSkillBoost = Number((getSkillRank('pot_1') * 2.5).toFixed(1));
     let actualThc = (thc || (tD.baseTHC + Math.floor(Math.random() * 4))) + thcSkillBoost;
@@ -1403,7 +1709,9 @@
       uid: 'BB-' + Math.random().toString(36).substring(2, 7).toUpperCase(),
       name: name,
       role: role,
-      lineage: lineage || "Ohio Certified Phenotype",
+      lineage: lineage || "Ohio Certified Cut",
+      generation: generation || "P1",
+      phenoTag: phenoTag || "Breeder's Cut",
       tierIdx: tierIdx,
       tierName: tD.name,
       tierColor: tD.color,
@@ -1419,7 +1727,86 @@
     };
   }
 
-  /* ================= PERSONAL CRAFT & SHOWROOM CANOPY ================= */
+  /* ================= MOTHER PLANT & CLONE NURSERY ================= */
+  function renderMotherTent() {
+    const grid = $('mother-tents-grid'); if (!grid) return; grid.innerHTML = '';
+    for (let i = 0; i < 4; i++) {
+      let mother = State.motherPlants[i];
+      let div = document.createElement('div');
+      div.className = 'check-item';
+      div.style.flexDirection = 'column';
+      div.style.alignItems = 'stretch';
+      div.style.gap = '6px';
+
+      if (mother) {
+        let cvId = `mother-cv-${i}`;
+        div.innerHTML = `
+          <div style="display:flex; justify-content:space-between; align-items:center;">
+            <span style="font-weight:900; color:#fff; font-size:10px;">${mother.name}</span>
+            <span class="badge" style="color:var(--c-purple); border-color:var(--c-purple);">MOTHER #${i+1}</span>
+          </div>
+          <div style="display:flex; gap:8px; align-items:center;">
+            <div style="width:56px; height:56px; background:#000; border-radius:4px; overflow:hidden; border:1px solid #1a2a1a; flex-shrink:0;">
+              <canvas id="${cvId}" width="128" height="128" style="width:56px; height:56px; image-rendering:pixelated;"></canvas>
+            </div>
+            <div style="font-size:8.5px; color:var(--silver-dim); line-height:1.4;">
+              <div>THC: <b style="color:var(--c-lime);">${mother.thc}%</b> | Terps: <b style="color:var(--c-cyan);">${mother.terpenes}%</b></div>
+              <div>Gen: <b style="color:#fff;">${mother.generation}</b> | Score: <b style="color:var(--c-gold);">${mother.score}</b></div>
+            </div>
+          </div>
+          <div style="display:flex; gap:4px; margin-top:2px;">
+            <button class="btn btn-green" style="flex:1;" onclick="takeCloneFromMother(${i})">✂️ Take Free Clone</button>
+            <button class="btn btn-danger" onclick="retireMother(${i})">Retire</button>
+          </div>
+        `;
+        grid.appendChild(div);
+        let cv = $(cvId);
+        if (cv) renderUniversalVisual128(cv, "MOTHER_PLANT", mother.seedInt, mother.palette);
+      } else {
+        div.innerHTML = `
+          <div style="text-align:center; padding:12px; color:var(--silver-dim); font-size:9px;">
+            <div>[Empty Mother Chamber #${i+1}]</div>
+            <div style="font-size:7.5px; margin-top:2px;">Save a flowering plant on chop to keep perpetual genetics.</div>
+          </div>
+        `;
+        grid.appendChild(div);
+      }
+    }
+  }
+
+  function savePlantAsMother(potId) {
+    if (State.motherPlants.length >= 4) { toast("Mother Tent is full (4/4). Retire an existing mother first."); return; }
+    let pot = State.growPots.find(p => p.id === potId);
+    if (!pot || !pot.occupied) return;
+
+    let mother = JSON.parse(JSON.stringify(pot.plant));
+    State.motherPlants.push(mother);
+    toast(`🌱 Saved ${mother.name} to the Mother Plant Nursery! Instant clones available forever.`);
+    updateHUD(); renderMotherTent();
+  }
+
+  function takeCloneFromMother(motherIdx) {
+    let mother = State.motherPlants[motherIdx];
+    if (!mother) return;
+    let emptyPot = State.growPots.find(p => !p.occupied);
+    if (!emptyPot) { toast("No empty pots in canopy for this clone cutting!"); return; }
+
+    emptyPot.occupied = true;
+    emptyPot.plant = createCultivar(mother.name + " (Clone)", mother.role, mother.tierIdx, mother.seedInt, mother.thc, mother.terpenes, mother.bagAppeal, mother.palette, mother.morphology, mother.lineage, mother.generation, "Rooted Clone");
+    emptyPot.progress = 20; // Clones skip early germination
+    emptyPot.phase = 'VEGETATIVE';
+
+    toast(`✂️ Cut and rooted clone of ${mother.name} directly into Pot #${emptyPot.id + 1}!`);
+    updateHUD(); renderGrowUI();
+  }
+
+  function retireMother(idx) {
+    let m = State.motherPlants.splice(idx, 1)[0];
+    toast(`Retired ${m.name} mother plant.`);
+    updateHUD(); renderMotherTent();
+  }
+
+  /* ================= PERSONAL CRAFT GROW CANOPY ================= */
   function initPots() {
     let fac = PERSONAL_FACILITIES[State.facIdx];
     State.growPots = [];
@@ -1430,17 +1817,19 @@
 
   function renderGrowUI() {
     let fac = PERSONAL_FACILITIES[State.facIdx];
-    $('grow-fac-title').innerText = `${fac.name}`;
+    if ($('grow-fac-title')) $('grow-fac-title').innerText = `${fac.name}`;
     let occ = State.growPots.filter(p => p.occupied).length;
-    $('pots-count-txt').innerText = `${occ}/${fac.pots}`;
+    if ($('pots-count-txt')) $('pots-count-txt').innerText = `${occ}/${fac.pots}`;
 
     let next = PERSONAL_FACILITIES[State.facIdx + 1];
     let btnUpg = $('btn-upgrade-fac');
-    if (next) {
-      btnUpg.style.display = 'block';
-      btnUpg.innerText = `Upgrade: ${next.name} ($${fmt(next.cost)})`;
-    } else {
-      btnUpg.style.display = 'none';
+    if (btnUpg) {
+      if (next) {
+        btnUpg.style.display = 'block';
+        btnUpg.innerText = `Upgrade: ${next.name} ($${fmt(next.cost)})`;
+      } else {
+        btnUpg.style.display = 'none';
+      }
     }
 
     const grid = $('grow-pots-grid'); if (!grid) return;
@@ -1458,9 +1847,12 @@
             ${pot.progress >= 100 ? '⭐ READY TO CHOP' : pot.phase}
           </div>
           <div class="progress-bg"><div class="progress-fill" id="pot-bar-${pot.id}" style="width:${pot.progress}%;"></div></div>
-          <button class="btn btn-green" id="pot-chop-btn-${pot.id}" style="padding:4px 6px; font-size:8px; width:100%; margin-top:3px;" ${pot.progress >= 100 ? '' : 'disabled'} onclick="harvestPot(${pot.id})">
-            ${pot.progress >= 100 ? '✂️ Chop Cola' : 'Flowering...'}
-          </button>
+          <div style="display:flex; gap:3px; width:100%; margin-top:3px;">
+            <button class="btn btn-green" id="pot-chop-btn-${pot.id}" style="padding:4px 6px; font-size:7.5px; flex:1;" ${pot.progress >= 100 ? '' : 'disabled'} onclick="harvestPot(${pot.id})">
+              ${pot.progress >= 100 ? '✂️ Chop' : 'Flowering...'}
+            </button>
+            <button class="btn btn-purple" style="padding:4px 5px; font-size:7px;" title="Save as perpetual mother" onclick="savePlantAsMother(${pot.id})">🌱 Mother</button>
+          </div>
         `;
       } else {
         div.innerHTML = `
@@ -1470,6 +1862,7 @@
       }
       grid.appendChild(div);
     });
+    renderMotherTent();
   }
 
   function updateGrowPotsInPlace() {
@@ -1490,7 +1883,7 @@
         if (chopBtn) {
           if (pot.progress >= 100) {
             chopBtn.removeAttribute('disabled');
-            chopBtn.innerText = '✂️ Chop Cola';
+            chopBtn.innerText = '✂️ Chop';
             card.classList.add('ready');
           } else {
             chopBtn.setAttribute('disabled', 'true');
@@ -1509,7 +1902,7 @@
     list.innerHTML = '';
 
     if (State.seedInventory.length === 0) {
-      list.innerHTML = `<div style="text-align:center; padding:15px; color:var(--silver-dim);">Seed Vault empty. Visit Seeds tab to purchase certified cuts!</div>`;
+      list.innerHTML = `<div style="text-align:center; padding:15px; color:var(--silver-dim);">Seed Vault empty. Visit Seeds tab to purchase certified cuts or take clones from mothers!</div>`;
     } else {
       State.seedInventory.forEach((seed, idx) => {
         let div = document.createElement('div');
@@ -1536,7 +1929,7 @@
 
     let startProgress = getSkillRank('speed_2') * 20;
     pot.occupied = true;
-    pot.plant = createCultivar(seed.name, seed.role, seed.tierIdx, seed.seedInt, seed.thc, seed.terps, seed.bagAppeal, seed.palette, seed.morphology, seed.lineage);
+    pot.plant = createCultivar(seed.name, seed.role, seed.tierIdx, seed.seedInt, seed.thc, seed.terps, seed.bagAppeal, seed.palette, seed.morphology, seed.lineage, seed.generation, seed.phenoTag);
     pot.progress = startProgress;
     pot.phase = 'VEGETATIVE';
 
@@ -1557,7 +1950,7 @@
       if (State.seedInventory.length > 0) {
         let seed = State.seedInventory.shift();
         pot.occupied = true;
-        pot.plant = createCultivar(seed.name, seed.role, seed.tierIdx, seed.seedInt, seed.thc, seed.terps, seed.bagAppeal, seed.palette, seed.morphology, seed.lineage);
+        pot.plant = createCultivar(seed.name, seed.role, seed.tierIdx, seed.seedInt, seed.thc, seed.terps, seed.bagAppeal, seed.palette, seed.morphology, seed.lineage, seed.generation, seed.phenoTag);
         pot.progress = startProgress;
         pot.phase = 'VEGETATIVE';
         planted++;
@@ -1652,7 +2045,7 @@
           <button class="btn btn-blue" onclick="warehousePullCheapestSeeds()">1. Pull Bulk Seeds</button>
           <button class="btn btn-green" onclick="warehouseTriggerCycle()">2. Cycle Industrial Rotation</button>
           <button class="btn btn-gold" onclick="warehouseHarvest()">3. Harvest Commercial Batch</button>
-          <button class="btn btn-scarlet" onclick="warehouseAutoStockDispensary()">4. Bulk Package &amp; Stock Chain</button>
+          <button class="btn btn-scarlet" onclick="warehouseAutoStockDispensary()">4. Bulk Smart-Pack &amp; Stock</button>
         </div>
       `;
     }
@@ -1718,7 +2111,7 @@
     let st = State.warehouseState.stagedStrain || REAL_STRAINS_DATABASE[0];
 
     let dryG = Math.floor(wh.baseYieldG * (0.9 + Math.random() * 0.3));
-    let batch = createCultivar(st.name, st.role, st.tierIdx, null, st.thc, st.terps, 86, st.pal, st.morph, st.lineage);
+    let batch = createCultivar(st.name, st.role, st.tierIdx, null, st.thc, st.terps, 86, st.pal, st.morph, st.lineage, "Commercial Cut");
     batch.weightG = dryG;
     State.bulkHarvests.push(batch);
 
@@ -1731,15 +2124,12 @@
 
   function warehouseAutoStockDispensary() {
     if (State.bulkHarvests.length === 0) { toast("No bulk flower in bins. Run warehouse cycle first!"); return; }
-    let batch = State.bulkHarvests[0];
-    let totalJars = Math.floor(batch.weightG / 2.83);
-    if (totalJars < 1) { toast("Bulk batch too small for auto-jarring."); return; }
-    packageBatch(0, 'TENTH', 'ALL');
+    smartPackBatch(0);
     autoStockAllShelves();
-    toast(`Automated lines jarred & stocked ${totalJars} Tenths across dispensary chain!`);
+    toast("Commercial batch Smart-Packed & stocked across dispensary chain!");
   }
 
-  /* ================= SOLVENTLESS HASH LAB & LIVE ROSIN ================= */
+  /* ================= SOLVENTLESS HASH LAB ================= */
   function updateRosinBatchOptions() {
     const sel = $('rosin-source-batch'); if (!sel) return;
     let opts = '';
@@ -1749,6 +2139,15 @@
     sel.innerHTML = opts || '<option value="">No Bulk Flower Available</option>';
     let yieldRate = 18 + (getSkillRank('hash_1') * 3);
     if ($('rosin-yield-rate')) $('rosin-yield-rate').innerText = `${yieldRate}%`;
+  }
+
+  function sortRosinVault(criteria) {
+    if (criteria === 'score') State.rosinVault.sort((a,b) => b.score - a.score);
+    if (criteria === 'thc') State.rosinVault.sort((a,b) => b.thc - a.thc);
+    if (criteria === 'terps') State.rosinVault.sort((a,b) => b.terpenes - a.terpenes);
+    if (criteria === 'units') State.rosinVault.sort((a,b) => b.units - a.units);
+    toast(`Sorted Rosin Vault by ${criteria.toUpperCase()}`);
+    renderHashLab();
   }
 
   function renderHashLab() {
@@ -1785,8 +2184,8 @@
               <div>EXTRACTOR SCORE: <b style="color:var(--c-gold);">${r.score}/100</b></div>
             </div>
             <div style="display:flex; gap:6px; margin-top:6px;">
-              <button class="btn btn-green" style="flex:1;" onclick="stockRosinOnShelf(${idx})">Put On Dispensary Menu ($${r.pricePerUnit})</button>
-              <button class="btn btn-danger" style="flex:1;" onclick="wholesaleRosin(${idx})">Wholesale Hash ($${Math.floor(r.pricePerUnit * 0.75)})</button>
+              <button class="btn btn-green" style="flex:1;" onclick="stockRosinOnShelf(${idx})">Put On Menu ($${r.pricePerUnit})</button>
+              <button class="btn btn-danger" style="flex:1;" onclick="wholesaleRosin(${idx})">Wholesale ($${Math.floor(r.pricePerUnit * 0.75)})</button>
             </div>
           </div>
         </div>
@@ -1862,6 +2261,7 @@
       seedInt: rosin.seedInt,
       palette: rosin.palette,
       score: rosin.score,
+      terpenes: rosin.terpenes,
       trophiesWon: 1,
       isRosin: true
     };
@@ -1882,7 +2282,7 @@
     updateHUD(); renderHashLab();
   }
 
-  /* ================= LARGE HIGH-VISIBILITY DOSSIER CARDS ================= */
+  /* ================= DOSSIER CARD HTML BUILDER ================= */
   function createDossierCardHTML(item, options = {}) {
     let tD = TIERS[item.tierIdx] || TIERS[0];
     let rCol = item.role === 'INDICA' ? 'var(--c-purple)' : item.role === 'SATIVA' ? 'var(--c-amber)' : 'var(--c-green)';
@@ -1894,6 +2294,7 @@
           <div style="display:flex; gap:6px; align-items:center;">
             <span style="font-weight:900; color:#fff; font-size:12px;">${item.name}</span>
             <span class="badge" style="color:${rCol}; border-color:${rCol};">${item.role}</span>
+            <span class="badge" style="color:var(--c-cyan); border-color:var(--c-cyan);">${item.generation || 'P1'}</span>
             <span class="score-pill">SCORE: ${item.score || 85}</span>
           </div>
           <span style="font-size:9px; color:${tD.color}; font-weight:bold;">${tD.name}</span>
@@ -1905,7 +2306,7 @@
           </div>
           <div class="dossier-info">
             <div style="color:var(--silver-dim);"><b>Lineage:</b> ${item.lineage}</div>
-            <div style="color:var(--silver-main); font-size:8.5px; margin-top:2px;">${item.desc || 'Certified Ohio phenotype selected for intense bag appeal and rich terpene bouquet.'}</div>
+            <div style="color:var(--silver-main); font-size:8.5px; margin-top:2px;">${item.desc || item.cutInfo || 'Certified Ohio phenotype selected for intense bag appeal and rich terpene bouquet.'}</div>
             
             <div class="dossier-meta-grid">
               <div>THC: <b style="color:var(--c-lime);">${item.thc}%</b></div>
@@ -1923,7 +2324,21 @@
     `;
   }
 
-  /* ================= SEED BANK & INVENTORY WITH DOSSIERS ================= */
+  /* ================= SEED VAULT & CATALOG WITH MULTI-SORT ================= */
+  function sortOwnedSeeds(criteria) {
+    if (criteria === 'thc') State.seedInventory.sort((a,b) => b.thc - a.thc);
+    if (criteria === 'tier') State.seedInventory.sort((a,b) => b.tierIdx - a.tierIdx);
+    if (criteria === 'score') State.seedInventory.sort((a,b) => (b.score||80) - (a.score||80));
+    if (criteria === 'name') State.seedInventory.sort((a,b) => a.name.localeCompare(b.name));
+    toast(`Sorted Seed Vault by ${criteria.toUpperCase()}`);
+    renderOwnedSeeds();
+  }
+
+  function sortSeedCatalog(mode) {
+    State.catalogSortMode = mode;
+    renderSeedCatalog();
+  }
+
   function renderOwnedSeeds() {
     $('owned-seeds-total').innerText = State.seedInventory.length;
     const rack = $('owned-seeds-dossiers'); if (!rack) return;
@@ -1936,7 +2351,7 @@
       let uId = 'owned-seed-' + idx;
       let cardHTML = createDossierCardHTML(s, {
         uniqueId: uId,
-        extraMetaHTML: `<div style="color:var(--c-green); font-weight:bold; margin-top:3px;">Seed Vault Pack: Certified Cut #BB-${idx+1}</div>`,
+        extraMetaHTML: `<div style="color:var(--c-green); font-weight:bold; margin-top:3px;">Seed Vault Pack: Certified Cut #BB-${idx+1} [${s.generation || 'P1'}]</div>`,
         actionButtonsHTML: `<button class="btn btn-green" onclick="quickPlantSpecificSeed(${idx})">Plant in Craft Pot</button>`
       });
       rack.insertAdjacentHTML('beforeend', cardHTML);
@@ -1951,7 +2366,7 @@
     let seed = State.seedInventory.splice(idx, 1)[0];
     let startProgress = getSkillRank('speed_2') * 20;
     emptyPot.occupied = true;
-    emptyPot.plant = createCultivar(seed.name, seed.role, seed.tierIdx, seed.seedInt, seed.thc, seed.terps, seed.bagAppeal, seed.palette, seed.morphology, seed.lineage);
+    emptyPot.plant = createCultivar(seed.name, seed.role, seed.tierIdx, seed.seedInt, seed.thc, seed.terps, seed.bagAppeal, seed.palette, seed.morphology, seed.lineage, seed.generation, seed.phenoTag);
     emptyPot.progress = startProgress;
     emptyPot.phase = 'VEGETATIVE';
     toast(`Planted ${seed.name} into Pot #${emptyPot.id + 1}!`);
@@ -1971,11 +2386,15 @@
       return true;
     });
 
+    if (State.catalogSortMode === 'priceAsc') filtered.sort((a,b) => a.cost - b.cost);
+    if (State.catalogSortMode === 'priceDesc') filtered.sort((a,b) => b.cost - a.cost);
+    if (State.catalogSortMode === 'thc') filtered.sort((a,b) => b.thc - a.thc);
+
     filtered.forEach((st, idx) => {
       let uId = 'cat-seed-' + idx;
       let cardHTML = createDossierCardHTML(st, {
         uniqueId: uId,
-        extraMetaHTML: `<div style="font-size:10px; color:var(--c-green); font-weight:bold; margin-top:3px;">Wholesale Price: $${st.cost} / 3-Pack</div>`,
+        extraMetaHTML: `<div style="font-size:10px; color:var(--c-green); font-weight:bold; margin-top:3px;">Wholesale Price: $${st.cost} / 3-Pack | Cut: ${st.cutInfo}</div>`,
         actionButtonsHTML: `<button class="btn btn-green" onclick="buyCatalogSeedById('${st.id}')">Buy 3-Pack ($${st.cost})</button>`
       });
       grid.insertAdjacentHTML('beforeend', cardHTML);
@@ -1998,6 +2417,8 @@
         name: cut.name,
         role: cut.role,
         lineage: cut.lineage,
+        generation: "P1",
+        phenoTag: cut.cutInfo,
         tierIdx: cut.tierIdx,
         thc: cut.thc,
         terps: cut.terps,
@@ -2013,7 +2434,23 @@
     updateHUD(); renderOwnedSeeds();
   }
 
-  /* ================= PACKAGING STATION CONTROLS ================= */
+  /* ================= PACKAGING STATION, SMART PACK & SORTERS ================= */
+  function sortBulkHarvests(criteria) {
+    if (criteria === 'weight') State.bulkHarvests.sort((a,b) => b.weightG - a.weightG);
+    if (criteria === 'thc') State.bulkHarvests.sort((a,b) => b.thc - a.thc);
+    if (criteria === 'score') State.bulkHarvests.sort((a,b) => b.score - a.score);
+    toast(`Sorted Bulk Flower by ${criteria.toUpperCase()}`);
+    renderBulkHarvests();
+  }
+
+  function sortPackagedVault(criteria) {
+    if (criteria === 'units') State.packagedVault.sort((a,b) => b.unitsRemaining - a.unitsRemaining);
+    if (criteria === 'val') State.packagedVault.sort((a,b) => (b.unitsRemaining * b.pricePerUnit) - (a.unitsRemaining * a.pricePerUnit));
+    if (criteria === 'score') State.packagedVault.sort((a,b) => b.score - a.score);
+    toast(`Sorted Packaged Vault by ${criteria.toUpperCase()}`);
+    renderPackagedVault();
+  }
+
   function renderBulkHarvests() {
     const list = $('packaging-bulk-list'); if (!list) return; list.innerHTML = '';
     if (State.bulkHarvests.length === 0) {
@@ -2029,7 +2466,32 @@
           <div style="font-size:10.5px; color:var(--c-lime); font-weight:bold; margin-top:2px;">
             Available Bulk: <b style="color:#fff; font-size:12px;">${b.weightG >= 1000 ? (b.weightG/1000).toFixed(2) + 'kg' : b.weightG.toFixed(1) + 'g'}</b>
           </div>
-          <div style="display:flex; flex-direction:column; gap:4px; margin-top:6px;">
+          
+          <div style="margin:4px 0;">
+            <button class="btn btn-gold" style="width:100%; font-size:9.5px; padding:6px;" onclick="smartPackBatch(${idx})">
+              ⚡ SMART PACK BATCH (Optimize Tenths, Halves &amp; Pre-Rolls)
+            </button>
+          </div>
+
+          <div style="display:flex; flex-direction:column; gap:4px; margin-top:4px;">
+            <div style="display:flex; align-items:center; gap:4px; font-size:8px;">
+              <span style="width:75px; color:#fff; font-weight:bold;">1.0g Cone:</span>
+              <button class="btn btn-green" onclick="packageBatch(${idx}, 'PREROLL_1G', 1)">1x</button>
+              <button class="btn btn-green" onclick="packageBatch(${idx}, 'PREROLL_1G', 10)">10x</button>
+              <button class="btn btn-green" onclick="packageBatch(${idx}, 'PREROLL_1G', 'ALL')">MAX</button>
+            </div>
+            <div style="display:flex; align-items:center; gap:4px; font-size:8px;">
+              <span style="width:75px; color:#fff; font-weight:bold;">5g Pocket Tin:</span>
+              <button class="btn btn-gold" onclick="packageBatch(${idx}, 'PREROLL_5PK', 1)">1x</button>
+              <button class="btn btn-gold" onclick="packageBatch(${idx}, 'PREROLL_5PK', 5)">5x</button>
+              <button class="btn btn-gold" onclick="packageBatch(${idx}, 'PREROLL_5PK', 'ALL')">MAX</button>
+            </div>
+            <div style="display:flex; align-items:center; gap:4px; font-size:8px;">
+              <span style="width:75px; color:#fff; font-weight:bold;">28g Party Box:</span>
+              <button class="btn btn-blue" onclick="packageBatch(${idx}, 'PREROLL_28PK', 1)">1x</button>
+              <button class="btn btn-blue" onclick="packageBatch(${idx}, 'PREROLL_28PK', 5)">5x</button>
+              <button class="btn btn-blue" onclick="packageBatch(${idx}, 'PREROLL_28PK', 'ALL')">MAX</button>
+            </div>
             <div style="display:flex; align-items:center; gap:4px; font-size:8px;">
               <span style="width:75px; color:#fff; font-weight:bold;">2.83g Tenth:</span>
               <button class="btn btn-scarlet" onclick="packageBatch(${idx}, 'TENTH', 1)">1x</button>
@@ -2041,20 +2503,13 @@
               <span style="width:75px; color:#fff; font-weight:bold;">14.15g Half:</span>
               <button class="btn btn-gold" onclick="packageBatch(${idx}, 'HALF', 1)">1x</button>
               <button class="btn btn-gold" onclick="packageBatch(${idx}, 'HALF', 10)">10x</button>
-              <button class="btn btn-gold" onclick="packageBatch(${idx}, 'HALF', 25)">25x</button>
               <button class="btn btn-gold" onclick="packageBatch(${idx}, 'HALF', 'ALL')">MAX</button>
             </div>
             <div style="display:flex; align-items:center; gap:4px; font-size:8px;">
               <span style="width:75px; color:#fff; font-weight:bold;">28.3g Full Zip:</span>
               <button class="btn btn-blue" onclick="packageBatch(${idx}, 'OUNCE', 1)">1x</button>
-              <button class="btn btn-blue" onclick="packageBatch(${idx}, 'OUNCE', 10)">10x</button>
+              <button class="btn btn-blue" onclick="packageBatch(${idx}, 'OUNCE', 5)">5x</button>
               <button class="btn btn-blue" onclick="packageBatch(${idx}, 'OUNCE', 'ALL')">MAX</button>
-            </div>
-            <div style="display:flex; align-items:center; gap:4px; font-size:8px;">
-              <span style="width:75px; color:#fff; font-weight:bold;">453g (1-LB):</span>
-              <button class="btn btn-purple" onclick="packageBatch(${idx}, 'POUND_BALE', 1)">1x</button>
-              <button class="btn btn-purple" onclick="packageBatch(${idx}, 'POUND_BALE', 5)">5x</button>
-              <button class="btn btn-purple" onclick="packageBatch(${idx}, 'POUND_BALE', 'ALL')">MAX</button>
             </div>
           </div>
         `,
@@ -2064,6 +2519,65 @@
       let cv = $(`canvas-${uId}`);
       if (cv) renderUniversalVisual128(cv, "BUD", b.seedInt, b.palette, { morphology: b.morphology, tierIdx: b.tierIdx });
     });
+  }
+
+  /* ⚡ SMART PACK OPTIMIZER */
+  function smartPackBatch(bulkIdx) {
+    let bulk = State.bulkHarvests[bulkIdx];
+    if (!bulk) return;
+    let initialWeight = bulk.weightG;
+    if (initialWeight < 2.83) { toast("Batch too small to smart-pack. Need at least 2.83g."); return; }
+
+    let packedSummary = [];
+    SMART_PACK_TIERS.forEach(plan => {
+      let fmtObj = PACKAGING_WEIGHTS[plan.formatKey];
+      let targetG = initialWeight * plan.weightTargetPct;
+      let units = Math.floor(targetG / fmtObj.grams);
+      if (units > 0 && bulk.weightG >= (units * fmtObj.grams)) {
+        let used = Number((units * fmtObj.grams).toFixed(2));
+        bulk.weightG = Number((bulk.weightG - used).toFixed(2));
+        let unitPrice = Math.floor(fmtObj.grams * fmtObj.basePricePerGram * (bulk.score / 70));
+
+        State.packagedVault.push({
+          packUid: 'PK-' + Math.random().toString(36).substring(2,7).toUpperCase(),
+          cultivarUid: bulk.uid,
+          name: bulk.name,
+          role: bulk.role,
+          lineage: bulk.lineage,
+          generation: bulk.generation,
+          tierIdx: bulk.tierIdx,
+          tierColor: bulk.tierColor,
+          thc: bulk.thc,
+          terpenes: bulk.terpenes,
+          score: bulk.score,
+          seedInt: bulk.seedInt,
+          palette: bulk.palette,
+          morphology: bulk.morphology,
+          formatKey: plan.formatKey,
+          formatName: fmtObj.name,
+          visualCat: fmtObj.visualCat,
+          gramsPerUnit: fmtObj.grams,
+          unitsRemaining: units,
+          pricePerUnit: unitPrice,
+          trophiesWon: bulk.trophiesWon || 0
+        });
+        packedSummary.push(`${units}x ${fmtObj.name}`);
+      }
+    });
+
+    // Package any leftover into 1g cones or Tenths
+    while (bulk.weightG >= 2.83) {
+      packageBatch(bulkIdx, 'TENTH', 1);
+    }
+    while (bulk.weightG >= 1.0) {
+      packageBatch(bulkIdx, 'PREROLL_1G', 1);
+    }
+
+    if (bulk.weightG < 0.5) State.bulkHarvests.splice(bulkIdx, 1);
+    addXP(120);
+    checkMission('m2');
+    toast(`⚡ SMART PACK COMPLETE: Produced ${packedSummary.join(', ')}!`);
+    updateHUD(); renderBulkHarvests(); renderPackagedVault();
   }
 
   function packageBatch(bulkIdx, formatKey, qtyMultiplier) {
@@ -2088,6 +2602,7 @@
       name: bulk.name,
       role: bulk.role,
       lineage: bulk.lineage,
+      generation: bulk.generation,
       tierIdx: bulk.tierIdx,
       tierColor: bulk.tierColor,
       thc: bulk.thc,
@@ -2149,7 +2664,7 @@
     });
   }
 
-  /* ================= GOURMET INFUSION KITCHEN & BAKERY ================= */
+  /* ================= INFUSION KITCHEN & BAKERY ================= */
   function renderEdiblesKitchen() {
     const grid = $('edibles-kitchen-grid'); if (!grid) return; grid.innerHTML = '';
     EDIBLES_RECIPES.forEach(recipe => {
@@ -2221,7 +2736,7 @@
     updateHUD(); renderBulkHarvests(); renderPackagedVault();
   }
 
-  /* ================= DOCTOR'S CLINIC & MEDICAL CARDS ================= */
+  /* ================= DOCTOR'S CLINIC DESK ================= */
   function renderClinicDesk() {
     const box = $('clinic-desk-box');
     const badge = $('clinic-status-badge');
@@ -2273,7 +2788,7 @@
     updateHUD(); renderClinicDesk();
   }
 
-  /* ================= MULTI-CITY DISPENSARY CHAIN ================= */
+  /* ================= DISPENSARY CHAIN ================= */
   function renderDispensaryChain() {
     const grid = $('dispensary-chain-grid'); if (!grid) return; grid.innerHTML = '';
     State.dispensaryLocations.forEach(loc => {
@@ -2309,7 +2824,7 @@
     updateHUD(); renderDispensaryChain();
   }
 
-  /* ================= STOREFRONT & MENU ENGINE ================= */
+  /* ================= STOREFRONT & CUSTOMER ARCHETYPES TICKER ================= */
   function initStore() {
     let targetSlots = STORE_EXPANSIONS[State.storeExpansionIdx].slots;
     State.storeShelves = [];
@@ -2539,16 +3054,26 @@
     updateHUD(); renderStore(); renderParaphernaliaMarket();
   }
 
+  /* CUSTOMER REGISTER TICK WITH 4 ARCHETYPES */
   function customerTick() {
     let activeShelves = State.storeShelves.filter(s => s.item && s.remainingUnits > 0);
     if (activeShelves.length === 0) return;
 
-    let shelf = activeShelves[Math.floor(Math.random() * activeShelves.length)];
+    let archetype = PATRON_ARCHETYPES[Math.floor(Math.random() * PATRON_ARCHETYPES.length)];
+    let suitableShelves = activeShelves.filter(s => {
+      if (s.isGear) return true;
+      let vCat = s.item.visualCat;
+      return archetype.favCategories.includes(vCat);
+    });
+    if (suitableShelves.length === 0) suitableShelves = activeShelves;
+
+    let shelf = suitableShelves[Math.floor(Math.random() * suitableShelves.length)];
     let fairVal = shelf.isGear ? shelf.item.baseRetail : shelf.item.pricePerUnit;
     let ratio = shelf.pricePerUnit / fairVal;
 
-    let buyChance = ratio <= 0.95 ? 0.90 : ratio <= 1.25 ? 0.65 : ratio <= 1.6 ? 0.32 : 0.10;
-    if (!shelf.isGear && shelf.item.trophiesWon > 0) buyChance += 0.25;
+    let buyChance = ratio <= archetype.priceTolerance ? 0.75 : 0.20;
+    if (!shelf.isGear && (shelf.item.terpenes || 0) >= archetype.minTerps) buyChance += 0.25;
+    if (!shelf.isGear && shelf.item.trophiesWon > 0) buyChance += 0.20;
     if (State.doctorLicensed) buyChance += 0.35;
 
     const ticker = $('customer-ticker');
@@ -2567,7 +3092,7 @@
 
       let log = document.createElement('div');
       log.style.color = "var(--c-green)";
-      log.innerText = `✓ Customer bought ${unitsBought}x ${shelf.item.name} for $${saleTotal}!`;
+      log.innerHTML = `<span style="color:${archetype.tagColor}; font-weight:bold;">[${archetype.name}]</span> bought ${unitsBought}x ${shelf.item.name} for $${saleTotal}!`;
       if (ticker) { ticker.prepend(log); if (ticker.children.length > 8) ticker.removeChild(ticker.lastChild); }
 
       if (shelf.remainingUnits <= 0) {
@@ -2731,21 +3256,21 @@
     updateHUD(); renderSkills();
   }
 
-  /* ================= BREEDING LAB ================= */
+  /* ================= DEEP BREEDING MATRIX WITH CUSTOM NAMING ================= */
   function updateBreedingSelects() {
     const s1 = $('breed-mother'); const s2 = $('breed-father');
     if (!s1 || !s2) return;
     let opts = `<option value="">-- Choose Cultivar --</option>`;
-    let combined = [...State.bulkHarvests, ...State.packagedVault];
+    let combined = [...State.bulkHarvests, ...State.packagedVault, ...State.motherPlants];
     combined.forEach(st => {
-      opts += `<option value="${st.uid || st.cultivarUid}">${st.name} [Score: ${st.score} | THC: ${st.thc}%]</option>`;
+      opts += `<option value="${st.uid || st.cultivarUid}">${st.name} [${st.generation || 'P1'} | THC: ${st.thc}% | ${st.score} Score]</option>`;
     });
     s1.innerHTML = opts; s2.innerHTML = opts;
   }
 
   function previewBreeding() {
     const u1 = $('breed-mother').value; const u2 = $('breed-father').value;
-    let all = [...State.bulkHarvests, ...State.packagedVault];
+    let all = [...State.bulkHarvests, ...State.packagedVault, ...State.motherPlants];
     const p1 = all.find(x => (x.uid === u1 || x.cultivarUid === u1));
     const p2 = all.find(x => (x.uid === u2 || x.cultivarUid === u2));
     
@@ -2755,11 +3280,35 @@
     const rBox = $('breed-result-box');
     if (p1 && p2 && u1 !== u2) {
       rBox.style.display = 'block';
-      let hybridName = `${p1.name.split(' ')[0]} × ${p2.name.split(' ').slice(-1)[0]}`;
+
+      // Detect Filial Generation
+      let g1 = p1.generation || 'P1';
+      let g2 = p2.generation || 'P1';
+      let targetFilial = "F1";
+      if (g1 === 'F1' && g2 === 'F1') targetFilial = "F2";
+      else if (g1.includes('F') && (g2 === 'P1' || g1.includes(p2.name))) targetFilial = "BX1";
+
+      $('breed-filial-badge').innerText = `GENERATION: ${targetFilial}`;
+
+      // Smart Portmanteau Auto-Suggestion (Clean Words)
+      let w1 = p1.name.split(' ')[0];
+      let w2 = p2.name.split(' ').slice(-1)[0];
+      let suggestedName = `${w1} ${w2}`;
+      if (!$('breed-custom-name').value.trim()) {
+        $('breed-custom-name').value = suggestedName;
+      }
+
       let estScore = Math.floor((p1.score + p2.score) / 2) + 3 + (getSkillRank('gen_1') * 5);
-      $('breed-cross-name').innerText = hybridName;
+      $('breed-cross-name').innerText = $('breed-custom-name').value.trim() || suggestedName;
       $('breed-est-score').innerText = `EST SCORE: ${estScore}`;
-      $('breed-desc-txt').innerText = `Ohio hybrid vigor verified. Inheriting ${p1.palette} pigmentation and stabilized chemotype.`;
+      $('breed-desc-txt').innerText = `Cross of ${p1.name} × ${p2.name}. Inheriting stabilized ${p1.palette} pigmentation and hybrid vigor.`;
+      
+      $('breed-pheno-preview').innerHTML = `
+        <b>Phenotype Hunting Forecast:</b><br>
+        • Pheno #1: ${p1.palette.replace('_',' ')} Gas Leaning (${Math.min(41, p1.thc + 2)}% THC)<br>
+        • Pheno #2: ${p2.palette.replace('_',' ')} Terpene Dominant (${Math.min(8.5, (p2.terpenes + 1.2)).toFixed(1)}% Terps)<br>
+        • Pheno #3: Breeder's Elite Triple Cut (+4 Score)
+      `;
     } else {
       rBox.style.display = 'none';
     }
@@ -2770,18 +3319,32 @@
     if (!u1 || !u2 || u1 === u2) { toast("Select two distinct parent cultivars."); return; }
     if (State.funds < 250) { toast("Breeding pollination setup requires $250."); return; }
 
-    let all = [...State.bulkHarvests, ...State.packagedVault];
+    let all = [...State.bulkHarvests, ...State.packagedVault, ...State.motherPlants];
     const p1 = all.find(x => (x.uid === u1 || x.cultivarUid === u1));
     const p2 = all.find(x => (x.uid === u2 || x.cultivarUid === u2));
     if (!p1 || !p2) return;
 
     State.funds -= 250;
+
+    let g1 = p1.generation || 'P1';
+    let g2 = p2.generation || 'P1';
+    let targetFilial = "F1";
+    if (g1 === 'F1' && g2 === 'F1') targetFilial = "F2";
+    else if (g1.includes('F') && (g2 === 'P1' || g1.includes(p2.name))) targetFilial = "BX1";
+
     let leapChance = 0.40 + (getSkillRank('gen_2') * 0.35);
     let nTier = Math.min(9, Math.max(p1.tierIdx, p2.tierIdx) + (Math.random() < leapChance ? 1 : 0));
     let nThc = Math.min(41, Math.floor((p1.thc + p2.thc) / 2 + (Math.random() * 3 + 1)));
     let nTerps = Number((((p1.terpenes + p2.terpenes) / 2) + (Math.random() * 0.9)).toFixed(1));
     let nAppeal = Math.min(99, Math.floor((p1.bagAppeal + p2.bagAppeal) / 2 + (Math.random() * 4)));
-    let crossName = `${p1.name.split(' ')[0]} × ${p2.name.split(' ').slice(-1)[0]}`;
+    
+    let customName = $('breed-custom-name').value.trim();
+    if (!customName) {
+      let w1 = p1.name.split(' ')[0];
+      let w2 = p2.name.split(' ').slice(-1)[0];
+      customName = `${w1} ${w2}`;
+    }
+
     let mixedSeed = (p1.seedInt + p2.seedInt) % 9999999;
     let hybridRole = Math.random() < 0.5 ? p1.role : p2.role;
     let hybridPal = Math.random() < 0.5 ? p1.palette : p2.palette;
@@ -2791,28 +3354,33 @@
     let seedCount = 3 + (getSkillRank('gen_3') > 0 ? 3 : 0);
 
     for (let i = 0; i < seedCount; i++) {
+      let phenoNumber = (i % 3) + 1;
+      let phenoBonus = phenoNumber === 1 ? 1 : phenoNumber === 2 ? 2 : 3;
       State.seedInventory.push({
-        name: crossName,
+        name: `${customName} #BB-${phenoNumber}`,
         role: hybridRole,
         lineage: lineageDesc,
+        generation: targetFilial,
+        phenoTag: `Pheno #${phenoNumber}`,
         tierIdx: nTier,
-        thc: nThc,
-        terps: nTerps,
-        bagAppeal: nAppeal,
+        thc: Math.min(41, nThc + phenoBonus),
+        terps: Number((nTerps + (phenoNumber === 2 ? 0.6 : 0)).toFixed(1)),
+        bagAppeal: Math.min(99, nAppeal + phenoBonus),
         palette: hybridPal,
         morphology: hybridMorph,
-        seedInt: mixedSeed + i
+        seedInt: mixedSeed + i * 17
       });
     }
 
+    $('breed-custom-name').value = '';
     addXP(150);
-    toast(`GENETICS STABILIZED: Generated ${seedCount}x ${crossName} Seeds! Stored in Seed Vault.`);
+    toast(`GENETICS STABILIZED: Produced ${seedCount}x ${customName} (${targetFilial}) seeds! Stored in Seed Vault.`);
     updateHUD(); renderOwnedSeeds(); updateBreedingSelects();
   }
 
   /* ================= DOSSIER MODAL ================= */
   function openDossierModalByData(cultivarUid) {
-    let all = [...State.bulkHarvests, ...State.packagedVault];
+    let all = [...State.bulkHarvests, ...State.packagedVault, ...State.motherPlants];
     let p = all.find(x => (x.uid === cultivarUid || x.cultivarUid === cultivarUid));
     if (!p) return;
 
@@ -2823,6 +3391,7 @@
     $('dossier-content').innerHTML = `
       <div style="display:flex; justify-content:space-between; margin-bottom:6px;">
         <span class="badge" style="color:var(--c-green); border-color:var(--c-green);">${p.role} PROFILE</span>
+        <span class="badge" style="color:var(--c-cyan); border-color:var(--c-cyan);">${p.generation || 'P1'}</span>
         <span class="score-pill">OVERALL SCORE: ${p.score}/100</span>
       </div>
       <div><b>Pedigree Lineage:</b> ${p.lineage}</div>
@@ -2844,7 +3413,7 @@
   function gameTick() {
     tickCounter++;
 
-    // 1-second countdown clock decrement
+    // 1-second countdown decrement
     if (tickCounter % 10 === 0) {
       State.dayTimeRemaining--;
       if (State.dayTimeRemaining <= 0) {
@@ -2895,7 +3464,7 @@
 
     let packInterval = getSkillRank('speed_3') > 0 ? 12 : 25;
     if (State.auto.autoPack && State.bulkHarvests.length > 0 && tickCounter % packInterval === 0) {
-      packageBatch(0, 'TENTH', 1);
+      smartPackBatch(0);
     }
 
     if (State.auto.autoRestock && tickCounter % 15 === 0) {
@@ -2922,7 +3491,7 @@
     const target = $('tab-' + tabId);
     if (target) target.classList.add('active');
 
-    if (tabId === 'grow') renderGrowUI();
+    if (tabId === 'grow') { renderGrowUI(); renderMotherTent(); }
     if (tabId === 'warehouse') renderWarehouseUI();
     if (tabId === 'hashlab') renderHashLab();
     if (tabId === 'seeds') { renderOwnedSeeds(); renderSeedCatalog(); }
@@ -2937,32 +3506,28 @@
   /* ================= INITIALIZATION ================= */
   function initStarterPack() {
     State.seedInventory = [
-      { name: "Jack Herer (Original 1994 Cut)", role: "SATIVA", lineage: "Haze × Northern Lights #5 × Shiva Skunk", tierIdx: 5, thc: 24, terps: 5.6, bagAppeal: 90, palette: "EMERALD_MINT", morphology: "MAIN_COLA", seedInt: 1994 },
-      { name: "Lemon G (Athens Cut)", role: "SATIVA", lineage: "Original Columbian Sativa Heirloom (Athens, OH)", tierIdx: 5, thc: 24, terps: 6.0, bagAppeal: 88, palette: "LIME_DIESEL", morphology: "FOXTAIL", seedInt: 1420 },
-      { name: "Ohio Deathstar", role: "INDICA", lineage: "Sour Diesel × Sensi Star (Southwestern OH)", tierIdx: 6, thc: 29, terps: 5.8, bagAppeal: 91, palette: "MIDNIGHT_OBSIDIAN", morphology: "DENSE_NUG", seedInt: 4200 },
-      { name: "Orange 43 (Ohio Connoisseur)", role: "SATIVA", lineage: "White Fire 43 × Orange", tierIdx: 7, thc: 32, terps: 6.4, bagAppeal: 93, palette: "GOLDEN_HONEY", morphology: "MAIN_COLA", seedInt: 7100 }
+      { name: "Jack Herer", cutInfo: "Original 1994 Cut", role: "SATIVA", lineage: "Haze × Northern Lights #5 × Shiva Skunk", generation: "P1", tierIdx: 5, thc: 24, terps: 5.6, bagAppeal: 90, palette: "EMERALD_MINT", morphology: "MAIN_COLA", seedInt: 1994 },
+      { name: "Lemon G", cutInfo: "Athens 1990s Cut", role: "SATIVA", lineage: "Original Columbian Sativa Heirloom (Athens, OH)", generation: "P1", tierIdx: 5, thc: 24, terps: 6.0, bagAppeal: 88, palette: "LIME_DIESEL", morphology: "FOXTAIL", seedInt: 1420 },
+      { name: "Ohio Deathstar", cutInfo: "Team Deathstar Original", role: "INDICA", lineage: "Sour Diesel × Sensi Star (Southwestern OH)", generation: "P1", tierIdx: 6, thc: 29, terps: 5.8, bagAppeal: 91, palette: "MIDNIGHT_OBSIDIAN", morphology: "DENSE_NUG", seedInt: 4200 },
+      { name: "Orange 43", cutInfo: "Ohio Connoisseur Selection", role: "SATIVA", lineage: "White Fire 43 × Orange", generation: "P1", tierIdx: 7, thc: 32, terps: 6.4, bagAppeal: 93, palette: "GOLDEN_HONEY", morphology: "MAIN_COLA", seedInt: 7100 }
     ];
   }
 
   function init() {
-    initStarterPack();
-    initPots();
-    initStore();
-    initParaphernaliaMarket();
-    updateHUD();
-    renderGrowUI();
-    renderOwnedSeeds();
-    renderSeedCatalog();
-    renderStore();
-    renderClinicDesk();
-    renderParaphernaliaMarket();
-    renderEdiblesKitchen();
-    renderMissions();
-    renderCups();
-    renderSkills();
-    renderHashLab();
-    renderDispensaryChain();
-    updateAutoUI();
+    let saved = localStorage.getItem('buckeyeBudsEmpire_V8');
+    if (saved) {
+      try {
+        State = JSON.parse(saved);
+        if (!State.motherPlants) State.motherPlants = [];
+      } catch(e) { initStarterPack(); initPots(); initStore(); initParaphernaliaMarket(); }
+    } else {
+      initStarterPack();
+      initPots();
+      initStore();
+      initParaphernaliaMarket();
+    }
+    
+    refreshAllViews();
     setInterval(gameTick, 100);
   }
 
